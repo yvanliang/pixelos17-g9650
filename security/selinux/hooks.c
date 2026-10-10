@@ -3445,6 +3445,8 @@ static int selinux_inode_permission(struct inode *inode, int mask)
 
 	sid = cred_sid(cred);
 	isec = inode_security_rcu(inode, flags & MAY_NOT_BLOCK);
+	if (IS_ERR(isec))
+		return PTR_ERR(isec);
 
 	rc = avc_has_perm_noaudit(sid, isec->sid, isec->sclass, perms, 0, &avd);
 	audited = avc_audit_required(perms, &avd, rc,
