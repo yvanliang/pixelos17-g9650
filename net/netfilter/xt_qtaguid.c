@@ -2958,6 +2958,13 @@ static int __init qtaguid_proc_register(struct proc_dir_entry **res_procdir)
 		goto no_ctrl_entry;
 	}
 
+	/* Android's net_bw_acct group may change another UID's counter set.
+	 * This legacy tree checks proc_dir_entry ownership; a later VFS chown
+	 * does not update that stored ownership. Set both before any inode exists.
+	 * Keep ctrl_write_limited enabled and every UID/tag authorization check.
+	 */
+	proc_set_user(xt_qtaguid_ctrl_file, GLOBAL_ROOT_UID, KGIDT_INIT(3007));
+
 	xt_qtaguid_stats_file = proc_create_data("stats", proc_stats_perms,
 						 *res_procdir,
 						 &proc_qtaguid_stats_fops,
@@ -2968,6 +2975,9 @@ static int __init qtaguid_proc_register(struct proc_dir_entry **res_procdir)
 		ret = -ENOMEM;
 		goto no_stats_entry;
 	}
+	/* net_bw_stats grants the system access to detailed counters for all UIDs. */
+	proc_set_user(xt_qtaguid_stats_file, GLOBAL_ROOT_UID, KGIDT_INIT(3006));
+
 	/*
 	 * TODO: add support counter hacking
 	 * xt_qtaguid_stats_file->write_proc = qtaguid_stats_proc_write;
