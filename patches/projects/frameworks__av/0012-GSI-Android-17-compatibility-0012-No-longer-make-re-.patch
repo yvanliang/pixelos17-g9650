@@ -1,0 +1,28 @@
+From b2587a7c4936560cc1b3e710ac1f4a86c9267451 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:06 +0800
+Subject: [PATCH 12/25] GSI Android 17 compatibility:
+ 0012-No-longer-make-re-assigning-legacy-audio-groups-fata.patch
+
+Change-Id: I62b314c5fb68bd1c32f317c9c0162a0c958ac834
+---
+ services/audiopolicy/engine/common/src/EngineBase.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/services/audiopolicy/engine/common/src/EngineBase.cpp b/services/audiopolicy/engine/common/src/EngineBase.cpp
+index 5f03b10..d27bc65 100644
+--- a/services/audiopolicy/engine/common/src/EngineBase.cpp
++++ b/services/audiopolicy/engine/common/src/EngineBase.cpp
+@@ -348,9 +348,9 @@ engineConfig::ParsingResult EngineBase::processParsingResult(
+             }
+             if (group.stream != AUDIO_STREAM_DEFAULT) {
+                 // A legacy stream can be assigned once to a volume group
+-                LOG_ALWAYS_FATAL_IF(checkStreamForGroups(group.stream, mVolumeGroups),
+-                                    "stream %s already assigned to a volume group, "
+-                                    "review the configuration", toString(group.stream).c_str());
++                if(checkStreamForGroups(group.stream, mVolumeGroups)) {
++                    ALOGE("stream %s already assigned to a volume group, review the configuration", toString(group.stream).c_str());
++                }
+                 volumeGroup->addSupportedStream(group.stream);
+             }
+             addSupportedAttributesToGroup(group, volumeGroup, strategy);

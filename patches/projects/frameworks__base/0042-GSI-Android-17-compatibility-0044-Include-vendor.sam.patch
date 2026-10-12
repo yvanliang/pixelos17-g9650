@@ -1,0 +1,23 @@
+From 2fea6f826a0ea2daac89831f4e111deaf3d4d459 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:02 +0800
+Subject: [PATCH 42/60] GSI Android 17 compatibility:
+ 0044-Include-vendor.samsung.hardware.radio.network-V1-jav.patch
+
+Change-Id: Ibbb091e0fac8cb49bf866f57f54a435b13be70f7
+---
+ Android.bp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Android.bp b/Android.bp
+index c8fd90503..1488fcfb0 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -235,6 +235,7 @@ java_library {
+         "android.hardware.radio.network-V5-java",
+         "android.hardware.radio.sim-V5-java",
+         "android.hardware.radio.voice-V5-java",
++        "vendor.samsung.hardware.radio.network-V1-java",
+         "android.hardware.thermal-V1.0-java-constants",
+         "android.hardware.thermal-V1.0-java",
+         "android.hardware.thermal-V1.1-java",

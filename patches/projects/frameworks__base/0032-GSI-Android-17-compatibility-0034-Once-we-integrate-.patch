@@ -1,0 +1,23 @@
+From 7c64146b3252846d086b88160ac048edc83a2b80 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:41:31 +0800
+Subject: [PATCH 32/60] GSI Android 17 compatibility:
+ 0034-Once-we-integrate-Samsung-Power-hal-in-libpowermanag.patch
+
+Change-Id: Ib96675b49ed1c771b7af30939bcca4e21c0ec8ae
+---
+ services/core/jni/Android.bp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/services/core/jni/Android.bp b/services/core/jni/Android.bp
+index 83c7f130a..2c2417009 100644
+--- a/services/core/jni/Android.bp
++++ b/services/core/jni/Android.bp
+@@ -205,6 +205,7 @@ cc_defaults {
+         "service.incremental",
+         "vendor.samsung.hardware.light@2.0",
+         "vendor.samsung.hardware.light@3.0",
++        "vendor.samsung.hardware.miscpower@2.0",
+     ],
+ 
+     static_libs: [

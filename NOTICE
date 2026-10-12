@@ -1,0 +1,17 @@
+Unofficial SM-G9650 adaptation maintained by yvanliang.
+
+Upstream work remains attributed to its original authors and licensed under
+its original project licenses. See individual source files and repositories:
+- PixelOS-AOSP/android_manifest and PixelOS platform projects
+- Android Open Source Project
+- LineageOS projects
+- cawilliamson/treble_restlessos compatibility snapshot
+- TrebleDroid, PHH, and AndyCGYan compatibility work included by that snapshot
+- klabit87/android_kernel_samsung_sdm845 (GPL-2.0)
+- GrapheneOS Camera (provided separately as an original signed input)
+
+Git patch queues preserve exported commit headers and original code notices.
+Some adaptation commits imported third-party patches under the local author's
+Git identity. The original 240-entry source ledger and upstream snapshot are
+retained for provenance; local authorship metadata is not a claim of exclusive
+authorship of those imported changes.

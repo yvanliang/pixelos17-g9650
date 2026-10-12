@@ -1,0 +1,5 @@
+install_symlink {
+    name: "g9650-wifi-vendor-path",
+    installed_location: "etc/wifi",
+    symlink_target: "/vendor/etc/wifi",
+}

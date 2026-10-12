@@ -1,0 +1,24 @@
+From 9019e2ccd1d28daa945e5e99171f7d7523022c7d Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 17:15:35 +0800
+Subject: [PATCH 10/11] G9650: preserve the verified shell entrypoint and netd
+ SELinux domain
+
+Change-Id: I0f2d9b280a66b83ee6335c368c9f919a53f71462
+---
+ server/netd.rc | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/server/netd.rc b/server/netd.rc
+index 94e452a..b09e64b 100644
+--- a/server/netd.rc
++++ b/server/netd.rc
+@@ -1,6 +1,7 @@
+ # This should be similar to proper 'netd' below, this is merely a quick self test during bootup.
+ # If this invocation fails during a mainline module update it should trigger a module rollback.
+-service netd1shot /system/bin/g9650-netd-oneshot.sh
++service netd1shot /system/bin/sh /system/bin/g9650-netd-oneshot.sh
++    seclabel u:r:netd:s0
+     disabled # only started once bpf programs are loaded
+     class main
+     capabilities CHOWN DAC_OVERRIDE DAC_READ_SEARCH FOWNER IPC_LOCK KILL NET_ADMIN NET_BIND_SERVICE NET_RAW SETUID SETGID

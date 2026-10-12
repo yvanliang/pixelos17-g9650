@@ -1,0 +1,35 @@
+From af3baa950498b839b9112da5fa82b62dd3d3005c Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 12:28:43 +0800
+Subject: [PATCH 57/60] G9650: refuse cached app freezing on the legacy binder
+ and cgroup kernel
+
+Change-Id: Ib292eff1c791d7e73c7306bc34d58942fc3eff18
+---
+ .../core/java/com/android/server/am/Freezer.java     | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/services/core/java/com/android/server/am/Freezer.java b/services/core/java/com/android/server/am/Freezer.java
+index 3b3cf5509..723142072 100644
+--- a/services/core/java/com/android/server/am/Freezer.java
++++ b/services/core/java/com/android/server/am/Freezer.java
+@@ -75,8 +75,18 @@ class Freezer {
+      * Determines whether the freezer is supported by this system.
+      * @return true if the freezer is supported.
+      */
++    private static final boolean LEGACY_FREEZER_UNAVAILABLE = isLegacyFreezerUnavailable();
++
++    private static boolean isLegacyFreezerUnavailable() {
++        final boolean legacy = android.os.SystemProperties.get("ro.boot.bootloader", "")
++                .startsWith("G9650") && android.system.Os.uname().release.startsWith("4.9.");
++        if (legacy) android.util.Slog.i(TAG_AM,
++                "G9650: cached app freezer unavailable; legacy binder and cgroup lack its APIs");
++        return legacy;
++    }
++
+     public boolean isFreezerSupported() {
+-        return nativeIsFreezerSupported();
++        return !LEGACY_FREEZER_UNAVAILABLE && nativeIsFreezerSupported();
+     }
+ 
+     // Native methods

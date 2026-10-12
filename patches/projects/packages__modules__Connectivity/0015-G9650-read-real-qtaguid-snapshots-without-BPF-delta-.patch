@@ -1,0 +1,235 @@
+From c9f9f559414e6b733e0841b1b498bbabcb1243c0 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:40:09 +0800
+Subject: [PATCH 15/18] G9650: read real qtaguid snapshots without BPF delta
+ double counting
+
+Change-Id: Ifc9181f85c8280f5d444c145d937fce84a43b320
+---
+ ...android_server_net_NetworkStatsFactory.cpp |  5 +
+ .../libs/libnetworkstats/BpfNetworkStats.cpp  | 97 +++++++++++++++++++
+ .../include/netdbpf/BpfNetworkStats.h         |  1 +
+ .../server/net/NetworkStatsFactory.java       | 17 ++++
+ 4 files changed, 120 insertions(+)
+
+diff --git a/service-t/jni/com_android_server_net_NetworkStatsFactory.cpp b/service-t/jni/com_android_server_net_NetworkStatsFactory.cpp
+index 5edd0f6..99bbed8 100644
+--- a/service-t/jni/com_android_server_net_NetworkStatsFactory.cpp
++++ b/service-t/jni/com_android_server_net_NetworkStatsFactory.cpp
+@@ -192,7 +192,12 @@ static int readNetworkStatsDev(JNIEnv* env, jclass clazz, jobject stats) {
+     return statsLinesToNetworkStats(env, clazz, stats, lines);
+ }
+ 
++static jboolean isLegacyStatsBackend(JNIEnv*, jclass) {
++    return android::bpf::isLegacyQtaguidBackend();
++}
++
+ static const JNINativeMethod gMethods[] = {
++    MAKE_JNI_NATIVE_METHOD("nativeIsLegacyStatsBackend", "()Z", isLegacyStatsBackend),
+     MAKE_JNI_NATIVE_METHOD("nativeReadNetworkStatsDetail", "(Landroid/net/NetworkStats;)I", readNetworkStatsDetail),
+     MAKE_JNI_NATIVE_METHOD("nativeReadNetworkStatsDev", "(Landroid/net/NetworkStats;)I", readNetworkStatsDev),
+ };
+diff --git a/service-t/native/libs/libnetworkstats/BpfNetworkStats.cpp b/service-t/native/libs/libnetworkstats/BpfNetworkStats.cpp
+index 3e6b199..c89ec7c 100644
+--- a/service-t/native/libs/libnetworkstats/BpfNetworkStats.cpp
++++ b/service-t/native/libs/libnetworkstats/BpfNetworkStats.cpp
+@@ -15,6 +15,10 @@
+  */
+ 
+ #include <inttypes.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <sys/utsname.h>
++#include "android-base/properties.h"
+ #include <net/if.h>
+ #include <string.h>
+ #include <unordered_set>
+@@ -40,6 +44,89 @@ namespace bpf {
+ 
+ using base::Result;
+ 
++// G9650/4.9 only: consume real kernel qtaguid counters, never fabricated zeros.
++bool isLegacyQtaguidBackend() {
++    static const bool legacy = [] {
++        struct utsname kernel = {};
++        return base::GetProperty("ro.boot.bootloader", "").rfind("G9650", 0) == 0
++                && uname(&kernel) == 0 && strncmp(kernel.release, "4.9.", 4) == 0
++                && access("/proc/net/xt_qtaguid/stats", R_OK) == 0;
++    }();
++    return legacy;
++}
++
++static int parseLegacyDetail(std::vector<stats_line>* lines) {
++    FILE* file = fopen("/proc/net/xt_qtaguid/stats", "re");
++    if (!file) return -errno;
++    char buffer[1024];
++    if (!fgets(buffer, sizeof(buffer), file)
++            || strncmp(buffer, "idx iface acct_tag_hex", 22) != 0) {
++        fclose(file); return -EINVAL;
++    }
++    while (fgets(buffer, sizeof(buffer), file)) {
++        stats_line line = {};
++        unsigned index;
++        uint64_t tag;
++        const int fields = sscanf(buffer, "%u %31s %" SCNx64 " %u %u %" SCNd64
++                " %" SCNd64 " %" SCNd64 " %" SCNd64, &index, line.iface, &tag,
++                &line.uid, &line.set, &line.rxBytes, &line.rxPackets,
++                &line.txBytes, &line.txPackets);
++        if (fields != 9 || line.rxBytes < 0 || line.txBytes < 0
++                || line.rxPackets < 0 || line.txPackets < 0) {
++            fclose(file); return -EINVAL;
++        }
++        line.tag = tag >> 32;
++        lines->push_back(line);
++    }
++    const int result = ferror(file) ? -EIO : 0;
++    fclose(file);
++    if (result == 0) groupNetworkStats(*lines);
++    return result;
++}
++
++static int parseLegacyDev(std::vector<stats_line>* lines) {
++    FILE* file = fopen("/proc/net/xt_qtaguid/iface_stat_all", "re");
++    if (!file) return -errno;
++    char buffer[512];
++    while (fgets(buffer, sizeof(buffer), file)) {
++        stats_line line = {};
++        unsigned active;
++        int64_t rxBytes, rxPackets, txBytes, txPackets;
++        const int fields = sscanf(buffer, "%31s %u %" SCNd64 " %" SCNd64
++                " %" SCNd64 " %" SCNd64 " %" SCNd64 " %" SCNd64
++                " %" SCNd64 " %" SCNd64, line.iface, &active, &line.rxBytes,
++                &line.rxPackets, &line.txBytes, &line.txPackets,
++                &rxBytes, &rxPackets, &txBytes, &txPackets);
++        if (fields != 10) { fclose(file); return -EINVAL; }
++        // iface_stat_all stores inactive totals plus the currently active counters.
++        if (active & 1) {
++            line.rxBytes += rxBytes; line.rxPackets += rxPackets;
++            line.txBytes += txBytes; line.txPackets += txPackets;
++        }
++        line.uid = UID_ALL; line.set = SET_ALL; line.tag = TAG_NONE;
++        lines->push_back(line);
++    }
++    const int result = ferror(file) ? -EIO : 0;
++    fclose(file);
++    return result;
++}
++
++static int getLegacyStats(const char* iface, int64_t uid, StatsValue* stats) {
++    std::vector<stats_line> lines;
++    const int result = uid < 0 ? parseLegacyDev(&lines) : parseLegacyDetail(&lines);
++    if (result != 0) return result;
++    *stats = {};
++    for (const auto& line : lines) {
++        if (iface && strcmp(line.iface, iface) != 0) continue;
++        // tag zero already includes all tagged traffic for this UID.
++        if (uid >= 0 && (line.uid != uid || line.tag != TAG_NONE)) continue;
++        stats->rxBytes += line.rxBytes; stats->rxPackets += line.rxPackets;
++        stats->txBytes += line.txBytes; stats->txPackets += line.txPackets;
++    }
++    return 0;
++}
++
++
+ BpfMapRW<uint32_t, IfaceValue>& getIfaceIndexNameMap() {
+     constexpr bool exclusive = true;
+     static BpfMapRW<uint32_t, IfaceValue> ifaceIndexNameMap(IFACE_INDEX_NAME_MAP_PATH, exclusive);
+@@ -93,6 +180,7 @@ static Result<IfaceValue> ifindex2name(const uint32_t ifindex) {
+ }
+ 
+ void bpfRegisterIface(const char* iface) {
++    if (isLegacyQtaguidBackend()) return;
+     if (!iface) return;
+     if (strlen(iface) >= sizeof(IfaceValue)) return;
+     uint32_t ifindex = if_nametoindex(iface);
+@@ -115,6 +203,7 @@ int bpfGetUidStatsInternal(uid_t uid, StatsValue* stats,
+ }
+ 
+ int bpfGetUidStats(uid_t uid, StatsValue* stats) {
++    if (isLegacyQtaguidBackend()) return getLegacyStats(nullptr, uid, stats);
+     static BpfMapRO<uint32_t, StatsValue> appUidStatsMap(APP_UID_STATS_MAP_PATH);
+     return bpfGetUidStatsInternal(uid, stats, appUidStatsMap);
+ }
+@@ -170,6 +259,7 @@ int bpfGetIfaceStatsInternal(const char* iface, StatsValue* stats,
+ }
+ 
+ int bpfGetIfaceStats(const char* iface, StatsValue* stats) {
++    if (isLegacyQtaguidBackend()) return getLegacyStats(iface, -1, stats);
+     return bpfGetIfaceStatsInternal(iface, stats, getIfaceStatsMap(), ifindex2name);
+ }
+ 
+@@ -185,6 +275,11 @@ int bpfGetIfIndexStatsInternal(uint32_t ifindex, StatsValue* stats,
+ }
+ 
+ int bpfGetIfIndexStats(int ifindex, StatsValue* stats) {
++    if (isLegacyQtaguidBackend()) {
++        char name[IF_NAMESIZE];
++        if (!if_indextoname(ifindex, name)) return -errno;
++        return getLegacyStats(name, -1, stats);
++    }
+     return bpfGetIfIndexStatsInternal(ifindex, stats, getIfaceStatsMap());
+ }
+ 
+@@ -253,6 +348,7 @@ int parseBpfNetworkStatsDetailInternal(std::vector<stats_line>& lines,
+ }
+ 
+ int parseBpfNetworkStatsDetail(std::vector<stats_line>* lines) {
++    if (isLegacyQtaguidBackend()) return parseLegacyDetail(lines);
+     static BpfMapRO<uint32_t, uint32_t> configurationMap(CONFIGURATION_MAP_PATH);
+     static BpfMap<StatsKey, StatsValue> statsMapA(STATS_MAP_A_PATH);
+     static BpfMap<StatsKey, StatsValue> statsMapB(STATS_MAP_B_PATH);
+@@ -318,6 +414,7 @@ int parseBpfNetworkStatsDevInternal(std::vector<stats_line>& lines,
+ }
+ 
+ int parseBpfNetworkStatsDev(std::vector<stats_line>* lines) {
++    if (isLegacyQtaguidBackend()) return parseLegacyDev(lines);
+     return parseBpfNetworkStatsDevInternal(*lines, getIfaceStatsMap(), ifindex2name);
+ }
+ 
+diff --git a/service-t/native/libs/libnetworkstats/include/netdbpf/BpfNetworkStats.h b/service-t/native/libs/libnetworkstats/include/netdbpf/BpfNetworkStats.h
+index ef6dc3a..0e48de2 100644
+--- a/service-t/native/libs/libnetworkstats/include/netdbpf/BpfNetworkStats.h
++++ b/service-t/native/libs/libnetworkstats/include/netdbpf/BpfNetworkStats.h
+@@ -105,6 +105,7 @@ int parseBpfNetworkStatsDevInternal(std::vector<stats_line>& lines,
+                                     const BpfMapRO<uint32_t, StatsValue>& statsMap,
+                                     const IfIndexToNameFunc ifindex2name);
+ 
++bool isLegacyQtaguidBackend();
+ void bpfRegisterIface(const char* iface);
+ int bpfGetUidStats(uid_t uid, StatsValue* stats);
+ int bpfGetIfaceStats(const char* iface, StatsValue* stats);
+diff --git a/service-t/src/com/android/server/net/NetworkStatsFactory.java b/service-t/src/com/android/server/net/NetworkStatsFactory.java
+index 7d48b71..43a9b19 100644
+--- a/service-t/src/com/android/server/net/NetworkStatsFactory.java
++++ b/service-t/src/com/android/server/net/NetworkStatsFactory.java
+@@ -253,6 +253,21 @@ public class NetworkStatsFactory {
+             // Take a reference. If this gets swapped out, we still have the old reference.
+             final UnderlyingNetworkInfo[] vpnArray = mUnderlyingNetworkInfos;
+ 
++            // qtaguid returns cumulative snapshots, unlike consumed BPF deltas.
++            // Accumulating this snapshot would double count traffic on every poll.
++            if (nativeIsLegacyStatsBackend()) {
++                final NetworkStats snapshot = mDeps.getNetworkStatsDetail();
++                mPersistSnapshot = snapshot.clone();
++                snapshot.apply464xlatAdjustments(mStackedIfaces);
++                for (UnderlyingNetworkInfo info : vpnArray) {
++                    snapshot.migrateTun(info.getOwnerUid(), info.getInterface(),
++                            info.getUnderlyingInterfaces());
++                    snapshot.filterDebugEntries();
++                }
++                mTunAnd464xlatAdjustedStats = snapshot;
++                return snapshot.filteredClone(limitUid, limitIfaces, limitTag);
++            }
++
+             requestSwapActiveStatsMapLocked();
+             // Stats are always read from the inactive map, so they must be read after the
+             // swap
+@@ -370,6 +385,8 @@ public class NetworkStatsFactory {
+      * are expected to monotonically increase since device boot.
+      */
+     @VisibleForTesting
++    public static native boolean nativeIsLegacyStatsBackend();
++
+     public static native int nativeReadNetworkStatsDetail(NetworkStats stats);
+ 
+     @VisibleForTesting

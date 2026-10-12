@@ -1,0 +1,38 @@
+From 3d330ac6c73c514429a5d891335604e8aa05f023 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:37 +0800
+Subject: [PATCH 02/12] GSI Android 17 compatibility:
+ 0002-Revert-libsepol-Make-an-unknown-permission-an-error-.patch
+
+Change-Id: Ib453479ae82aae2061c3c6eca08179bb30bdb5ec
+---
+ libsepol/cil/src/cil_resolve_ast.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/libsepol/cil/src/cil_resolve_ast.c b/libsepol/cil/src/cil_resolve_ast.c
+index 5eec703..a137c65 100644
+--- a/libsepol/cil/src/cil_resolve_ast.c
++++ b/libsepol/cil/src/cil_resolve_ast.c
+@@ -93,14 +93,18 @@ static int __cil_resolve_perms(symtab_t *class_symtab, symtab_t *common_symtab,
+ 				}
+ 			}
+ 			if (rc != SEPOL_OK) {
++				struct cil_list *empty_list;
+ 				if (class_flavor == CIL_MAP_CLASS) {
+ 					cil_log(CIL_ERR, "Failed to resolve permission %s for map class\n", (char*)curr->data);
+-				} else {
+-					cil_log(CIL_ERR, "Failed to resolve permission %s\n", (char*)curr->data);
++					goto exit;
+ 				}
+-				goto exit;
++				cil_log(CIL_WARN, "Failed to resolve permission %s\n", (char*)curr->data);
++				/* Use an empty list to represent unknown perm */
++				cil_list_init(&empty_list, perm_strs->flavor);
++				cil_list_append(*perm_datums, CIL_LIST, empty_list);
++			} else {
++				cil_list_append(*perm_datums, CIL_DATUM, perm_datum);
+ 			}
+-			cil_list_append(*perm_datums, CIL_DATUM, perm_datum);
+ 		} else {
+ 			cil_list_append(*perm_datums, curr->flavor, curr->data);
+ 		}

@@ -1,0 +1,114 @@
+From 9e1adede011eb8db18e5c976e585c14bdb4b105e Mon Sep 17 00:00:00 2001
+From: yvanliang <42460514+yvanliang@users.noreply.github.com>
+Date: Thu, 15 Oct 2026 20:51:34 +0800
+Subject: [PATCH 37/38] G9650: retain minimal power services without persistent
+ diagnostic collection
+
+---
+ custom_g9650.mk                |  1 -
+ g9650/g9650-charger-log.sh     | 20 --------------------
+ g9650/g9650-charger-quiesce.sh | 11 +----------
+ g9650/g9650-charger.rc         | 18 +-----------------
+ 4 files changed, 2 insertions(+), 48 deletions(-)
+ delete mode 100644 g9650/g9650-charger-log.sh
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index a021acc..930579c 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -87,6 +87,5 @@ PRODUCT_DEX_PREOPT_BOOT_FLAGS += --runtime-arg -Xgc:CC
+ # Give the offline charger reboot/poweroff capability on FVA4 only.
+ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-charger.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-charger.rc
+ 
+-PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-charger-log.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-charger-log.sh
+ 
+ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-charger-quiesce.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-charger-quiesce.sh
+diff --git a/g9650/g9650-charger-log.sh b/g9650/g9650-charger-log.sh
+deleted file mode 100644
+index 1875a14..0000000
+--- a/g9650/g9650-charger-log.sh
++++ /dev/null
+@@ -1,20 +0,0 @@
+-#!/system/bin/sh
+-umask 077
+-dir=/dev/g9650-charger-cache
+-grep -q " $dir " /proc/mounts || exit 1
+-{
+-    grep -E "firmware_mnt|g9650-charger-cache" /proc/mounts
+-    ls -l /vendor/firmware_mnt/image/a630_zap*
+-    echo "mode=$(getprop ro.bootmode) charger=$(pidof charger)"
+-    for pid in $(pidof charger); do grep -E '^(Name|Uid|Gid|Cap)' "/proc/$pid/status"; done
+-} > "$dir/g9650-charger-environment.log"
+-dmesg -w > "$dir/g9650-charger-kernel.log" 2>&1 &
+-reader=$!
+-while kill -0 "$reader" 2>/dev/null; do
+-    sync
+-    size=$(stat -c %s "$dir/g9650-charger-kernel.log")
+-    [ "$size" -lt 33554432 ] || break
+-    sleep 1
+-done
+-kill "$reader" 2>/dev/null
+-sync
+diff --git a/g9650/g9650-charger-quiesce.sh b/g9650/g9650-charger-quiesce.sh
+index 419b55b..d986f00 100644
+--- a/g9650/g9650-charger-quiesce.sh
++++ b/g9650/g9650-charger-quiesce.sh
+@@ -1,18 +1,9 @@
+ #!/system/bin/sh
+-# Run synchronously from init's shutdown trigger, before its no-data fast path.
+-log=/dev/g9650-charger-cache/g9650-charger-action.log
+-printf '\nquiesce begin\n' >> "$log"
++# Wait for display/input handles to close before init's no-data reboot fast path.
+ n=0
+ while pidof charger >/dev/null; do
+     n=$((n + 1))
+     [ "$n" -lt 50 ] || break
+     sleep 0.1
+ done
+-pids=$(pidof charger)
+-printf 'quiesce remaining=%s polls=%s\n' "$pids" "$n" >> "$log"
+-if [ -n "$pids" ]; then
+-    for pid in $pids; do
+-        cat "/proc/$pid/stack" >> "$log" 2>&1
+-    done
+-fi
+ sync
+diff --git a/g9650/g9650-charger.rc b/g9650/g9650-charger.rc
+index e027997..eaeafb2 100644
+--- a/g9650/g9650-charger.rc
++++ b/g9650/g9650-charger.rc
+@@ -12,27 +12,11 @@ service g9650-charger /system/bin/charger
+     capabilities SYS_BOOT
+     seclabel u:r:charger:s0
+ 
+-# Cache is unencrypted and available before charger-mode /data mounting.
+ on charger
+     # Charger skips normal fs mounting; Adreno still needs its signed firmware.
+     mount vfat /dev/block/bootdevice/by-name/apnhlos /vendor/firmware_mnt ro nosuid nodev noexec context=u:object_r:firmware_file:s0,shortname=lower,uid=0,gid=1000,dmask=227,fmask=337
+-    mkdir /dev/g9650-charger-cache 0770 root system
+-    mount ext4 /dev/block/platform/soc/1d84000.ufshc/by-name/cache /dev/g9650-charger-cache nosuid nodev noexec
+-    write /dev/g9650-charger-cache/g9650-charger-action.log begin
+-    chown system system /dev/g9650-charger-cache/g9650-charger-action.log
+-    chmod 0600 /dev/g9650-charger-cache/g9650-charger-action.log
+-    start g9650-charger-log
+     start g9650-charger
+ 
+-service g9650-charger-log /system/bin/sh /system/bin/g9650-charger-log.sh
+-    class charger
+-    disabled
+-    oneshot
+-    timeout_period 180
+-    user root
+-    group root system cache log readproc
+-    capabilities SYSLOG
+-    seclabel u:r:init:s0
+ 
+ # init's no-/data reboot fast path does not stop any services. Release the
+ # charging DRM/input handles before the Samsung kernel starts its freeze pass.
+@@ -45,5 +29,5 @@ service g9650-charger-quiesce /system/bin/sh /system/bin/g9650-charger-quiesce.s
+     oneshot
+     timeout_period 8
+     user root
+-    group root system cache log readproc
++    group root system readproc
+     seclabel u:r:init:s0

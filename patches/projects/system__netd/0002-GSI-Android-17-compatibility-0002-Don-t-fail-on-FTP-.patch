@@ -1,0 +1,38 @@
+From 6a62257e91cf9a44949f20667471b2314b49fd0f Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:45 +0800
+Subject: [PATCH 02/11] GSI Android 17 compatibility:
+ 0002-Don-t-fail-on-FTP-conntracking-failing.patch
+
+Change-Id: I3f205fd314b9a4faf8f0157fa0645d3dab55dc32
+---
+ server/TetherController.cpp | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/server/TetherController.cpp b/server/TetherController.cpp
+index c41fe7a..379c33b 100644
+--- a/server/TetherController.cpp
++++ b/server/TetherController.cpp
+@@ -722,13 +722,19 @@ int TetherController::setForwardRules(bool add, const char *intIface, const char
+         return -EREMOTEIO;
+     }
+ 
+-    std::vector<std::string> v4 = {
++    std::vector<std::string> v4Ftp = {
+             "*raw",
+-            StringPrintf("%s %s -p tcp --dport 21 -i %s -j CT --helper ftp", op,
+-                         LOCAL_RAW_PREROUTING, intIface),
++            StringPrintf("%s %s -p tcp --dport 21 -i %s -j CT --helper ftp",
++                            op, LOCAL_RAW_PREROUTING, intIface),
+             StringPrintf("%s %s -p tcp --dport 1723 -i %s -j CT --helper pptp", op,
+                          LOCAL_RAW_PREROUTING, intIface),
+             "COMMIT",
++    };
++    if(iptablesRestoreFunction(V4, Join(v4Ftp, '\n'), nullptr) == -1) {
++            ALOGE("Failed adding iptables CT target on FTP.");
++    }
++
++    std::vector<std::string> v4 = {
+             "*filter",
+             StringPrintf("%s %s -i %s -o %s -m state --state ESTABLISHED,RELATED -g %s", op,
+                          LOCAL_FORWARD, extIface, intIface, LOCAL_TETHER_COUNTERS_CHAIN),

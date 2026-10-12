@@ -1,0 +1,25 @@
+[
+  {
+    "path": "vendor/hardware_overlay/TrebleApp/app.apk",
+    "present": true,
+    "bytes": 1601440,
+    "sha256": "edee1100343311780d5402d732cb1b85d57f635883122c5356161ce2022fba1f",
+    "reason": "generated from the patched TrebleApp source"
+  },
+  {
+    "path": "device/g9650/compat/camera/Camera-93.apk",
+    "present": true,
+    "bytes": 3931896,
+    "sha256": "6e1d05a7b96b308f3a9dff3103db55cfee2cbea38b3249b5879fe35cfcf179ff",
+    "reason": "original signed GrapheneOS Camera 93 build input"
+  },
+  {
+    "path": "vendor/pixel/gms/common/g9650-legacy/PrebuiltGmsCoreVic.apk",
+    "present": true,
+    "sha256": "c497bb73e10f6b94d7d59be2befe04dfae2728721deaeb921bec41d8747519b5",
+    "reason": "derive original signed APK from pinned upstream GMS APEX",
+    "source_apex": "vendor/pixel/gms/common/proprietary/system/apex/com.google.android.gmssystem.prodvic.apex",
+    "source_apex_sha256": "3d259c8d56cd8608f3cfe0c367ad63d6a972f894909bf585aa45e12448b4d794",
+    "payload_path": "priv-app/PrebuiltGmsCoreVic@CP2A.260605.012/PrebuiltGmsCoreVic.apk"
+  }
+]

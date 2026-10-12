@@ -1,0 +1,41 @@
+From 3e3ffc2f8acdaec96426ab44217ae1edda6c67ce Mon Sep 17 00:00:00 2001
+From: yvanliang <42460514+yvanliang@users.noreply.github.com>
+Date: Thu, 15 Oct 2026 19:51:43 +0800
+Subject: [PATCH 33/38] G9650: restore offline charger reboot and poweroff
+ capabilities
+
+---
+ custom_g9650.mk        |  3 +++
+ g9650/g9650-charger.rc | 12 ++++++++++++
+ 2 files changed, 15 insertions(+)
+ create mode 100644 g9650/g9650-charger.rc
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index e8894ed..99dde14 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -83,3 +83,6 @@ PRODUCT_ENABLE_UFFD_GC := false
+ # Disabling UFFD alone leaves the host dex2oat collector selection implicit.
+ PRODUCT_DEX_PREOPT_DEFAULT_FLAGS += --runtime-arg -Xgc:CC
+ PRODUCT_DEX_PREOPT_BOOT_FLAGS += --runtime-arg -Xgc:CC
++
++# Give the offline charger reboot/poweroff capability on FVA4 only.
++PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-charger.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-charger.rc
+diff --git a/g9650/g9650-charger.rc b/g9650/g9650-charger.rc
+new file mode 100644
+index 0000000..cf635fa
+--- /dev/null
++++ b/g9650/g9650-charger.rc
+@@ -0,0 +1,12 @@
++# G9650/FVA4: init.qcom.rc imports an older charger without CAP_SYS_BOOT.
++# A SYSTEM service cannot override a VENDOR service across the Treble boundary.
++# Stop marks the old service disabled before class_start charger can run it.
++on early-init && property:ro.bootmode=charger
++    stop charger
++
++service g9650-charger /system/bin/charger
++    class charger
++    user system
++    group system graphics input wakelock
++    capabilities SYS_BOOT
++    seclabel u:r:charger:s0

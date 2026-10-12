@@ -1,0 +1,43 @@
+From 61d3f3d4908c101ba6cddf015825f958932e2e17 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:04 +0800
+Subject: [PATCH 08/25] GSI Android 17 compatibility:
+ 0008-There-are-three-SCO-devices.-Fallback-from-one-to-th.patch
+
+Change-Id: I2b0c3d5f2bc6b0bdcf70a3a4ce811df7982db06a
+---
+ .../managerdefinitions/src/HwModule.cpp       | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/services/audiopolicy/common/managerdefinitions/src/HwModule.cpp b/services/audiopolicy/common/managerdefinitions/src/HwModule.cpp
+index ca2b277..93702bf 100644
+--- a/services/audiopolicy/common/managerdefinitions/src/HwModule.cpp
++++ b/services/audiopolicy/common/managerdefinitions/src/HwModule.cpp
+@@ -388,6 +388,27 @@ sp<HwModule> HwModuleCollection::getModuleForDeviceType(audio_devices_t type,
+             }
+         }
+     }
++    //We didn't find one? Ok but all SCOs are equivalent surely?
++    if(type == AUDIO_DEVICE_OUT_BLUETOOTH_SCO ||
++        type == AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET ||
++        type == AUDIO_DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
++        ALOGE("Fallback SCO");
++        if(type != AUDIO_DEVICE_OUT_BLUETOOTH_SCO) {
++            auto ret = getModuleForDeviceType(AUDIO_DEVICE_OUT_BLUETOOTH_SCO, encodedFormat);
++            ALOGE("Fallback SCO simple? %s", (ret != nullptr) ? "yes" : "no");
++            if(ret != nullptr) return ret;
++        }
++        if(type != AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET) {
++            auto ret = getModuleForDeviceType(AUDIO_DEVICE_OUT_BLUETOOTH_SCO_HEADSET, encodedFormat);
++            ALOGE("Fallback SCO headset? %s", (ret != nullptr) ? "yes" : "no");
++            if(ret != nullptr) return ret;
++        }
++        if(type != AUDIO_DEVICE_OUT_BLUETOOTH_SCO_CARKIT) {
++            auto ret = getModuleForDeviceType(AUDIO_DEVICE_OUT_BLUETOOTH_SCO_CARKIT, encodedFormat);
++            ALOGE("Fallback SCO carkit? %s", (ret != nullptr) ? "yes" : "no");
++            if(ret != nullptr) return ret;
++        }
++    }
+     return nullptr;
+ }
+ 

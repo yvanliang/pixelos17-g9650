@@ -1,0 +1,41 @@
+From 99f713a4969df9b5279d8cffe8eb992713a94ad9 Mon Sep 17 00:00:00 2001
+From: yvanliang <42460514+yvanliang@users.noreply.github.com>
+Date: Sat, 17 Oct 2026 15:29:35 +0800
+Subject: [PATCH 38/38] G9650: restore legacy VNDK 29 passthrough HAL paths
+
+---
+ custom_g9650.mk  |  3 +++
+ g9650/Android.bp | 13 +++++++++++++
+ 2 files changed, 16 insertions(+)
+ create mode 100644 g9650/Android.bp
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 930579c..159b4cf 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -89,3 +89,6 @@ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-charger.rc:$(TARGET_COPY_OUT
+ 
+ 
+ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-charger-quiesce.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-charger-quiesce.sh
++
++# Let legacy Vendor HIDL clients find their matching VNDK 29 mapper.
++PRODUCT_PACKAGES += g9650-vndk29-lib-path g9650-vndk29-lib64-path
+diff --git a/g9650/Android.bp b/g9650/Android.bp
+new file mode 100644
+index 0000000..ad1c35c
+--- /dev/null
++++ b/g9650/Android.bp
+@@ -0,0 +1,13 @@
++// VNDK 29 libhidlbase searches the old pre-APEX passthrough HAL path.
++install_symlink {
++    name: "g9650-vndk29-lib-path",
++    installed_location: "lib/vndk-sp-29",
++    symlink_target: "/apex/com.android.vndk.v29/lib",
++}
++
++install_symlink {
++    name: "g9650-vndk29-lib64-path",
++    installed_location: "lib64/vndk-sp-29",
++    symlink_target: "/apex/com.android.vndk.v29/lib64",
++}
++

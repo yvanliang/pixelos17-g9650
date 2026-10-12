@@ -1,0 +1,24 @@
+name: Adaptation validation
+on:
+  push:
+    branches: [g9650-seventeen]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Validate manifest, patch syntax, hashes, and source-only contents
+        run: python3 scripts/validate.py
+      - name: Test patch preparation and corruption guards
+        run: python3 -m unittest discover -s tests -v
+      - name: Compile Python tooling
+        run: python3 -m compileall -q scripts tests
+      - name: Check shell syntax
+        run: find scripts -name '*.sh' -exec bash -n {} +

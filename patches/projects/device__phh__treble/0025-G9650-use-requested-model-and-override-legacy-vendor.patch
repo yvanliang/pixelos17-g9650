@@ -1,0 +1,31 @@
+From 8558297bbc3e4fac695b016cfe403d312d43c2cf Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:06:54 +0800
+Subject: [PATCH 25/38] G9650: use requested model and override legacy vendor
+ density at product scope
+
+---
+ custom_g9650.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 4a8f443..8067382 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -11,7 +11,7 @@ PRODUCT_NAME := custom_g9650
+ PRODUCT_DEVICE := tdgsi_arm64_ab
+ PRODUCT_BRAND := google
+ PRODUCT_SYSTEM_BRAND := google
+-PRODUCT_MODEL := PixelOS G9650
++PRODUCT_MODEL := G9650
+ PRODUCT_CHARACTERISTICS := device
+ PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
+ PRODUCT_DEFAULT_APEX_PAYLOAD_TYPE := ext4
+@@ -52,3 +52,7 @@ PRODUCT_COPY_FILES += device/phh/treble/g9650/00-g9650-metadata.rc:$(TARGET_COPY
+ 
+ # Diagnostic sources remain available, but accepted builds omit the temporary service.
+ PRODUCT_PACKAGES := $(filter-out g9650-early-trace,$(PRODUCT_PACKAGES))
++
++# Product properties load after the stock vendor's 420-DPI default.
++# Retain the accepted logical density without changing physical panel resolution.
++PRODUCT_PRODUCT_PROPERTIES += ro.sf.lcd_density=560

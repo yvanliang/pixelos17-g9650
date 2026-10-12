@@ -1,0 +1,36 @@
+From f9b6a73adab7964f71e60ced207912de0ccfa011 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 10:34:44 +0800
+Subject: [PATCH 23/38] G9650: initialize writable legacy metadata before
+ aconfigd
+
+---
+ custom_g9650.mk            | 3 +++
+ g9650/00-g9650-metadata.rc | 7 +++++++
+ 2 files changed, 10 insertions(+)
+ create mode 100644 g9650/00-g9650-metadata.rc
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index f8582cf..62d69be 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -46,3 +46,6 @@ PRODUCT_SYSTEM_PROPERTIES += ro.sf.lcd_density=560
+ 
+ # Temporary early kernel diagnosis; original init stays intact.
+ PRODUCT_PACKAGES += g9650-early-trace
++
++# Supply writable aconfig storage before platform early-init on this legacy device.
++PRODUCT_COPY_FILES += device/phh/treble/g9650/00-g9650-metadata.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/00-g9650-metadata.rc
+diff --git a/g9650/00-g9650-metadata.rc b/g9650/00-g9650-metadata.rc
+new file mode 100644
+index 0000000..37e975e
+--- /dev/null
++++ b/g9650/00-g9650-metadata.rc
+@@ -0,0 +1,7 @@
++# G9650/FVA4 has no metadata partition and does not use metadata encryption.
++# The read-only rootfs stub otherwise prevents aconfigd from initializing.
++# Sorted init directory parsing runs this before aconfigd.rc's early-init.
++# Rebuilt flag maps are volatile; this product does not support virtual A/B OTA.
++on early-init && property:ro.custom.device=g9650
++    mount tmpfs tmpfs /metadata nodev nosuid noexec mode=0775,uid=0,gid=1000,size=16m
++    restorecon /metadata

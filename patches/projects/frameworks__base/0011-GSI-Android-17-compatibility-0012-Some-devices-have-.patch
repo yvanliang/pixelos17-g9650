@@ -1,0 +1,25 @@
+From a2814377bb36c05fea811ac2b2b857f7e935c11d Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:41 +0800
+Subject: [PATCH 11/60] GSI Android 17 compatibility:
+ 0012-Some-devices-have-proximity-sensor-reporting-NaN-as-.patch
+
+Change-Id: I3a119cf2ed61b6cc9c3a9b96a1150ac55911c8e7
+---
+ .../server/display/DisplayPowerProximityStateController.java   | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/services/core/java/com/android/server/display/DisplayPowerProximityStateController.java b/services/core/java/com/android/server/display/DisplayPowerProximityStateController.java
+index 70c651187..d9e5addde 100644
+--- a/services/core/java/com/android/server/display/DisplayPowerProximityStateController.java
++++ b/services/core/java/com/android/server/display/DisplayPowerProximityStateController.java
+@@ -418,6 +418,9 @@ public final class DisplayPowerProximityStateController {
+         if (mProximitySensor != null) {
+             mProximityThreshold = Math.min(mProximitySensor.getMaximumRange(),
+                     TYPICAL_PROXIMITY_THRESHOLD);
++            if(Float.isNaN(mProximityThreshold)) {
++                mProximityThreshold = 5.0f;
++            }
+         }
+     }
+ 

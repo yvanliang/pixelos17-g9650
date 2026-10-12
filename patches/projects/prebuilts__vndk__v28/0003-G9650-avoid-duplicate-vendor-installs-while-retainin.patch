@@ -1,0 +1,37 @@
+From 2ed3a3916bcacd1185e70495e8cd7141c9ddb3b6 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 17:48:02 +0800
+Subject: [PATCH 3/3] G9650: avoid duplicate vendor installs while retaining
+ the VNDK28 snapshot
+
+Change-Id: I82a2190e154a8d9aee2c93780def268d84c02380
+---
+ Android.bp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Android.bp b/Android.bp
+index 7df0a02..a3730ba 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -131,8 +131,8 @@ prebuilt_etc {
+ 
+ // Defining prebuilt libraries for the compatibility of old vendor modules
+ cc_prebuilt_library_shared {
+-    name: "libprotobuf-cpp-lite-vndk28-vendorcompat"
+-    installable: false,,
++    name: "libprotobuf-cpp-lite-vndk28-vendorcompat",
++    installable: false,
+     stem: "libprotobuf-cpp-lite",
+     vendor: true,
+     // These are already stripped, and restripping them just issues diagnostics.
+@@ -164,8 +164,8 @@ cc_prebuilt_library_shared {
+ }
+ 
+ cc_prebuilt_library_shared {
+-    name: "libprotobuf-cpp-full-vndk28-vendorcompat"
+-    installable: false,,
++    name: "libprotobuf-cpp-full-vndk28-vendorcompat",
++    installable: false,
+     stem: "libprotobuf-cpp-full",
+     vendor: true,
+     // These are already stripped, and restripping them just issues diagnostics.

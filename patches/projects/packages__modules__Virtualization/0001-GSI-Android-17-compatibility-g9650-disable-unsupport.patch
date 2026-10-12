@@ -1,0 +1,33 @@
+From 133c87de9c6dbcd69f5c0430e6dca59e2b3ec361 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 23:41:33 +0800
+Subject: [PATCH] GSI Android 17 compatibility:
+ g9650-disable-unsupported-avf.patch
+
+Change-Id: I71532e8df8caf42bb67f4c4fb043738b9c88f3df
+---
+ build/apex/product_packages.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/build/apex/product_packages.mk b/build/apex/product_packages.mk
+index ea447c7..b1d5126 100644
+--- a/build/apex/product_packages.mk
++++ b/build/apex/product_packages.mk
+@@ -22,6 +22,8 @@
+ # If devices supports AVF it implies that it uses non-flattened APEXes.
+ $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
+ 
++# G9650 Linux 4.9 cannot run AVF VM services or mount the enabled EROFS APEX.
++ifneq ($(TARGET_PRODUCT),custom_g9650)
+ PRODUCT_PACKAGES += \
+     com.android.compos \
+     features_com.android.virt.xml \
+@@ -62,3 +64,8 @@ ifdef RELEASE_AVF_ENABLE_NETWORK
+     $(error RELEASE_AVF_ENABLE_LLPVM_CHANGES must also be enabled)
+   endif
+ endif
++
++else
++PRODUCT_AVF_ENABLED := false
++PRODUCT_SYSTEM_EXT_PROPERTIES += ro.config.isolated_compilation_enabled=false
++endif

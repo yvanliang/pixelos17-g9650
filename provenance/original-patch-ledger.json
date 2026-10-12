@@ -1,0 +1,1682 @@
+[
+  {
+    "path": "compat/restless/patches/trebledroid/platform_bionic/0001-Add-new-mechanism-to-fake-vendor-props-on-a-per-proc.patch",
+    "sha256": "c6f577952f9e304a3a6a013102e6256c99755cdeb7a06e6013cec9662f39bf53",
+    "target": "bionic",
+    "commit": "f83520760008730700ebd0c5f0ac135f960ad610",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_build/0001-Remove-init.vndk-nodef.rc.patch",
+    "sha256": "79cd2a6e53aa076bdc0eedcf18cbc9ea45b5cd763a5ccb34f1042cf1b16af733",
+    "target": "build/make",
+    "commit": "99f8d4901d31cb7e46fc6dab5ce47559b67130db",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_build/0002-build-Remove-llkd.patch",
+    "sha256": "7f37e2c699fd0e1ca912adfe11415ba6440685a13c20f79c1c12611b6b329423",
+    "target": "build/make",
+    "commit": "4ef7491eb253284e5087cf6ca98df6f9b3a829e4",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_build/0003-Include-vndk-v28-v29-and-v30-sepolicy-support.patch",
+    "sha256": "32d416d03dc3d4f86de5d310bd4ee0d4c20f9fe7f847e74e837d76af1fbcbc35",
+    "target": "build/make",
+    "commit": "0bc26962d970a0c782875a14bf2af7ff8bd9a927",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0001-Increase-default-log_level-to-get-actual-selinux-err.patch",
+    "sha256": "64cf0de7ac1d4f3e86057ac2bf027b6d646776c181411238b39715b97f0ed483",
+    "target": "external/selinux",
+    "commit": "10e490ad93eb2d9f0d8c7baf7525a73be9aebf86",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0002-Revert-libsepol-Make-an-unknown-permission-an-error-.patch",
+    "sha256": "8cc2e24959ce8a01aacf7f299beebe91ddfa518539a58711e6b96d33b827d92b",
+    "target": "external/selinux",
+    "commit": "3d330ac6c73c514429a5d891335604e8aa05f023",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0003-Workaround-device-phh-treble-conflict-with-SELinux-p.patch",
+    "sha256": "3a3e2fc97cd4bf113168c1e418652ee9d7ac52ef7419eeeb13ada9d337bc4d19",
+    "target": "external/selinux",
+    "commit": "e1a510a789b40d3c133e9034f67ed0e716945ccf",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0004-Allow-devices-virtual-block-genfscon-conflict-seen-o.patch",
+    "sha256": "b53bbc388e4e976b265c7f311c5c236329a1fdb8f09e69969290422d7621e4e7",
+    "target": "external/selinux",
+    "commit": "45c5e3d0e437f2289a6353c38f1b524907be120d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0005-if-service-is-rcs-accept-conflict.-Seen-on-Moto-E5.patch",
+    "sha256": "6c01be6cad53a190d172c870cca5cf9bf1fcc4d62e975c253b8b58e992376443",
+    "target": "external/selinux",
+    "commit": "aff31c9cebdcca45e2b21528bdab160070bb0fc9",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0006-Allow-mismatches-of-exfat-genfscon.patch",
+    "sha256": "9421e1ff5bc82685d2705156d92138d7f3706cf5843050e87352159bcb8c67a1",
+    "target": "external/selinux",
+    "commit": "4c97af38aeab8bb9c29dc97906bd529e70dc8180",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0007-Fix-boot-on-Moto-devices-using-unknown-class.patch",
+    "sha256": "e55fc03bf69394f4015aabb12790837135ffca98fda6ef04019cd388ed0a8f7a",
+    "target": "external/selinux",
+    "commit": "4e68cbc3265c939371c16c0e0faf2d8afb93b488",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0008-Improve-SELinux-policy-workaround-on-device-phh-treb.patch",
+    "sha256": "1d20ccc7c9e82552f3fb1e2d686101cf9a95097c6be26e2898d103408201d2b7",
+    "target": "external/selinux",
+    "commit": "2ae861497e32c06b144e3e297a3e0bd4c6a19f5b",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0009-Allow-sys-vm-watermark_scale_factor-conflict-seen-on.patch",
+    "sha256": "68274807b4954421491cbb22f4ce3b46d7d3a251350cc2870fcb869835adc37b",
+    "target": "external/selinux",
+    "commit": "bdcdefc402df6b9d9363c16d0209f9af7244b8b3",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0010-Allow-conflict-on-fuseblk.patch",
+    "sha256": "36d0fcff6c8ead66d36e0e765f91b6310cc83f31567d9d0e1586619d57400fac",
+    "target": "external/selinux",
+    "commit": "9877691a576785fb9aaf821dee04264af79f65c6",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0011-Fix-conflicting-sepolicy-for-compaction_proactivenes.patch",
+    "sha256": "ede33b01177da283ce8995db0b4c90aa861b7ad11c27757f9f4b5bc8252b529e",
+    "target": "external/selinux",
+    "commit": "6f27950311a3336692b57f0a4d731d28ac09e157",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_external_selinux/0012-Fix-secilc-on-Moto-One-Action.patch",
+    "sha256": "f97ab22e00ef8d1826dd60b1070ef4581f16ef1913ce1c180f6062afaa3880c8",
+    "target": "external/selinux",
+    "commit": "b613c44b1eb94755dd0a343d09008f04e5c8d9d5",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0001-APM-Restore-S-R-and-Q-behavior-respectively-for-tele.patch",
+    "sha256": "e6331d33789e8d3b301786f9b9b6c0d53103946d6df222adabf3ca124d78d2a2",
+    "target": "frameworks/av",
+    "commit": "d830492f40e1b691646ed6c19260c5302bed09bc",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0002-Fix-BT-in-call-on-CAF-devices.patch",
+    "sha256": "d0b60d4851be32e5db8282c017b5ac68efc127aaf4077ba08de4f1ba18f3f9e6",
+    "target": "frameworks/av",
+    "commit": "51bdf863d11cec99fc4ad3f265d847c4d951f505",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0003-Add-partial-cam-id-is-hardcoded-support-for-Asus-ZF6.patch",
+    "sha256": "d3e7fdd066f1930c895c15f3075b11175ab508771d14b1b52f279ef32fc2f630",
+    "target": "frameworks/av",
+    "commit": "db9abe8ca955b244b8c5c19ba89379c36fd8a332",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0004-APM-Optionally-force-load-audio-policy-for-system-si.patch",
+    "sha256": "590f75ec3c174e4a64a93bb45cbb9d858530c5c570b3cd3641261b9691f216ea",
+    "target": "frameworks/av",
+    "commit": "2f7985abf237bcecf5c3225251603d09bc2484ff",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0005-APM-Remove-A2DP-audio-ports-from-the-primary-HAL.patch",
+    "sha256": "7057a93a395cddc4953e37d50c6294319d91d502c4d60d3a2218c0f858b61801",
+    "target": "frameworks/av",
+    "commit": "31aaa9a7a6c89002b11123da1b5d12d40886a1b0",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0006-audiopolicy-try-again-with-trimmed-audio-port-name-i.patch",
+    "sha256": "0972000dbfd2bd7da7fad7f0ff60feb442948dcd8bfabdcf5465e65cbc0b4917",
+    "target": "frameworks/av",
+    "commit": "1a74806d308f831020fc101da6c9057e443c6891",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0007-camera-Implement-property-to-override-default-camera.patch",
+    "sha256": "b57815a6f81320719ae9e5e092f72cacadab86d6c7cc2f16ea6421464e5e0256",
+    "target": "frameworks/av",
+    "commit": "4458d99cad7f2db0c000df5c82fbda9e79ee0843",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0008-There-are-three-SCO-devices.-Fallback-from-one-to-th.patch",
+    "sha256": "c6377d1a00b7cd28b77409419f2d15190e051d7ff966052082737d3322c05d9f",
+    "target": "frameworks/av",
+    "commit": "61d3f3d4908c101ba6cddf015825f958932e2e17",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0009-Add-persist.sys.phh.samsung.camera_ids-property-to-a.patch",
+    "sha256": "672621e6621b2da37a871465e2b4c017150cc89ac67c2d989d1ee8ca1d71b256",
+    "target": "frameworks/av",
+    "commit": "21fc1f09ea3707806a8bf86d544c3afaf333f7d0",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0010-Add-a-property-to-force-camera-timestamp-source.patch",
+    "sha256": "503ec9c5c1a3685c6120e78c719ba14449b9023a6b0a8911e6a7f97d613dd7e4",
+    "target": "frameworks/av",
+    "commit": "ed760d001753021d9621964099b755f9889597fa",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0011-FIH-devices-Fix-Earpiece-audio-output.patch",
+    "sha256": "88b09123ce03c75f801f76e3f303bd82f3787eb5894a10b31140ea26be324b55",
+    "target": "frameworks/av",
+    "commit": "b0e53a06a1b06ab078f4c61b3cb34cd6a471573b",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0012-No-longer-make-re-assigning-legacy-audio-groups-fata.patch",
+    "sha256": "429f6931ac130e52dae40694e1aaf7ff7893bc481f105eebbee075a83ba7066a",
+    "target": "frameworks/av",
+    "commit": "b2587a7c4936560cc1b3e710ac1f4a86c9267451",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0013-Make-camera-IDs-filter-out-optional.patch",
+    "sha256": "803d928f5696d08cea37043e4bc2480997a94609ee726a1c42001080822065e2",
+    "target": "frameworks/av",
+    "commit": "7aaefafe54166d2aa58a4edc60177e83de17d774",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0014-Support-Samsung-R-multi-cams.patch",
+    "sha256": "f8b40625ac2821f71478238386a085d08711cfbb8380de4fd60a7f5d4c97643c",
+    "target": "frameworks/av",
+    "commit": "1325d53d6f9624ac356a53c227504842496b7fd1",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0015-Not-all-sources-in-a-route-are-valid.-Dont-ignore-th.patch",
+    "sha256": "321571b00afb74e627050a157f9e1a71428a7da3c005e7b82fabcaf6b7c89bc3",
+    "target": "frameworks/av",
+    "commit": "27b41c95860e152dcf35b8d93b8b3ec7bdd09e8e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0016-Use-a-fake-volume-policy-when-none-has-been-found.patch",
+    "sha256": "6179abc741065df50d06a4aee1dd82f86d93d7cedcd38a0836dcd1e9e7f21406",
+    "target": "frameworks/av",
+    "commit": "c4aa290b36491976819ed5538d6a86e0dcb8ca9e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0017-Add-a-prop-to-change-Samsung-flash-strength.patch",
+    "sha256": "d0e006e43a5e01eb2f3514d5a5a087110c4f2f1fcdab8dbea85b453249a2722d",
+    "target": "frameworks/av",
+    "commit": "a57cdf4e43e71168797df37e03694fd1a6e97e18",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0018-voip-Fix-high-pitched-voice-on-Qualcomm-devices.patch",
+    "sha256": "8660d56c6a58390e19826930a7e2ce9a85042175a2bffa3697794e0bbb5b8caf",
+    "target": "frameworks/av",
+    "commit": "b5c5dd1c9933c4f3a80a3b1a0908fd152b9b956f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0019-audiopolicy-Fix-broken-mic-while-video-recording-on-.patch",
+    "sha256": "fd07d321bde471040236a7f705dcda4920cf0639c139dd1507feb30e0f09d8aa",
+    "target": "frameworks/av",
+    "commit": "eed1c7a8978bfd618438d032ffdeb23a2996a118",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0020-Add-a-prop-to-disable-AUDIO_OUTPUT_FLAG_FAST-from-au.patch",
+    "sha256": "b97b4733e28098889be9218ed2b7fed2d38e1e46b5e889c5518ce0e1b9492a74",
+    "target": "frameworks/av",
+    "commit": "660330e611e94235f0be55d5dde60f3d2753fe4c",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0021-Add-a-prop-to-fix-echo-on-incoming-or-outgoing-calls.patch",
+    "sha256": "1e77736787a36310d4799aa5292525bfa3778ac14b6bf0cc37f1cf6588806a79",
+    "target": "frameworks/av",
+    "commit": "3e86c7f124845a9255987a8730d04ba03ae8f7ae",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0022-Include-Samsung-AIDL-camera-ids.patch",
+    "sha256": "7882bb373c2a59f30322dae676b9b45645a6346a267075112cb730d75de93315",
+    "target": "frameworks/av",
+    "commit": "1cddd6f4c3eade43e72abc7e83fa409da805f181",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0023-Allow-using-camera-modes-declared-in-Samsung-proprie.patch",
+    "sha256": "91e1285246b219278d861ba90c2eb85206ee90bffe81ad1a7331bc955e6ed99c",
+    "target": "frameworks/av",
+    "commit": "5fdc6f48e55fd8da0c1e02b4210d28d13122aae4",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0024-Tell-Unihertz-Agold-we-are-not-a-GSI.-Fixes-aux-cam-.patch",
+    "sha256": "5f6e7f62d36b9428d58b5ddbbdaaa5a0ec1568729fa17f4677299b8908bea084",
+    "target": "frameworks/av",
+    "commit": "eff1c2e1a43f1608c6627319b413f6cfd15c1232",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_av/0025-Revert-Remove-framework-support-for-audio-HIDL-HAL-V.patch",
+    "sha256": "b2345caaf50232015ce0a03dbf578cdd0fdd38ba6b63549a0d21fa9860c2627d",
+    "target": "frameworks/av",
+    "commit": "0a3752d75a1e06d12888664d2f0f1b9a94e14fce",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0001-Disable-vendor-mismatch-warning.patch",
+    "sha256": "570841c17a389149e455b1bccd409f5168e10f0a0f1ed74eb2fb185cbcc6800f",
+    "target": "frameworks/base",
+    "commit": "f3ef9c84cc8942c2dec6c70503dd259df6d5c0f4",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0002-Fallback-to-stupid-autobrightness-if-brightness-valu.patch",
+    "sha256": "6597a58efae2ce80d35f9cd9bf3b01f0f19bb4177ad06c06b7f534ce89e712f7",
+    "target": "frameworks/base",
+    "commit": "39762173110f0b87b35db5aacb4d54975deee775",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0003-Fix-env-empty-string-ANDROID_STORAGE.patch",
+    "sha256": "11a2df833e1dfff77c32a2682505c5dcdcb1a66ade24535a52e03db5c32b68dd",
+    "target": "frameworks/base",
+    "commit": "a23f4bd80d150a4cc2524afaffbef59354de1585",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0004-Relax-requirement-for-visible-flag-to-sdcards.patch",
+    "sha256": "24740264d9f46ef722e5c94a2eaf047415fd0644dceffdcd4808bfcd9cb7e77c",
+    "target": "frameworks/base",
+    "commit": "a23f4bd80d150a4cc2524afaffbef59354de1585",
+    "disposition": "already_present_and_semantically_verified"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0005-Don-t-crash-if-there-is-IR-HAL-is-not-declared.patch",
+    "sha256": "31cb1017ba07392b7a69af7e07bbfa79c773248efd81f8b618fb443f0fc44a81",
+    "target": "frameworks/base",
+    "commit": "d834d5277a2512b64576bd867b7095e8f8af5d8a",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0006-Implement-a-persistent-property-to-override-the-defa.patch",
+    "sha256": "47c24851c460fce75971434ae604c5c8512a9d87f010346d82e9b9e3c5871b7b",
+    "target": "frameworks/base",
+    "commit": "4559a18dba5fa46a0b27857c98c5094423f89b1f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0007-Re-order-services-so-that-it-works-even-without-qtag.patch",
+    "sha256": "6ce92a541f68c77d2fa4e5a5a55900612e1fd786e1902dfce2010fbac9a6ae8c",
+    "target": "frameworks/base",
+    "commit": "89cc9474996a26131c82838f4c0671f1ef7bab03",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0008-Support-samsung-Pie-and-Q-light-hal.patch",
+    "sha256": "ea50a179b64a73a69470f6dbe41ce194acd29d06067ea91cfa09b1cd5a45b118",
+    "target": "frameworks/base",
+    "commit": "a93cbe6260ea8190dfc8ee66842761fe8f1f9544",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0009-Add-support-for-samsung-touch-physical-and-hover-pro.patch",
+    "sha256": "cf651115870b3b8e6449540aa1c99aeecadf11875f229eb46bc88dfe146732c5",
+    "target": "frameworks/base",
+    "commit": "27418f45c4c03310d34376207ada0e8e6af37b83",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0010-Always-allow-overriding-the-number-of-work-profiles.patch",
+    "sha256": "0ace2ca849c1b272375f027e903dad19821246fd28204edecd773c4ffed9e15e",
+    "target": "frameworks/base",
+    "commit": "02101539e89a8d003252dca7fb4de9f962dd7856",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0011-HOME-deserves-to-wake-up-devices-just-as-well-as-bac.patch",
+    "sha256": "7ece1fcd5e95cf49a34622adf9f1a7dc7f7bc5ea12ab86587f8f06a0284a8220",
+    "target": "frameworks/base",
+    "commit": "05772c4846de96500dd0d674fe5911298e922207",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0012-Some-devices-have-proximity-sensor-reporting-NaN-as-.patch",
+    "sha256": "65aa6de02b62f1eb1e87768775b33cd0cf1a5e5627e2e594ee71df91dca8ff41",
+    "target": "frameworks/base",
+    "commit": "a2814377bb36c05fea811ac2b2b857f7e935c11d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0013-Fix-brightness-range-not-being-complete-on-Samsung-d.patch",
+    "sha256": "2b42d874598d714305101f0b1da41a32ee76faab4032d09d846caa30da197554",
+    "target": "frameworks/base",
+    "commit": "3010955440f8869f89fba206a04e709ff023baea",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0014-Re-implement-fnmatch-like-behaviour-for-RRO-java-sid.patch",
+    "sha256": "a62ebc9d3da8914111c297da78bb4db18dc74beda76dda9da873e81971b2fe5e",
+    "target": "frameworks/base",
+    "commit": "462dc062e865fb2aa71b70741994b48d230481a9",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0015-Remove-useless-notification-about-console-service-be.patch",
+    "sha256": "1909c54ac6acb122a1e9bdc34bfd7f0349c6dfa9e23857d3cd882014687c0ca4",
+    "target": "frameworks/base",
+    "commit": "2fd07d4206bffc9d09375ac3d2c17d1c7798534c",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0016-Revert-Remove-unused-SystemProperties.set.patch",
+    "sha256": "f1b9e242540dfa7f4fc056a530b1ef24fce0eb9b7f063fa0573969a5bba8b286",
+    "target": "frameworks/base",
+    "commit": "cf62b297d4614185a68aaa4f59d8d1e311f548d8",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0017-TelephonyManager-bring-back-getNetworkClass.patch",
+    "sha256": "0e05d28b65ce80c4433ee9bd3e3454039c01d04abae78722658ccd5ac0f2fa36",
+    "target": "frameworks/base",
+    "commit": "bd02fd90ed500be03fd9acca543a1d38f549d435",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0018-TelephonyManager-add-API-annotations-for-setTelephon.patch",
+    "sha256": "4cccc9ca1437e4c515d317846969a3b6e0e91b61b6a99a30d1b324fe55a9b8e6",
+    "target": "frameworks/base",
+    "commit": "1ba95bc2094c08eb4df60a29c29baac9e1922158",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0019-Automatically-detect-pick-up-sensor-so-that-an-overl.patch",
+    "sha256": "35e5399b8e3cdfd251bf1ddd20925e729accd6cd46830773e728b9a8288c48e4",
+    "target": "frameworks/base",
+    "commit": "9c6a4065069800ef07b713c52c9f95505ed22c3e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0020-Catch-broken-mainBuiltInDisplayCutoutRectApproximati.patch",
+    "sha256": "242ff134957e518ee25af368ab25ed27fbbc19c6ac1fdc47813513934a1daf99",
+    "target": "frameworks/base",
+    "commit": "2e388ac6bdd98e948d4d53e51aa334dc7aed0f3a",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0021-backlight-Fix-backlight-control-on-Galaxy-S9.patch",
+    "sha256": "6c0bc0ce1ff954673a266f6d2558ae2e888d3d98519fe7f746c0b6a7dee48d0b",
+    "target": "frameworks/base",
+    "commit": "87c3ec326dbb97f3fbcaa27212a989d2c6ceb900",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0022-Allow-disabling-of-fingerprint-cleanups-needed-on-so.patch",
+    "sha256": "88115ea658e9d801c710c71f03b6e543f97beacf78b427243e03f867897a9b73",
+    "target": "frameworks/base",
+    "commit": "5bf0d7aac7cf5c87f58b688d0fec16e2388a0a87",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0023-Dynamically-resize-boot-animation-to-match-screen-si.patch",
+    "sha256": "3edf3d86629a714ae0bafa3c9dbd38f4a8fb0007ef5817e80319c73f87bba3fc",
+    "target": "frameworks/base",
+    "commit": "5a7b4215bb3c4f943918ad72385404de401a035e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0024-Revert-Remove-more-FDE-methods-from-StorageManager.patch",
+    "sha256": "b5a733d41a7534c1be5dc56c32d25252579e008708d6bfb3f300231db52ebeb6",
+    "target": "frameworks/base",
+    "commit": "c47478712a49a6346fd6450f2bb9c416b434942b",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0025-SystemUI-Use-AVCProfileMain-for-screen-recorder.patch",
+    "sha256": "e397c88e6beb730a9dea240102e3df943eaf51cb99cc70462a2153feaefcd255",
+    "target": "frameworks/base",
+    "commit": "c47478712a49a6346fd6450f2bb9c416b434942b",
+    "disposition": "already_present_and_semantically_verified"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0026-Set-old-fingerprint-sensors-to-security-strong.patch",
+    "sha256": "95df1ac5533ecf7b5e19c6007c944b3794fa8183be25d7c5afc1476832c89a11",
+    "target": "frameworks/base",
+    "commit": "c2035a57da6b2eb1bc69785f22013f10702a5724",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0027-Call-Samsung-s-ISehSysInputDev-to-report-screen-stat.patch",
+    "sha256": "2d89ae01c4dddfa96d42c6fb28508d236ed94d83c9574a94db83c0b1dd45aba6",
+    "target": "frameworks/base",
+    "commit": "50bae447dff89b9409a12f874eab1012dd083901",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0028-Try-catch-around-constrainNitsAndBacklightArrays-and.patch",
+    "sha256": "39c6eb554602539f2afea2fbc39f70b65289363223b40b8073d32907c3ee282b",
+    "target": "frameworks/base",
+    "commit": "774ef4d41c3a177edf24c0b90bcafe462d78a9a5",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0029-Add-Mediatek-power-hints-on-touch.patch",
+    "sha256": "3be1530affd8865daeab43b7860e467e6543c3582946a1ecfb5ebc5a01b6bae4",
+    "target": "frameworks/base",
+    "commit": "9fcc99b8677be40ff20c0a8c481d8546200d74ef",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0030-Detect-Moto-dynamic-hardware-feature.patch",
+    "sha256": "8f5eae40ae328cbca97691d3683f7ad11c9abe840cb9d119077aceb14becc75b",
+    "target": "frameworks/base",
+    "commit": "ddb2bff3cfbd3ba21c6941c8e46d3e7d89fd2483",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0031-Restore-getSimStateForSlotIndex-in-SubscriptionManag.patch",
+    "sha256": "d8e04057cdad9944db56920fc2b09a8e4ed54b1ea5d6229d8a4190a2ad8215cf",
+    "target": "frameworks/base",
+    "commit": "72d68d5454dc2c4f968667496f79d4029e431e00",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0032-Add-runWithCleanCallingIdentity-variant-with-both-ex.patch",
+    "sha256": "6a8df8a8e5301d67442a092b3ef004d7781dd8556937b03fa200027ae1a603fa",
+    "target": "frameworks/base",
+    "commit": "f52741affb485c3c6bbebbfd82db7e8b481ff51a",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0033-Catch-NPE-in-SystemUI.patch",
+    "sha256": "35f816c6594f5e427eda3f63e5d4c35baef047dbb96c9e0e521d0a94f148c29c",
+    "target": "frameworks/base",
+    "commit": "44d4c014404cec891674f3499ead726877d732e5",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0034-Once-we-integrate-Samsung-Power-hal-in-libpowermanag.patch",
+    "sha256": "a528cf3868c669d5ea68710935b15d07f23b4f6dca78c01842c922c7b5c3aec8",
+    "target": "frameworks/base",
+    "commit": "7c64146b3252846d086b88160ac048edc83a2b80",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0035-FOD-support-for-Asus-Samsung-recent-Xiaomi-and-RedMa.patch",
+    "sha256": "e02cd28e58226f70a9769903e43720b4e85c9c517ef7488739b3ca4fb2dd3067",
+    "target": "frameworks/base",
+    "commit": "33b337a9e8a63993bdd142186b77923935c4136f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0036-Fix-brightness-slider-curve-for-some-devices.patch",
+    "sha256": "218a5df41908503f39206557038b1585734949c746f11c0dd076c451bcddcdb5",
+    "target": "frameworks/base",
+    "commit": "b454c4df019969974fe92dfa81863d3c18eea2fd",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0037-Ignore-cgroup-creation-errors.patch",
+    "sha256": "f2a223c59aa8c15cf1a49b7d804a53f1329126dbde858b5b24768606b6280cf3",
+    "target": "frameworks/base",
+    "commit": "452d57d62c4a7c24b7adf825038e0a2a4b1e7b4d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0038-Samsung-tablets-use-SW_MACHINE_COVER-rather-than-SW_.patch",
+    "sha256": "5da3e8f14cad60267a3eca502a0a28f0501557af73cba3930a63402bb48e8b3e",
+    "target": "frameworks/base",
+    "commit": "2089d08a97bbb7551e3e0448a282e7684e9c435b",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0039-Add-a-prop-to-use-linear-backlight-control.patch",
+    "sha256": "97ab2a0ab69fd939816d9fc721952c41f34bc8d03875ea4fd4ca27587f70bd6e",
+    "target": "frameworks/base",
+    "commit": "50d18ae849df16fc4b2c9c3241f3d834aaacb9a9",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0040-Add-support-for-Samsung-full-brightness-on-their-AID.patch",
+    "sha256": "0eb8b8ab4c4c135f924ff813e784799cec58fa84ac2d8df5ddd048ab08ef8d1a",
+    "target": "frameworks/base",
+    "commit": "1fd2196b4807ad0aa54a0d10292616fade09df42",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0041-Add-Samsung-sysinput.patch",
+    "sha256": "d415dbc4c8fccca90e7867f95bacc9fca2c7c1f914314d5c118b433160be92a4",
+    "target": "frameworks/base",
+    "commit": "c7d8192a7acf60237962d943e23c06d910bf3c6b",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0042-Bunch-of-FOD-stuff-commonize-refreshing-the-services.patch",
+    "sha256": "4473ade71cb0bf84c07d80971861eca8c7870649daf81a8900246895e7e20b82",
+    "target": "frameworks/base",
+    "commit": "9f42abbfcf5b564919ad14343ad739b8e1c9887d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0043-Some-Samsung-devices-use-SW_FLIP-0x15-rather-than-SW.patch",
+    "sha256": "8333dfd938281c21441be8d3b21239c1477788453157874e02102df85c36a8c1",
+    "target": "frameworks/base",
+    "commit": "b3881a330888acc429b83e6432583c809b189dd2",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0044-Include-vendor.samsung.hardware.radio.network-V1-jav.patch",
+    "sha256": "76ef7081db2bb02b35bb61fd9ce068a49091bf33b0a033985fe24639d56145ea",
+    "target": "frameworks/base",
+    "commit": "2fea6f826a0ea2daac89831f4e111deaf3d4d459",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0045-Include-vendor.samsung.hardware.radio-V2.2-java-HIDL.patch",
+    "sha256": "14d63dce52ec5e4c667c357bd8b7985f065274baa17895e09b04efc3c21fba3e",
+    "target": "frameworks/base",
+    "commit": "62f6fe9c22cb1d61f5e2e2ce080686420d2eb963",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0046-Allow-signature-spoofing-for-microG-Companion-Servic.patch",
+    "sha256": "ddb24c30b23e624ff074a9943141b80574c6a32ea907a4fce7972c198e013910",
+    "target": "frameworks/base",
+    "commit": "2fb23e037a478626b9bf61ab56533d95437579c8",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0047-Don-t-crash-system_server-if-we-fail-to-parse-dynami.patch",
+    "sha256": "e3c530619d139a91fbb82e3749fc0d8a19c6b3580c5d82070b723540f63a7064",
+    "target": "frameworks/base",
+    "commit": "f5009c6554625c07beb46688d80548a7293e4627",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0048-Add-a-prop-to-disable-animation-in-for-sysui-media-c.patch",
+    "sha256": "e2caee5eeba7d8a2510c2ec5a23dddecf251c5e4e2b1452041d5377316afc883",
+    "target": "frameworks/base",
+    "commit": "233e9dc6dff603248626827ec2a046df4c97ff02",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0049-Allow-APKs-of-a-certain-signature-to-install-work-li.patch",
+    "sha256": "9d5930c2afedf23e8c950fa7b609ded8f50ab998f6d32477e4741d81268655d4",
+    "target": "frameworks/base",
+    "commit": "15ad590e8dc0167ba089b740e47ff5a0e89a227b",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0050-Add-support-for-treating-virtual-biometric-sensors-a.patch",
+    "sha256": "bbb2e37fac3b49d399fe8184948d0cf0fa7dbc9e462b829a0f9328df198dda18",
+    "target": "frameworks/base",
+    "commit": "c54f6556b858b91e92341041dfe13ddeccb31ab3",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0051-Allow-spoofing-signingInfo-for-microG-Companion-Serv.patch",
+    "sha256": "68a51f8bc93b666ae7af321f2fd8056c83791a03d274f51bee4c7f9c2cecf426",
+    "target": "frameworks/base",
+    "commit": "dfbb4cb95633cbb1aeca77601d6a9fd46673755b",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0052-HintManagerService-Generate-dummy-mSupportInfo-for-n.patch",
+    "sha256": "255dd7e4b4b74dbe3512e8029da0251667fb7667416eb5fe578febafd0467609",
+    "target": "frameworks/base",
+    "commit": "32af7d2a7fb6371d64671e276415c2cd998d7b8f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_base/0053-Not-all-kernel-support-splicing-pipes-or-is-it-socke.patch",
+    "sha256": "58a3877d00b9214b45483e12c3baf3e83ed63ddb60f1765efced9f05d6181e0f",
+    "target": "frameworks/base",
+    "commit": "6f88f0a6802f2591b804d7c604c3ac0b589d3515",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0001-On-Samsung-we-need-to-send-a-hack-message-to-HAL-to-.patch",
+    "sha256": "4adab261c38654da36b9b29b824d7d836283543504928028bd794d4e09c66c69",
+    "target": "frameworks/native",
+    "commit": "0882d99ff77ba588c333fc7daca3d0402a6ee065",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0002-Matching-an-input-with-a-display-uses-uniqueId.patch",
+    "sha256": "5e40ccf4b4a76d0bb65cbbbdb5719933479fc765750b24465e4e5805b6a01694",
+    "target": "frameworks/native",
+    "commit": "d2fbca8c308e6e5cf50ed0b47439042feadfafc8",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0003-unshared_oob-didn-t-exist-in-O-P-so-detect-its-suppo.patch",
+    "sha256": "51f5463b6a09f29be7cd0c88ea41f712183848d658397b92c19adc085dccd1d1",
+    "target": "frameworks/native",
+    "commit": "244b9e2a1b0708269ac8b6cd91f1af51830b8b69",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0004-Remove-Samsung-system-permission-on-sensors.patch",
+    "sha256": "4e9205d12c38e2464b631319e0240313f18da5924d234aa1b82ea336d83158b2",
+    "target": "frameworks/native",
+    "commit": "8178ddff1c548fdeaf5597462231f894dc7bae5a",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0005-Mark-accelerometer-input-as-sensor-exclusively-if-th.patch",
+    "sha256": "d5d98b9becc0f44340a2d0bb1a25f6a0aaffdec82cdb8abc8fb5eb00e6d79542",
+    "target": "frameworks/native",
+    "commit": "3926d736bb71ebd9b55ae216a8eacb77a4b28afd",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0006-MIUI13-devices-hide-their-vibrator-HAL-behind-non-de.patch",
+    "sha256": "ffa9ff884d15f3147a8c7f46170c358ebdb3fa86b6928c25b078936b7fe90d18",
+    "target": "frameworks/native",
+    "commit": "ad225c3cfd5da1d73d2552de5d292d1bfaf517ca",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0007-powermanager-Add-support-Samsung-miscpower-HAL.patch",
+    "sha256": "bcc5c02c4660b5ab169dcf88bfe15005b31993445158d553fdc606094b5b80c2",
+    "target": "frameworks/native",
+    "commit": "913753e328edd9dc83328c4941a9486ded0cf84e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0008-FOD-support-for-Samsung-and-Asus.patch",
+    "sha256": "cec0e94e101a036296f84fa94a99fc0c42eab27bda393476bc9d0fd998885ed2",
+    "target": "frameworks/native",
+    "commit": "6de84ac62d903db155cd7b87c44c77d62c161060",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0009-Add-MTK-GED-KPI-support-to-fix-broken-Mediatek-gpufr.patch",
+    "sha256": "b42fec893a785603739297333c75879e21fe4afc5bb8ed19475057110e1cc1c5",
+    "target": "frameworks/native",
+    "commit": "a7815433ac5de625557a38c1f196315245fd68c9",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0010-Fix-loading-unnamed-GLES.patch",
+    "sha256": "04dd590ab9116bebf7e17d5804e236a5cdead2ca5910b778a4a205069bae7603",
+    "target": "frameworks/native",
+    "commit": "f7c5de23803765eca52b9a37ac5e53e3079b8d71",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0011-Increase-SW_MAX-4.patch",
+    "sha256": "af830f90c639167a9d66097152d65c71a98bac039a9ab218c55f162540ab3a60",
+    "target": "frameworks/native",
+    "commit": "2acfe83d1c93fec4cb0b4264a267af17c0dc1159",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0012-Disable-gpuservice-on-old-BPF-less-kernel.patch",
+    "sha256": "3f813628300c129cd8704455224a211778028c08bcd82b87ce525da2bc69f7f0",
+    "target": "frameworks/native",
+    "commit": "e6a6980bc5f12d59cb0f2f09be2477ccd3608f3f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0013-SurfaceFlinger-Disable-SF-HWC-backpressure.patch",
+    "sha256": "45f2a8e65d6ace354aaa4929df2484b39dc74ba07f3bafe41559ff5229a91f69",
+    "target": "frameworks/native",
+    "commit": "fe09705e5669942040be481f97bef3241ecb961c",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0014-Fix-touch-on-Meizu-21-Note.patch",
+    "sha256": "3add7387046f9e5b203943e852cd3199e364c46d64b4e55fea7926740bd7fb45",
+    "target": "frameworks/native",
+    "commit": "efc9688409372586f0674ff4c28e92ee3192ba8d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0015-Fix-touch-on-MEIZU-21-Pro-1.patch",
+    "sha256": "6a3062ea6726bc88a9f63f42a538354367bbb08175489d90db23494277c842ed",
+    "target": "frameworks/native",
+    "commit": "f0be218bc43062a5aadd4d9d03ab52f5948b1864",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_native/0016-Revert-Remove-dead-code-from-LayerFE.patch",
+    "sha256": "e41d80a4dfbd84f3179e88f42f85f11a83c369568854e776e2af553d0ac5c9f7",
+    "target": "frameworks/native",
+    "commit": "6ae62ef90edc929b95b27d3f9e766f2787073361",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_net_ims/0001-Pie-MTK-IMS-calls-static-ImsManager.updateImsService.patch",
+    "sha256": "9c895aec94f556214c788621ca0c7f4d00ba587237f16d9fb7ad68d90db04ec4",
+    "target": "frameworks/opt/net/ims",
+    "commit": "a0a97473b7be45c027f88e12cb74c46d7c3810de",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0001-SubscriptionController-Do-not-override-default-calli.patch",
+    "sha256": "c6bfe7c2eb9448a2a1e299e55e1e3e4de4e6df9390ab62b27a868bc1cdf5b83f",
+    "target": "frameworks/opt/telephony",
+    "commit": "4fd69e5bfa2c157e4bdd943a14c2cb59c0aa056a",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0002-Telephony-Don-not-call-onUssdRelease-for-Huawei-RIL.patch",
+    "sha256": "47af35df3216e3a9d428e5d06f00a70e6886fe64566bb0a9eddc1c1764563c0c",
+    "target": "frameworks/opt/telephony",
+    "commit": "b2a97b5295ec31997ac90c28b267327dc1f3bffa",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0003-Fix-baseband-being-too-long-to-fit-into-a-91-chars-p.patch",
+    "sha256": "059608442d059be586aa3683e0bc16d8177b762cc016522619820d83bd274f21",
+    "target": "frameworks/opt/telephony",
+    "commit": "0fa27fb55260fbbd86cec4f8aa9edae14f5428e5",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0004-Fix-NPE-with-1.0-and-1.1-CardStatus.patch",
+    "sha256": "f6d3d6adc182670423f39dc13d7e023c8b3541728c1fd982bd71473a5b95621b",
+    "target": "frameworks/opt/telephony",
+    "commit": "e5043805a13ec2279cf4c265317810034295447e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0005-Conditionally-revert-Block-Binder-thread-until-incom.patch",
+    "sha256": "001b8fbe34082f8d610e30ebca99cc1fc1530b56e7aa6daac4b4c3ebe5d05b51",
+    "target": "frameworks/opt/telephony",
+    "commit": "e5043805a13ec2279cf4c265317810034295447e",
+    "disposition": "already_present_and_semantically_verified"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0006-When-logging-UiccSlot-ignore-error-if-we-cant-print-.patch",
+    "sha256": "8c215bed9e5288ee2c52c568c4bbf24a9d9a9eae9f9d031f18b9fec2bd90b99b",
+    "target": "frameworks/opt/telephony",
+    "commit": "ac192fc5c44cf19a04238634eafb58a38ab4c782",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0007-Initialize-Samsung-AIDL-ISehRadioNetwork.-Fixes-5G-o.patch",
+    "sha256": "8a69f8fdf06e3c6726e11b2428325cadeb4c6e863afa03174a838ed7d4ffd6fd",
+    "target": "frameworks/opt/telephony",
+    "commit": "46797195452d60cc08a87ea73295b5b8d509019d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0008-Initialize-Samsung-HIDL-ISehRadio.-Fixes-5G-on-S20-U.patch",
+    "sha256": "2f6883330e5ef1bf2822b13750d86283bc898a6fa0a520022d4bd3ecc011628a",
+    "target": "frameworks/opt/telephony",
+    "commit": "038ccf5a9cc4865452f931b196e862b090f46c18",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0009-When-reading-SMSC-ignore-invalid-SMSC.patch",
+    "sha256": "932f163611d157b65057795a8451161b8f8a22083d702edab68106cfb0782600",
+    "target": "frameworks/opt/telephony",
+    "commit": "4a4cb879160319efb359c650e4ae56b154304e5d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0010-Samsung-SMSC-When-we-receive-those-weird-SMSC-actual.patch",
+    "sha256": "e433e383356a27a219a36d2571413d65608346621f3cbb9d7f81511ff27aa95c",
+    "target": "frameworks/opt/telephony",
+    "commit": "7495a47a6ccf9361639014dbc602bc10743ef7f2",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_frameworks_opt_telephony/0011-Allow-for-SMSC-patching-to-be-configurable.patch",
+    "sha256": "ec7584a66579be883a8d4b16826fc7c1d161e11d538390a64a58faed6e5f3508",
+    "target": "frameworks/opt/telephony",
+    "commit": "1f5f3331dc954b66a1380fae7f2a2cc803f58d35",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_hardware_interfaces/0001-Add-a-vendor800-command-to-be-able-to-call-vendor-sp.patch",
+    "sha256": "70ad238c3a5ea292b715a0b200a2223260f5fd38dedd98e36c98690fcca4b218",
+    "target": "hardware/interfaces",
+    "commit": "6b7f2a3fa527e7f8d7bddd20dc7b717b273cf784",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_hardware_interfaces/0002-Fix-light-sensor-crash-on-Xiaomi-13.patch",
+    "sha256": "2269e4aaa1a79695ed7b32bf4120846777dee614f56c1b639eedd150d84c828c",
+    "target": "hardware/interfaces",
+    "commit": "a13bd606d47d36976e7bfb00371c0288a9d2c518",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_hardware_interfaces/0003-Fix-crash-on-Samsung-S23-using-stock-properties-beca.patch",
+    "sha256": "58fe831efcfb5711edd7cb8a46cd896b520366676e3d070ca758b3c258b0adcd",
+    "target": "hardware/interfaces",
+    "commit": "5bc97e8bb957c2eeaa97f3e6b2f1b1614b204964",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_apps_Settings/0001-Act-as-usb-device-when-there-is-no-hal-but-we-believ.patch",
+    "sha256": "4c433bb5ee0701136ed8466c5008e0643ed29a3bacdb979ef413e769abee226a",
+    "target": "packages/apps/Settings",
+    "commit": "a6ad4074da3fa45ce3fbd084d44d228e1d5526c0",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_apps_Settings/0002-Ignore-cancelled-fingerprint-events-they-are-expecte.patch",
+    "sha256": "2d874159d325f9e1e6d04e0c66514f381adfcbfe615b39db663e648b9e704c47",
+    "target": "packages/apps/Settings",
+    "commit": "11db7e9a7f34dbe77d4a8c635ee5c9f15406b1cb",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_apps_Settings/0003-Revert-Wi-Fi-Remove-Do-not-validate-option-in-CA-cer.patch",
+    "sha256": "13ddf3f14ff5ee4ea3ef31beaf940cfa1e74c9b17a37bc123c33244be4a25537",
+    "target": "packages/apps/Settings",
+    "commit": "1d0dd49382b9791528e316f3a0fdcc4c049d407d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_apps_Settings/0004-Revert-Wi-Fi-Check-if-domain-field-is-not-empty-when.patch",
+    "sha256": "abd39f5b588ad32030e0929216cf8f9b93d3e1a0fde22c9f3839b7e832d47989",
+    "target": "packages/apps/Settings",
+    "commit": "aaec62813fc00715f5f7784984895554f59e215b",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Bluetooth/0001-audio_hal_interface-Optionally-use-sysbta-HAL.patch",
+    "sha256": "9bbd5ec2406e27cec9f64e8eb24f0be9bd93c3abad27563d728a5e1ce44be40b",
+    "target": "packages/modules/Bluetooth",
+    "commit": "0dbbffd64610fa06ad571650dac7df823dbb440e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Bluetooth/0002-Don-t-crash-on-status-UNSUPPORTED_REMOTE_OR_LMP_FEAT.patch",
+    "sha256": "82a9a7db76bfb0204c5b589bcfe552d41380e1362ec1835146bf67fb7b020461",
+    "target": "packages/modules/Bluetooth",
+    "commit": "26979d6a0f70a49658d74380c4631f102cb0ebc0",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Bluetooth/0003-Add-option-to-change-eSCO-Transport-Unit-Size.patch",
+    "sha256": "c038e51c0fa341b13837d9bab5d4d48ed35b78b3664341aaefea91cc70c126d8",
+    "target": "packages/modules/Bluetooth",
+    "commit": "7949842327408b213f52e54e775226d4f51bfd09",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Bluetooth/0004-Don-t-abort-when-failing-to-get-real-time-priority.patch",
+    "sha256": "148d2710abee519162911722b1eed70572e019d1fa3b7eb52efac1a240802c19",
+    "target": "packages/modules/Bluetooth",
+    "commit": "43c17e62dbffdd64eaf1a69307b26c00fb19cdff",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Bluetooth/0005-On-Samsung-devices-we-need-to-tell-Audio-HAL-if-we-r.patch",
+    "sha256": "1fe79ffc3e8b0a4890d2f422a23fcc54b79a36adeca06cb8bde33b6d18fd77d0",
+    "target": "packages/modules/Bluetooth",
+    "commit": "7b736b3727fcf3dbfda374a6580763cc326b523e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Bluetooth/0006-Add-properties-to-disable-some-features-commands-sta.patch",
+    "sha256": "2ee4fb9666db9bd6fbf07a7c795f83c9bdf4f64c5218d902c9c01ab0851954f2",
+    "target": "packages/modules/Bluetooth",
+    "commit": "9b85c4b12cff984edb6ad5ca69b2b034b80e4709",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Bluetooth/0007-Add-a-property-to-cap-declared-le-vendor-version.-Fo.patch",
+    "sha256": "b4c1d20e0742a48830389ad586c1b5f1ff7df08fc72d5ab32e3b179e52085151",
+    "target": "packages/modules/Bluetooth",
+    "commit": "60e156e3fda8b6b73d1949a9722f5c3d71e96680",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Bluetooth/0008-gd-hci-Ignore-command-READ_REMOTE_VERSION_INFORMATIO.patch",
+    "sha256": "597d63389f94624a1d78b0da59002efd39daad342f531d90a4c3812eafe57eda",
+    "target": "packages/modules/Bluetooth",
+    "commit": "4cc478a6e4c742496a3f80bfb63f7ee3b25080b8",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0001-Allow-failing-to-load-bpf-programs-for-BPF-less-devi.patch",
+    "sha256": "47f4b3dd0a70680de43fed057ec2456d6e8e2f5578f361db8336294f1f87fd5a",
+    "target": "packages/modules/Connectivity",
+    "commit": "99f11955e6616cc18572de27b7a2c4758018b126",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0002-Support-non-working-BPF-maps-on-old-BPF-less-kernel.patch",
+    "sha256": "c8e1edf633819d222ee8c26f936802b8de87e4413f2435e4c3d8e2df9837b512",
+    "target": "packages/modules/Connectivity",
+    "commit": "235f7c61ccfdfd8809af9e6feed1cd299add5f74",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0003-Bring-back-traffic-indicators-for-legacy-devices.patch",
+    "sha256": "9434d74866313e108bb1dfe274e84c231d2fa824c09d0d8fab98df1830c45560",
+    "target": "packages/modules/Connectivity",
+    "commit": "1403744e2cff1688cc5228956bc04a79ffa32050",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0004-Revert-drop-support-for-V-gsi-on-pixel-5-R-base-kern.patch",
+    "sha256": "a3670a4f1ace97e9420ca5f8163a8e4b6b9217ba09119249fd9d9013ddc1c4af",
+    "target": "packages/modules/Connectivity",
+    "commit": "4e9f28caecdd621245ba22c003ed5168e62ab688",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0005-netd-Remove-4.14-kernel-restrictions.patch",
+    "sha256": "af88c3e11f2dae9c0f4d751a1f55513983471a0f77e5f9370fd0374c745f3d6b",
+    "target": "packages/modules/Connectivity",
+    "commit": "20b6479c76225da22f10c293f435f247415f9fe3",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0006-More-bpf-errors-ignore-there-are-some-4.14-without-t.patch",
+    "sha256": "7a55b581e67d77a8e5e03c5f0012db5379356289981017d52b0ed13c7487ca0a",
+    "target": "packages/modules/Connectivity",
+    "commit": "bc9b608650b7212a9c4226ddfcd60bd6d5915176",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0007-Revert-netdupdatable-add-back-abort-on-init-fail.patch",
+    "sha256": "cb6f28d8190f6361d790afa390a4dd0a480884bf90965b6fdc033cbdc3c531fb",
+    "target": "packages/modules/Connectivity",
+    "commit": "088d73789a4abc45e7aacd7ccee923d504ca1410",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0008-Additional-bpf-prevent-crash.patch",
+    "sha256": "2e5d288a8ee97e90f023bf97eb37b6b75e0dcc7a62a56f651927778eef057019",
+    "target": "packages/modules/Connectivity",
+    "commit": "c4940c99342c6e6158c18b1dbc12c170d887eab2",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_Connectivity/0009-Some-additional-handling-of-bpf-less-device.patch",
+    "sha256": "9b3a6872fabba877a313b6015e95771b78d18669d5e0656c6560e8f5c04ee912",
+    "target": "packages/modules/Connectivity",
+    "commit": "8efa820c32f45e5ad6cc05b527a5c294ce0f6ae3",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_vndk/0001-Revert-Removing-vndk-apex-v29.patch",
+    "sha256": "37a60a91a1ea5d00f5f1792cf7954e8887728abdad869fe31cfd736c5aa1a56d",
+    "target": "packages/modules/vndk",
+    "commit": "7c486f33ea6c6248b2f97560efb57c96327387a4",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_packages_modules_vndk/0002-Revert-Remove-VNDK-v28.patch",
+    "sha256": "be2a221dcf779d9e924f2e580adc82153925d1af656d8af5bad94a31acf91c4b",
+    "target": "packages/modules/vndk",
+    "commit": "e1344011351b9701474e4b1aeb3af5fe5a1f9c74",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_bpf/0001-Support-no-bpf-usecase.patch",
+    "sha256": "ad3bd2cafd8d9a182599c87aa09f6a1ac86bcdb264a90d9e0df1bcdccb26ee2d",
+    "target": "system/bpf",
+    "commit": "5c55c37b3ebfbaa68b9e91dc5e6a99173e293a1a",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_bpf/0002-Prepare-for-the-future-making-bpfloader.rs-fails-all.patch",
+    "sha256": "da74ed628a45b584cbc5cb1f40558355730ebc570bc915e7530879b6f1cdcdde",
+    "target": "system/bpf",
+    "commit": "257c95a74f53f2cf01be04352e9ca36b226f2afc",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0001-property_service-system-override-policy-for-apex-adb-and-logd-props.patch",
+    "sha256": "bde4a46e066f377f05d9c1a307b21616731cd6ff3e040cb152c6c311094d6150",
+    "target": "system/core",
+    "commit": "2260fb9d18282ec3dea5dbb2119d0a96580c9d1e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0002-Don-t-abandon-creating-property-tree-if-there-is-a-c.patch",
+    "sha256": "a1176f9b8b393030a850cddc047abc0e91b492714cb9a7d7b86956d8155a10f4",
+    "target": "system/core",
+    "commit": "120239885a415a6fda9a542e1e403f8dbf6d86b3",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0003-init-Do-not-start-console-service-when-debuggable.patch",
+    "sha256": "494610c2d2565a3411aacd8628928255889377f1b19c403efb53a6e2bf17fca2",
+    "target": "system/core",
+    "commit": "9212164a0b634c10f956467e7db84b6415a67dff",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0004-Panic-into-recovery-rather-than-bootloader.patch",
+    "sha256": "174bd52149f0aa053e3e8854850209b49d6b27168c907f2d3dcb1310535de05e",
+    "target": "system/core",
+    "commit": "76fdb3274655077dfa0f29c336440171994948b4",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0005-Detect-allowed-sdcard-options-based-on-vndk.patch",
+    "sha256": "1b87c38e0310c4f74f52a2ed82b6f46daa491bef7c186e101639dce520773bc7",
+    "target": "system/core",
+    "commit": "c519e259379d6ef88421e005d2b8f75032ada8a8",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0006-Ugly-but-secure-Set-dev-uinput-as-0666-to-fix-finger.patch",
+    "sha256": "f2597c1637b06902f45ffcd0a73d63bf66a98b7521f346dfd624114ae67e8a3d",
+    "target": "system/core",
+    "commit": "604b61173405a5a278abf5f85c8d3dc9e9f682b4",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0007-Revert-Set-system-xbin-permissions-to-750.patch",
+    "sha256": "bfd782794942c3fc9b770928469c9e1fe2c54e259cae6740790cdfca38c00fc5",
+    "target": "system/core",
+    "commit": "9f806ae5ab1f3837d88e4fefa6c193dfb524d9cb",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0008-Add-my-own-OTA-mechanism-going-over-data-1-2.patch",
+    "sha256": "884c5b16cc9096990973f36175405a61e295b5d7e6b72cb6beddf0680d0c260d",
+    "target": "system/core",
+    "commit": "3ed4759dd25942e8af4b379a4f7299f4e9244710",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0009-watchdogd-Support-pinging-two-watchdogs.patch",
+    "sha256": "0fdfa5cc3efcd9ff7b1ce77f01580691ca2960b74196c2b52c2fda33d0633985",
+    "target": "system/core",
+    "commit": "d5dcac8d584d20d5ea6cfd0c4873ad7b093bb3ab",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0010-healthd-offline-charger-fix-screen-off-3-3.patch",
+    "sha256": "c136baf7821c2b797031e5772ac307eeb0c397da77139f0b9d2f8127ab876d00",
+    "target": "system/core",
+    "commit": "faed23fc8549903e65b1720297202835922eb904",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0011-Add-vendor-firmware_mnt.-Moto-Razr-2019-look-for-fir.patch",
+    "sha256": "ba61f0ca80319e72063aea29bba840840fc1b2ac51de821b8b020a09ea7e2d50",
+    "target": "system/core",
+    "commit": "ddba51c0563149a0bfa17c8492d8776c951aab71",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0012-Ignore-dm-verity-and-AVB-setup-failures.patch",
+    "sha256": "df8b4537255448a5454100804d856856343996dc3c7f8bbb72bf813e8210110b",
+    "target": "system/core",
+    "commit": "1265a5b6d603730719fb9917ff60cb8324db8907",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0013-Fix-support-for-devices-without-cgroupv2-support.patch",
+    "sha256": "4f35683ddeeb2a20586a82e084ad28546bb93b801a92c43e3b7c649b890087db",
+    "target": "system/core",
+    "commit": "a3aa9e70c894691886b4b6f8a815e893f41dcb20",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0014-fix-Nubia-6-series-custom-rc-action-prop-validation.patch",
+    "sha256": "3e224e983cfca7eb5b48e32fdc0dbacee88f6e7dbf8083f5051c4840dc8ed8c4",
+    "target": "system/core",
+    "commit": "88266a2a4ec990848e5a99f8e512ced389895dff",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0015-HACK-Ignore-errors-when-setting-fscrypt-directory.-S.patch",
+    "sha256": "dd87abc7be98285856922d7964cca9a4cd86b5a17c2d669c887dfe5fee47300a",
+    "target": "system/core",
+    "commit": "aa31891fd01d91efc2dd1bedc328e96aca166a1f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0016-Flattened-apexes-no-longer-exist-we-ll-deal-with-it-.patch",
+    "sha256": "0e314ade89a73e1df4a0cc20495b22470c2baf8e7428e7a4102bbb7376d6389c",
+    "target": "system/core",
+    "commit": "aba590e2b167a1ac3f7abcc3373d834fd4ca53e8",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_core/0017-Revert-init-remove-session-keyring-workaround-for-ol.patch",
+    "sha256": "925046d9c89a69b05ff09dce6f8e43854ce0c353966ba624d7449262034330df",
+    "target": "system/core",
+    "commit": "281df0291dc7dcdc5b33f86649755e7066308495",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_extras/0001-libfscrypt-Bail-out-if-we-can-t-open-directory.patch",
+    "sha256": "96733b25be572d3ca5591cb61b8705fad503f6055d75a4180dfc89f128745b3f",
+    "target": "system/extras",
+    "commit": "5375dd001000b4392714fe499fd08c042728caf2",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_netd/0001-Huawei-Kirin-960-accept-broken-rpfilter-match.patch",
+    "sha256": "32166fada7371a8f7451c65aa2577202f46aee81dc77b8b055767fea4f4094ce",
+    "target": "system/netd",
+    "commit": "ebd9e3936cb888ff228775ea95451cea43c95000",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_netd/0002-Don-t-fail-on-FTP-conntracking-failing.patch",
+    "sha256": "a6ca0a88e31a2b97f7a5da4cfcae7fde01272279b78cf18799ce6c5416a78010",
+    "target": "system/netd",
+    "commit": "6a62257e91cf9a44949f20667471b2314b49fd0f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_netd/0003-Support-no-bpf-usecase.patch",
+    "sha256": "3867b8179c1c83e8e11ed4be3965760ad4b6a35c46e4efa04ab95e822c3a4ca3",
+    "target": "system/netd",
+    "commit": "71ce124dc2cfa642a63a5c876b0e412c97d646e3",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_netd/0004-Don-t-abort-in-case-of-cgroup-bpf-setup-fail-since-s.patch",
+    "sha256": "79c0ae7ae0eec130de923474bc8c69ef7491f24d6281acb9b44fad93f4e23f06",
+    "target": "system/netd",
+    "commit": "6635067a209bb887a4382d393282d9cb745a0ece",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_sepolicy/0001-Revert-removal-of-28.0-30.0-SEPolicy-compat-support.patch",
+    "sha256": "25c0f4d79fc50cd732a9f61138848c8ac186402dce1a9fd04bea0d9b1ce13eed",
+    "target": "system/sepolicy",
+    "commit": "dc162750b8cadc068708c30f08ede8f00ad95e21",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_sepolicy/0002-Fix-sepolicy-for-kernel-5.10-that-doesn-t-support-bp.patch",
+    "sha256": "a4a3e989a1615628ec5eccfe66095a5ed319c5a77ca97f11a3dce5b98aea4d99",
+    "target": "system/sepolicy",
+    "commit": "7e7d45c3a399cad9719778c75f92e2590ba52979",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_vold/0001-Allow-deletion-of-symlink.patch",
+    "sha256": "ab7e52baefc19781e5aaba63a2a883e26217bff516881d6e7d2906dfb829dc11",
+    "target": "system/vold",
+    "commit": "5c17e45ebeea071ae68a3be6518e19c6eed7eff6",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_vold/0002-Failing-to-create-facedata-shouldn-t-be-fatal.patch",
+    "sha256": "a9a948cf66fe8b06936061f02b21daec6916d290e91e4c63ec6fcddf80e9e08a",
+    "target": "system/vold",
+    "commit": "70d131c810483678caff7f3179f282290a5898e6",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_vold/0003-Don-t-unmount-rw-system.sh-binds.patch",
+    "sha256": "85faeba8a8f558dea342daa6e15453068171a9626cb511cd5d8638ca3beeb428",
+    "target": "system/vold",
+    "commit": "1745d27cfb0126904baa79a21df263b960582a6f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_vold/0004-Exfat-can-be-mounted-with-exfat-kernel-fs-driver-or-.patch",
+    "sha256": "e1c6a84b3a4b7cfbfd0f92a80efa8bdd6733894e004e0fa17e98f1e6a143aa67",
+    "target": "system/vold",
+    "commit": "e22eaa67beb4122e8b3233b9519a82e028bee30d",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_vold/0005-Every-voldmanaged-storage-is-adoptable.patch",
+    "sha256": "9ae0ca8e64e63993c7336eced64d726cfcb3adbf51561efe94b5b9fc36fe627e",
+    "target": "system/vold",
+    "commit": "8ff1e087b9cfbffb8a010cea4e1086c15fdf3e2a",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/trebledroid/platform_system_vold/0006-Revert-vold-remove-session-keyring-workaround-for-ol.patch",
+    "sha256": "db78412555d8ca023939c3f726ebe92147af7fe4909f1e06d22451c076d6e084",
+    "target": "system/vold",
+    "commit": "d680667dcf1cce04a961ef52028690eebcb4e3ea",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/rom/platform_system_core/0001-ueventd-restore-legacy-config-paths-for-pre-S-vendors.patch",
+    "sha256": "f5dd07ceb0a1450d2aaf251c244cb25dc8c379f195428dfb4df3ebcccb37cd92",
+    "target": "system/core",
+    "commit": "e8fccf776908214fa8ee7988674cc71fd294e6be",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/rom/platform_system_netd/0001-netd-drop-POSIX_SPAWN_CLOEXEC_DEFAULT-to-fix-dnsmasq-crash.patch",
+    "sha256": "b37b10e04530574ab3caea31645e82d29c215db90958e1364d68835fa412a40f",
+    "target": "system/netd",
+    "commit": "eaa072aa62bb73ba9cc8e322f7621a3a9a72f397",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/rom/platform_system_sepolicy/0003-sepolicy-label-dmabuf-filesystem-to-fix-camera-video-recording.patch",
+    "sha256": "654547173f717efae9eaccaa691eacfcb0afac4a39a83f53fc3752a7232fc16b",
+    "target": "system/sepolicy",
+    "commit": "fb126eabbce4ce8ad4a14d52c61c2726a16c6d5f",
+    "disposition": "applied"
+  },
+  {
+    "path": "patches/g9650-connectivity/0010-guard-bpf-less-interface-teardown.patch",
+    "sha256": "d48aca8e7795a03b9b8aa44cdaf6f26aa98afa2623624fecef0a70c8a4a700ca",
+    "target": "packages/modules/Connectivity",
+    "commit": "9ae47e33de0c03bc26dd7ce4662c2541d2239b23",
+    "disposition": "applied"
+  },
+  {
+    "path": "config/reviewed-patches/treble-app-sdk-signing.patch",
+    "sha256": "d5003c905dbe7cca337edb0ac8de50439356b4f775955177673aa61ab4c8e407",
+    "target": "treble_app",
+    "commit": "8f54d556e95c7ff52484ae6a61b82f391186cb71",
+    "disposition": "already_present_in_source"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_core/0001-Add-libkeyutils-from-TrebleDroid.patch",
+    "sha256": "ebf72f139a86d85b8e2ca0e40bd7b4af83d68ecc248a25bfb8b351d99f50803e",
+    "target": "system/core",
+    "commit": "b8ada353bf8698fd671b299f8ba3d23f5c3c2965",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_bionic/0002-epoll_pwait2-fall-back-to-epoll_pwait-on-kernels-5.1.patch",
+    "sha256": "deb66230eb869b1572b7b55d2f31b5f849e3bf9ccc07285938cbf34cc05cbdb1",
+    "target": "bionic",
+    "commit": "662cbc6eb64c249e68508ac419e1ee3e4ea383f2",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_apex/0001-Disable-O_DIRECT-for-old-kernels.patch",
+    "sha256": "bda1dd5f03a748c295f0a010b06fe5544e0472ceac9b223ad42d9139abd345f2",
+    "target": "system/apex",
+    "commit": "9ceff8cb713f9ecd42c73a92c8c0048e8349ce44",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_bpf/0001-bpfloader-relax-kernel-version-gates-and-fatal-error.patch",
+    "sha256": "83ab6979f364bf23b63ac9e1ba533db4aab9a6afa61885df4154aff5808d974d",
+    "target": "system/bpf",
+    "commit": "3e5572f70664cfe9551b6681202dbddade9dabba",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_packages_modules_Connectivity/0001-connectivity-tolerate-BPF-less-legacy-kernels.patch",
+    "sha256": "0c80f41e91005aa6f0b09930b216dbde24bb6fbdfe5f80a9aba771524f16e94c",
+    "target": "packages/modules/Connectivity",
+    "commit": "a119babf773aa912023cc634ea745099da6143c4",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_packages_modules_Connectivity/0002-netbpfload-drop-reboot_on_failure-from-the-loader-rc.patch",
+    "sha256": "50e8d2701081e1082fdc104cb07a21b429fcf4611355496cc836ba8955de3c20",
+    "target": "packages/modules/Connectivity",
+    "commit": "48d685be2300ddc632d8f6e20ffa6e9e864aff0e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_packages_modules_Connectivity/0003-libeventpolling-degrade-gracefully-when-the-ringbuf-maps-m.patch",
+    "sha256": "eccc51d97c419dd032d9753b6665c4bdd244e27e66e024b147912aab6c8e17ba",
+    "target": "packages/modules/Connectivity",
+    "commit": "2d62b07b568ada596b2b4425eb384572cbad54e6",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_packages_modules_Connectivity/0004-bpfnetmaps-keep-system_server-up-when-lpm_trie-maps-.patch",
+    "sha256": "15d4b5c6a11430e53962d5ba332d339ec01f25f14abdb5f2c6a94b663b228ec8",
+    "target": "packages/modules/Connectivity",
+    "commit": "94366693d21094f3c58ff001b4346726f35eb5c5",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_core/0002-Restore-old-kernel-support-in-init-and-libprocessgro.patch",
+    "sha256": "78617889c70d6114909ad8260640d27b433922d447d0dafe37270ab932f1aea0",
+    "target": "system/core",
+    "commit": "0ecd78c3e2caa3094221125c5be91e9297a3f029",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_packages_modules_Bluetooth/0001-bluetooth-legacy-controller-and-kernel-tolerance.patch",
+    "sha256": "9dd927325542d8abe0a881423ea46e1a3db5d1408b3526d3674f204914ab29d3",
+    "target": "packages/modules/Bluetooth",
+    "commit": "d911628714535d38925ee0cca1b7f80c5b1b9c5e",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_packages_modules_Wifi/0001-Add-persist.sys.phh.wifi_disable_sae-property-to-dis.patch",
+    "sha256": "f4ca19ffc2eed0468d5522b1d39fee1e503b3a69a25ab6226330b0475ce26a0c",
+    "target": "packages/modules/Wifi",
+    "commit": "33be63ccedf042ad5dc2a246b60790dad4c16a6f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_netd/0001-fix-iptables-COMMIT-PING-parse-error-in-tethering-CT.patch",
+    "sha256": "3d904b04296275d8a2a945e76e9b9f751b498053eaddcb0ac3d1c03cd122e9f8",
+    "target": "system/netd",
+    "commit": "9dce12f1cdf1eefaa9ab10644bed412c2c266d87",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_netd/0002-make-dnsmasq-communication-failures-non-fatal-for-te.patch",
+    "sha256": "3afb4dbc1a50fb2150070f22598d47f869c17ca440e90db21b9150ad8b0ee262",
+    "target": "system/netd",
+    "commit": "04043008a9ae6e7285403fea40f9e4d5504c6f35",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_netd/0003-netd-don-t-restart-zygote-when-netd-restarts.patch",
+    "sha256": "28cb46e6feea2aa99e52f6c163108519b1d26e77f8eba2ce97e7099e02968527",
+    "target": "system/netd",
+    "commit": "9232915e9ece267a467925eb5028f48453009eb3",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_vold/0001-vold-use-sdcardfs-as-fallback-when-FUSE-BPF-is-unavai.patch",
+    "sha256": "7866a130bcb842bf7ce54fbb07d74746e088a87195d3844fb4cecb5230696a8e",
+    "target": "system/vold",
+    "commit": "8eeeb36ba898a4e28f27bce1d41c10bb920005a1",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_frameworks_base/0016-Bitmap-scale-down-bitmaps-and-tolerate-seal-failures-on-legacy-kernels.patch",
+    "sha256": "ee5f9d501ef8ce1d13b0e0d46f7ee427d579cb0f7acd67297857c376dd05b722",
+    "target": "frameworks/base",
+    "commit": "7d202e221a11f146ce128fa25f65cbf71cdbd77f",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_system_core/0003-init-and-libprocessgroup-tolerate-legacy-vendor-kern.patch",
+    "sha256": "1980e6e2b5586cc2f15becfd4d2ce72bdd2d0b47059fba093ce0c78464273756",
+    "target": "system/core",
+    "commit": "45a9797e7121198bbc562904c318fc03913ec6a6",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_bionic/0004-bionic-tolerate-MADV_WIPEONFORK-failure-on-pre-4.14-.patch",
+    "sha256": "e27e995ceac23c4b175b213c3c326ce8e735ca97a9f7dcd1ec62fa188db96b7b",
+    "target": "bionic",
+    "commit": "2538deb7efec4eda04e5c3edf959d90a54810f45",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_build_release/0004-disable-require_gralloc4_or_newer-for-the-gsi.patch",
+    "sha256": "bead49eeda3f12583fec40836d7d218b9dba2e83585b0f96d6f8ad3b5f2228e9",
+    "target": "build/release",
+    "commit": "f2438c2c26005c6cd2336d377286b8b84d6f125a",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_device_phh_treble/0013-Disable-restricted-networking-mode-on-BPF-less-devic.patch",
+    "sha256": "89cbd18195d36b022b0e3dc829d1d7c0d3c25e5bc0d03c0b1d123a7505c8d3e7",
+    "target": "device/phh/treble",
+    "commit": "a8bcd2e80eb86d56173fc3646d235a5f6e693d07",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_device_phh_treble/0022-Disable-FUSE-BPF-on-devices-whose-kernels-lack-fuse-.patch",
+    "sha256": "bb772b005098767f771675cf801ef5b40e8e03416700b94371d9fcaa9e8f6760",
+    "target": "device/phh/treble",
+    "commit": "4c5bbc545e0ef5e39dfa2412cdd27b92b988ae56",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_device_phh_treble/0032-implement-new-bluetooth-audio-provider-method.patch",
+    "sha256": "c12c9b7c00e10bb7f2d306f1eef3d416435d6889b351c054902cf2c3a50e88f3",
+    "target": "device/phh/treble",
+    "commit": "c9d8cdbd2443de891ea3be1206bb4aaae6c5f570",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_device_phh_treble/0033-init-rc-files-declare-user-root-for-services-defaulting-to-root.patch",
+    "sha256": "f7bf84ca426314069a4ebb925183c38bad1f93c111c1c2e216088bc612fc43e0",
+    "target": "device/phh/treble",
+    "commit": "6fd4c0b2d052548604b31b9f5fd9aef813507996",
+    "disposition": "applied"
+  },
+  {
+    "path": "compat/restless/patches/personal/platform_frameworks_base/0019-core-api-add-entries-for-restored-FDE-and-network-class-apis.patch",
+    "sha256": "f7169deec7d321d9b0a058d4e03c02febc35712c660407735cb4b2a5f6a1f31d",
+    "target": "frameworks/base",
+    "commit": "550d930b9b3024421a83646ab16c7830d026ac92",
+    "disposition": "applied"
+  },
+  {
+    "path": "config/reviewed-patches/resetprop-android17-headers.patch",
+    "sha256": "79a0a6c7d0fbe88d8e1e38507c19af098aff8c5f2b155115fb83e4ef1ffaa7a3",
+    "target": "vendor/magisk",
+    "commit": "ddbe7603aee077e23cc32099320f8143ceefb94e",
+    "disposition": "applied"
+  },
+  {
+    "path": "config/reviewed-patches/surfaceflinger-backpressure-syntax.patch",
+    "sha256": "0dfdf903783d7440dbe875274e5ca6c8840d0e26bfca372768a6825e43298b53",
+    "target": "frameworks/native",
+    "commit": "c9fdb4a41547480919941292ca943c6c975a270f",
+    "disposition": "applied"
+  },
+  {
+    "path": "config/reviewed-patches/restored-legacy-api-lint.patch",
+    "sha256": "de79b06af41f15bf8bf3f3525caf27b5f99ab40c78092bd53885bba7e94b297a",
+    "target": "frameworks/base",
+    "commit": "729758855f36af636d07dd11e6174d7db3191e5f",
+    "disposition": "applied"
+  },
+  {
+    "path": "config/reviewed-patches/g9650-disable-unsupported-avf.patch",
+    "sha256": "c7884a06282f36a80990e7c2d4b4fca41cd7ff8d97c21e10c07a2ac5e029a79d",
+    "target": "packages/modules/Virtualization",
+    "commit": "133c87de9c6dbcd69f5c0430e6dca59e2b3ec361",
+    "disposition": "applied"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-fva4-genfs-collision.patch",
+    "sha256": "2e018f9cbacac393536fe40298ad35b1fd273d88e9ed1f647aed7bb7d535ad8e",
+    "target": "device/lineage/sepolicy",
+    "commit": "0688e3fa942907092d53fc3834a2d7e1862ea4fc",
+    "disposition": "applied"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-fva4-nlmsg-xperms.patch",
+    "sha256": "8407f6c03ae48ccf9ea6a9c8bf9f122aa5da4e363cf608626f62ca1181b789c3",
+    "target": "system/sepolicy",
+    "commit": "56a610f48e37a3f60c83c56415c09c06afaca8b2",
+    "disposition": "applied"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-vndk-manifest-dedup.patch",
+    "sha256": "7199f3c8900e25b7593d8af801697a09c328acfd2c3d5dcded63f83ea1ca49c1",
+    "target": "device/phh/treble",
+    "commit": "1f8ee78acd1169fad5f963be7b97b5db246cc485",
+    "disposition": "already_present_in_source"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-dns-bpf-legacy-entry.patch",
+    "sha256": "c4e1cb1f1cd97662b4ee2d571838a538783f255f2ce6265da6eeae673c50e76a",
+    "target": "packages/modules/DnsResolver",
+    "commit": "1ef3ddbe90d132a16bd1691c5cb3d8a571bf88b5",
+    "disposition": "already_present_in_source"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-early-metadata-storage.patch",
+    "sha256": "cc6f60ee7209a85e9b9d315cd9de1dfd6ae1ad669753edc4d41e321e4c240725",
+    "target": "device/phh/treble",
+    "commit": "f9b6a73adab7964f71e60ced207912de0ccfa011",
+    "disposition": "already_present_in_source"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-retire-early-diagnostics.patch",
+    "sha256": "afa2b1aa7cdcca10f0eb9cca7ae85b82e25a9f5f86047c5db7fdc79f5d2b7d8c",
+    "target": "device/phh/treble",
+    "commit": "cc2bd39454e66c463efbea11f042f6d34672e00e",
+    "disposition": "already_present_in_source"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-real-hidl-fingerprint.patch",
+    "sha256": "ad992e7b78e8c6f6bc98ae35fcf7970ddfd9c4f4c98b9657672e2c27e50e4f86",
+    "target": "frameworks/base",
+    "commit": "191d1fd786ad1b56109d637427952921b6985de1",
+    "disposition": "already_present_in_source"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-model-and-density.patch",
+    "sha256": "0b21f92fd9c46d397908e84d4db947e0c359aedcf36ea5cb47e1978ff8c3b5ff",
+    "target": "device/phh/treble",
+    "commit": "8558297bbc3e4fac695b016cfe403d312d43c2cf",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-connectivity-probe-defaults.patch",
+    "sha256": "f2b743f7c1a839dd5551fabbdc637679f57e1236a33fd74eeb1f3984a67c250d",
+    "target": "device/phh/treble",
+    "commit": "45f7e0515405f0a186be2128a6ca79cccf242fc7",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-single-aperture-camera.patch",
+    "sha256": "6ba387aaa5e9f9f26980b031792d82718dd04762b6476692a745d63b04609f43",
+    "target": "device/phh/treble",
+    "commit": "c8a082af669f67a8bf7ddaedafba3d7ff8ba0557",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-idempotent-audio-preferences.patch",
+    "sha256": "4be97b3b4e9de7c1d613854892b5b2bad73090144e97c0d36abad9e1b5847dfd",
+    "target": "treble_app",
+    "commit": "3babd86c25e5171f03efd1fee97e99ffdba348b3",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-audio-hal-restart-list.patch",
+    "sha256": "01dbce9d1216b4f86d0b8408982ae4f07082baa27160c205776bda07a44f1e39",
+    "target": "device/phh/treble",
+    "commit": "48ac30433aca16cccb3d3f9d27d632c1a293127d",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-qtaguid-accounting-hooks.patch",
+    "sha256": "71c38ed6f93089cab3e3cfd666fc7e0df20d9fc3d416f60568a15857327823c9",
+    "target": "system/netd",
+    "commit": "a4fa1f2da3c4e5b4ce6506d9a0a896d05834ebe8",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-legacy-network-statistics.patch",
+    "sha256": "9446f2ad02f8b437e5c1e2e4f9a4f4d00c076e3587e95345d685794eba709148",
+    "target": "packages/modules/Connectivity",
+    "commit": "c9f9f559414e6b733e0841b1b498bbabcb1243c0",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-google-photos-system-app.patch",
+    "sha256": "24ee14c036a254eb10fa083d2bc5d1cc0d2e0aedd04ff4505e2337493e8abb38",
+    "target": "device/phh/treble",
+    "commit": "6460fb02229a54c11995e4fda79b803e123067cf",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-optional-fsverity-capability.patch",
+    "sha256": "e7dd617aa648070aa312dec3bad957b5c184fb3d4c6ddfb3ad06c4c47349b2ae",
+    "target": "frameworks/base",
+    "commit": "6255d0de08e906b5d1435e6ea7ea76375a4bf638",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-legacy-network-diagnostics.patch",
+    "sha256": "7ca769600e72a388af542d9498da68991b6de53401e41cb7ca6fa1597f54e453",
+    "target": "packages/modules/Connectivity",
+    "commit": "1534ec6da7e32d233d4f1acfe07452d6ed956b79",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-freezer-capability.patch",
+    "sha256": "acdcebf71357574da98b17f2cc6f5f0258e38d613697f7f8e72504c7ee0e3650",
+    "target": "frameworks/base",
+    "commit": "af3baa950498b839b9112da5fa82b62dd3d3005c",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-fsverity-statx-fallback.patch",
+    "sha256": "8a5d7515ed405d4ee6b784b262b58275ab1681720fa585099cbcad37a0efde9c",
+    "target": "frameworks/base",
+    "commit": "e40a22a4dde787104ab7dd9677806877bc2a1d58",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-qtaguid-control-backend.patch",
+    "sha256": "8ff15ec10d675bfea7141eef5899fbda3d0b6c15729d87961a906e84f70cf36c",
+    "target": "packages/modules/Connectivity",
+    "commit": "cb6cc77cc1e618acda68b0da91d44e4805ed8231",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-legacy-iface-dump.patch",
+    "sha256": "20a6b6a0fd1c8c66f7c224feda33efa3e8d97ea942c557664c474c5047404f63",
+    "target": "packages/modules/Connectivity",
+    "commit": "a6cd40039cd409c5df4a6c2aeee5cddc9055f639",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-accurate-google-capabilities.patch",
+    "sha256": "25fc7660c23dc57afb6360a3a66bddbcdda072716aaf77ec139b9a68ddc67509",
+    "target": "device/phh/treble",
+    "commit": "266e4daeb275da1dcc848a6482cc67e08afb77d9",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-legacy-art-preopt.patch",
+    "sha256": "d8a447ffe0fdd49cee6079be44ef4e7d62f1a94244a285fd565d3c77f4b9070b",
+    "target": "device/phh/treble",
+    "commit": "b73d02fbef10960cc7cc61fc361dcbcee6e545ec",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-bitmap-sealed-readonly-mapping.patch",
+    "sha256": "dad464657a22ae9161d7798b582dce7799e2cba514ea0a28f32c0c50b51690bf",
+    "target": "frameworks/base",
+    "commit": "249dd1f8a7740c6f9d628bb76ae9b78c226f0abf",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-package-kill-freezer-capability.patch",
+    "sha256": "05ad8f9c7bb7ef82a784dcf42b8911050de5a5ff827ae25fcf1bf55428595ce0",
+    "target": "frameworks/base",
+    "commit": "46218bf580af0f481f76ba8519475c6af3e9583e",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-explicit-cc-preopt.patch",
+    "sha256": "7d12bf75e49bc7b425b212152c0d8678703b201593b149f11dbe37518bd2c1ac",
+    "target": "device/phh/treble",
+    "commit": "d378be6c82f58e188d05698cc3b65caba84456a8",
+    "disposition": "already_source_committed_effects_verified"
+  },
+  {
+    "path": "config/pixelos17/reviewed-patches/g9650-native-zygote-capability-bound.patch",
+    "sha256": "0de13ac61904c401ab96eee8920db85e2a40c4fb5a95ea04410fb736872bba99",
+    "target": "system/zygote",
+    "commit": "9515037bba65094f2bd1f3af48e3195dd588a494",
+    "disposition": "applied"
+  }
+]

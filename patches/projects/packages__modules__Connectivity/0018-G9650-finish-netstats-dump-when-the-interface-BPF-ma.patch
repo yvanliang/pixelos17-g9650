@@ -1,0 +1,26 @@
+From a6cd40039cd409c5df4a6c2aeee5cddc9055f639 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 12:39:04 +0800
+Subject: [PATCH 18/18] G9650: finish netstats dump when the interface BPF map
+ is unavailable
+
+Change-Id: I8c78f2f0080c9940ba20c7b3e8aa4c2dcd8d0904
+---
+ service-t/src/com/android/server/net/NetworkStatsService.java | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/service-t/src/com/android/server/net/NetworkStatsService.java b/service-t/src/com/android/server/net/NetworkStatsService.java
+index 514ee12..2e5061c 100644
+--- a/service-t/src/com/android/server/net/NetworkStatsService.java
++++ b/service-t/src/com/android/server/net/NetworkStatsService.java
+@@ -3405,6 +3405,10 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
+ 
+     @GuardedBy("mStatsLock")
+     private void dumpIfaceStatsMapLocked(final IndentingPrintWriter pw) {
++        if (mIfaceStatsMap == null) {
++            pw.println("Interface counters provided by legacy qtaguid; BPF map unavailable.");
++            return;
++        }
+         BpfDump.dumpMap(mIfaceStatsMap, pw, "mIfaceStatsMap",
+                 "ifaceIndex ifaceName rxBytes rxPackets txBytes txPackets",
+                 (key, value) -> {

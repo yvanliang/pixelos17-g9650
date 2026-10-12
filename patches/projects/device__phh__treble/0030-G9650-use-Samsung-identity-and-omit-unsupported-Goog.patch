@@ -1,0 +1,74 @@
+From 266e4daeb275da1dcc848a6482cc67e08afb77d9 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 12:50:26 +0800
+Subject: [PATCH 30/38] G9650: use Samsung identity and omit unsupported Google
+ hardware and missing app claims
+
+---
+ custom_g9650.mk                     | 10 ++++++++--
+ g9650/g9650-google-capabilities.xml | 31 +++++++++++++++++++++++++++++
+ 2 files changed, 39 insertions(+), 2 deletions(-)
+ create mode 100644 g9650/g9650-google-capabilities.xml
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 8952e67..87bdad2 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -9,8 +9,8 @@ $(call inherit-product, vendor/custom/config/common_full_phone.mk)
+ 
+ PRODUCT_NAME := custom_g9650
+ PRODUCT_DEVICE := tdgsi_arm64_ab
+-PRODUCT_BRAND := google
+-PRODUCT_SYSTEM_BRAND := google
++PRODUCT_BRAND := samsung
++PRODUCT_SYSTEM_BRAND := samsung
+ PRODUCT_MODEL := G9650
+ PRODUCT_CHARACTERISTICS := device
+ PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
+@@ -68,3 +68,9 @@ PRODUCT_PACKAGES := $(filter-out G9650CameraCompat,$(PRODUCT_PACKAGES))
+ # Pixel's Google Photos replaces the small AOSP Gallery on this product only.
+ PRODUCT_PACKAGES += Photos
+ PRODUCT_PACKAGES := $(filter-out Gallery2 Glimpse,$(PRODUCT_PACKAGES))
++
++# Keep Pixel UI apps, but report the real manufacturer and only supported features.
++PRODUCT_MANUFACTURER := samsung
++PRODUCT_SYSTEM_MANUFACTURER := samsung
++PRODUCT_SYSTEM_MODEL := G9650
++PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-google-capabilities.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/g9650-google-capabilities.xml
+diff --git a/g9650/g9650-google-capabilities.xml b/g9650/g9650-google-capabilities.xml
+new file mode 100644
+index 0000000..785edff
+--- /dev/null
++++ b/g9650/g9650-google-capabilities.xml
+@@ -0,0 +1,31 @@
++<?xml version="1.0" encoding="utf-8"?>
++<!-- G9650 has Pixel UI, not Google-manufactured hardware or newer Pixel AI capabilities.
++     Do not advertise Wellbeing when its provider is omitted from this product. -->
++<config>
++    <unavailable-feature name="com.google.android.feature.GOOGLE_BUILD" />
++    <unavailable-feature name="com.google.android.feature.AER_OPTIMIZED" />
++    <unavailable-feature name="com.google.android.feature.NEXT_GENERATION_ASSISTANT" />
++    <unavailable-feature name="com.google.android.feature.CONTEXTUAL_SEARCH" />
++    <unavailable-feature name="com.google.android.feature.CONTEXTUAL_SEARCH_LIVE_TRANSLATE" />
++    <unavailable-feature name="com.google.android.feature.WELLBEING" />
++    <unavailable-feature name="com.google.android.apps.photos.NEXUS_PRELOAD" />
++    <unavailable-feature name="com.google.android.apps.photos.nexus_preload" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2017_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2017_MIDYEAR_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2018_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2018_MIDYEAR_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2019_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2019_MIDYEAR_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2020_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2020_MIDYEAR_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2021_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2021_MIDYEAR_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2022_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2022_MIDYEAR_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2023_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2023_MIDYEAR_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2024_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2024_MIDYEAR_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2025_EXPERIENCE" />
++    <unavailable-feature name="com.google.android.feature.PIXEL_2025_MIDYEAR_EXPERIENCE" />
++</config>

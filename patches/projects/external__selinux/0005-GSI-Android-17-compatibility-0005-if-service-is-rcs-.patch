@@ -1,0 +1,42 @@
+From aff31c9cebdcca45e2b21528bdab160070bb0fc9 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:38 +0800
+Subject: [PATCH 05/12] GSI Android 17 compatibility:
+ 0005-if-service-is-rcs-accept-conflict.-Seen-on-Moto-E5.patch
+
+Change-Id: Idde10480443e87b3f65e4eb01eb2c27079145a91
+---
+ libselinux/src/label_backends_android.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/libselinux/src/label_backends_android.c b/libselinux/src/label_backends_android.c
+index 13354cd..a28ac11 100644
+--- a/libselinux/src/label_backends_android.c
++++ b/libselinux/src/label_backends_android.c
+@@ -62,14 +62,24 @@ static int nodups_specs(struct saved_data *data)
+ 					    curr_spec->property_key)) {
+ 				if (strcmp(spec_arr[jj].lr.ctx_raw,
+ 						    curr_spec->lr.ctx_raw)) {
+-					rc = -1;
+-					errno = EINVAL;
+ 					selinux_log
+ 						(SELINUX_ERROR,
+ 						 "Multiple different specifications for %s  (%s and %s).\n",
+ 						 curr_spec->property_key,
+ 						 spec_arr[jj].lr.ctx_raw,
+ 						 curr_spec->lr.ctx_raw);
++					int ignore = 0;
++					/*
++					 * This issue has been found on Moto E5
++					 * E SELinux : Multiple different specifications for rcs  (u:object_r:radio_service:s0 and u:object_r:mot_rcs_service:s0).
++					 */
++					if(!strcmp(curr_spec->property_key, "rcs"))
++						ignore = 1;
++
++					if(!ignore) {
++						rc = -1;
++						errno = EINVAL;
++					}
+ 				} else {
+ 					selinux_log
+ 						(SELINUX_WARNING,

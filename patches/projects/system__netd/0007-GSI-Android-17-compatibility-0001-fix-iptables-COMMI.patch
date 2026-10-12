@@ -1,0 +1,24 @@
+From 9dce12f1cdf1eefaa9ab10644bed412c2c266d87 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:56:41 +0800
+Subject: [PATCH 07/11] GSI Android 17 compatibility:
+ 0001-fix-iptables-COMMIT-PING-parse-error-in-tethering-CT.patch
+
+Change-Id: I6e96c30d74937a3d120caa3e79f6a939ca92084e
+---
+ server/TetherController.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/TetherController.cpp b/server/TetherController.cpp
+index f9a666c..1f0e483 100644
+--- a/server/TetherController.cpp
++++ b/server/TetherController.cpp
+@@ -728,7 +728,7 @@ int TetherController::setForwardRules(bool add, const char *intIface, const char
+                             op, LOCAL_RAW_PREROUTING, intIface),
+             StringPrintf("%s %s -p tcp --dport 1723 -i %s -j CT --helper pptp", op,
+                          LOCAL_RAW_PREROUTING, intIface),
+-            "COMMIT",
++            "COMMIT\n",
+     };
+     if(iptablesRestoreFunction(V4, Join(v4Ftp, '\n'), nullptr) == -1) {
+             ALOGE("Failed adding iptables CT target on FTP.");

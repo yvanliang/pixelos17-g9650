@@ -1,0 +1,35 @@
+From 32af7d2a7fb6371d64671e276415c2cd998d7b8f Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:26 +0800
+Subject: [PATCH 50/60] GSI Android 17 compatibility:
+ 0052-HintManagerService-Generate-dummy-mSupportInfo-for-n.patch
+
+Change-Id: I79718025b72dc6572f8618d4746b52cf65c36fad
+---
+ .../com/android/server/power/hint/HintManagerService.java    | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/services/core/java/com/android/server/power/hint/HintManagerService.java b/services/core/java/com/android/server/power/hint/HintManagerService.java
+index 5d9e51289..0390d3a67 100644
+--- a/services/core/java/com/android/server/power/hint/HintManagerService.java
++++ b/services/core/java/com/android/server/power/hint/HintManagerService.java
+@@ -330,6 +330,8 @@ public final class HintManagerService extends SystemService {
+             } catch (RemoteException e) {
+                 throw new IllegalStateException("Could not contact PowerHAL!", e);
+             }
++        } else {
++            mSupportInfo = getDummySupportInfo();
+         }
+         if (mSupportInfo.headroom.isCpuSupported) {
+             mCpuHeadroomCache = new HeadroomCache<>(2, mSupportInfo.headroom.cpuMinIntervalMillis);
+@@ -370,7 +372,10 @@ public final class HintManagerService extends SystemService {
+         } catch (RemoteException e) {
+             throw new IllegalStateException("Could not contact PowerHAL!", e);
+         }
++        return getDummySupportInfo();
++    }
+ 
++    private SupportInfo getDummySupportInfo() {
+         SupportInfo supportInfo = new SupportInfo();
+         supportInfo.usesSessions = isHintSessionSupported();
+         // Global boosts & modes aren't currently relevant for HMS clients

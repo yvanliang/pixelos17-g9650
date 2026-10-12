@@ -1,0 +1,54 @@
+From a4fa1f2da3c4e5b4ce6506d9a0a896d05834ebe8 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:39:38 +0800
+Subject: [PATCH 11/11] G9650: restore legacy qtaguid packet accounting without
+ BPF pins
+
+Change-Id: Ifbf1a81f29956919998889ba7d0e7e2e4dfa5cd3
+---
+ server/BandwidthController.cpp | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/server/BandwidthController.cpp b/server/BandwidthController.cpp
+index 8a96738..cd11d1e 100644
+--- a/server/BandwidthController.cpp
++++ b/server/BandwidthController.cpp
+@@ -36,6 +36,8 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #include <sys/wait.h>
++#include <sys/utsname.h>
++#include <unistd.h>
+ 
+ #include <linux/netlink.h>
+ #include <linux/rtnetlink.h>
+@@ -201,6 +203,29 @@ static const uint32_t uidBillingMask = Fwmark::getUidBillingMask();
+  */
+ 
+ std::vector<std::string> getBasicAccountingCommands() {
++    // Android 10's legacy owner matcher is xt_qtaguid on this stock kernel.
++    // Keep quotas/data-saver chains, and avoid unavailable pinned BPF programs.
++    char bootloader[PROP_VALUE_MAX] = {};
++    property_get("ro.boot.bootloader", bootloader, "");
++    struct utsname kernel = {};
++    if (strncmp(bootloader, "G9650", 5) == 0 && uname(&kernel) == 0
++            && strncmp(kernel.release, "4.9.", 4) == 0
++            && access("/proc/net/xt_qtaguid/stats", R_OK) == 0) {
++        return {"*filter", "-A bw_INPUT -j bw_global_alert",
++                "-A bw_INPUT -p esp -j RETURN",
++                StringPrintf("-A bw_INPUT -m mark --mark 0x%x/0x%x -j RETURN",
++                             uidBillingMask, uidBillingMask),
++                "-A bw_INPUT -m owner --socket-exists",
++                StringPrintf("-A bw_INPUT -j MARK --or-mark 0x%x", uidBillingMask),
++                "-A bw_OUTPUT -j bw_global_alert",
++                "-A bw_OUTPUT -o " IPSEC_IFACE_PREFIX "+ -j RETURN",
++                "-A bw_OUTPUT -m policy --pol ipsec --dir out -j RETURN",
++                "-A bw_OUTPUT -m owner --socket-exists",
++                "-A bw_costly_shared -j bw_penalty_box",
++                "-A bw_penalty_box -j bw_happy_box",
++                "-A bw_happy_box -j bw_data_saver",
++                "-A bw_data_saver -j RETURN", COMMIT_AND_CLOSE};
++    }
+     // clang-format off
+     std::vector<std::string> ipt_basic_accounting_commands = {
+             "*filter",

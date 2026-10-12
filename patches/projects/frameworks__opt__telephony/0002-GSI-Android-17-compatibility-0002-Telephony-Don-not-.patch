@@ -1,0 +1,28 @@
+From b2a97b5295ec31997ac90c28b267327dc1f3bffa Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:49 +0800
+Subject: [PATCH 02/10] GSI Android 17 compatibility:
+ 0002-Telephony-Don-not-call-onUssdRelease-for-Huawei-RIL.patch
+
+Change-Id: I45460fa755c7f2d8c4cc0f128010029cf0ab5b3d
+---
+ src/java/com/android/internal/telephony/GsmCdmaPhone.java | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/java/com/android/internal/telephony/GsmCdmaPhone.java b/src/java/com/android/internal/telephony/GsmCdmaPhone.java
+index ef655d7..fde5422 100644
+--- a/src/java/com/android/internal/telephony/GsmCdmaPhone.java
++++ b/src/java/com/android/internal/telephony/GsmCdmaPhone.java
+@@ -2665,7 +2665,11 @@ public class GsmCdmaPhone extends Phone {
+         if (found != null) {
+             // Complete pending USSD
+             if (isUssdRelease) {
+-                found.onUssdRelease();
++                if (SystemProperties.getBoolean("persist.sys.radio.huawei", false)) {
++                    found.onUssdFinished(ussdMessage, isUssdRequest);
++                } else {
++                    found.onUssdRelease();
++                }
+             } else if (isUssdError) {
+                 found.onUssdFinishedError();
+             } else {

@@ -1,0 +1,70 @@
+From 6cf66f1389e7095cf60365a72f598638eff5f7f4 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:47:50 +0800
+Subject: [PATCH 01/38] PixelOS 17: G9650 ARM64 GSI product and physical EXT4
+ constraints
+
+---
+ AndroidProducts.mk            |  2 ++
+ custom_g9650.mk               | 26 ++++++++++++++++++++++++++
+ tdgsi_arm64_ab/BoardConfig.mk |  8 ++++++++
+ 3 files changed, 36 insertions(+)
+ create mode 100644 AndroidProducts.mk
+ create mode 100644 custom_g9650.mk
+
+diff --git a/AndroidProducts.mk b/AndroidProducts.mk
+new file mode 100644
+index 0000000..adcf12c
+--- /dev/null
++++ b/AndroidProducts.mk
+@@ -0,0 +1,2 @@
++PRODUCT_MAKEFILES := $(LOCAL_DIR)/custom_g9650.mk
++COMMON_LUNCH_CHOICES := custom_g9650-cp2a-userdebug
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+new file mode 100644
+index 0000000..448b035
+--- /dev/null
++++ b/custom_g9650.mk
+@@ -0,0 +1,26 @@
++TARGET_GAPPS_ARCH := arm64
++TARGET_SCREEN_DENSITY := 560
++TARGET_SCREEN_WIDTH := 1440
++TARGET_SCREEN_HEIGHT := 2960
++WITH_GMS_AICORE := false
++include build/make/target/product/aosp_arm64.mk
++$(call inherit-product, device/phh/treble/base.mk)
++$(call inherit-product, vendor/custom/config/common_full_phone.mk)
++
++PRODUCT_NAME := custom_g9650
++PRODUCT_DEVICE := tdgsi_arm64_ab
++PRODUCT_BRAND := google
++PRODUCT_SYSTEM_BRAND := google
++PRODUCT_MODEL := PixelOS G9650
++PRODUCT_CHARACTERISTICS := device
++PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
++PRODUCT_DEFAULT_APEX_PAYLOAD_TYPE := ext4
++WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
++PRODUCT_EXTRA_VNDK_VERSIONS += 28 29
++PRODUCT_PACKAGES += g9650-lights-service g9650-wifi-vendor-path G9650CameraCompat
++PRODUCT_COPY_FILES += \
++    device/g9650/compat/g9650-netd-oneshot.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-netd-oneshot.sh \
++    device/g9650/compat/g9650-bootguard.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-bootguard.sh \
++    device/g9650/compat/g9650-boot-kmsg.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-boot-kmsg.sh \
++    device/g9650/compat/g9650-boot-kmsg.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-boot-kmsg.rc
++PRODUCT_SYSTEM_PROPERTIES += persist.sys.samsung.full_brightness=true
+diff --git a/tdgsi_arm64_ab/BoardConfig.mk b/tdgsi_arm64_ab/BoardConfig.mk
+index 2fddc52..9c6b810 100644
+--- a/tdgsi_arm64_ab/BoardConfig.mk
++++ b/tdgsi_arm64_ab/BoardConfig.mk
+@@ -6,3 +6,11 @@ BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648
+ else
+ BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 33554432
+ endif
++
++# G9650 physical SYSTEM constraints
++BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
++BOARD_SYSTEMIMAGE_PARTITION_SIZE := 4796186624
++BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 33554432
++BOARD_EXT4_SHARE_DUP_BLOCKS := true
++TARGET_NO_KERNEL := true
++TARGET_NO_KERNEL_IMAGE := true

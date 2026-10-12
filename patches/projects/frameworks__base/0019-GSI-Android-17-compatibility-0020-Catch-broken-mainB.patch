@@ -1,0 +1,43 @@
+From 2e388ac6bdd98e948d4d53e51aa334dc7aed0f3a Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:59 +0800
+Subject: [PATCH 19/60] GSI Android 17 compatibility:
+ 0020-Catch-broken-mainBuiltInDisplayCutoutRectApproximati.patch
+
+Change-Id: I031f956cae326e485bc8b6a208189bc11e4ff0c6
+---
+ core/java/android/view/DisplayCutout.java | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/core/java/android/view/DisplayCutout.java b/core/java/android/view/DisplayCutout.java
+index c34da2b99..d9872c837 100644
+--- a/core/java/android/view/DisplayCutout.java
++++ b/core/java/android/view/DisplayCutout.java
+@@ -1184,12 +1184,21 @@ public final class DisplayCutout {
+     public static DisplayCutout fromResourcesRectApproximation(Resources res,
+             String displayUniqueId, int physicalDisplayWidth, int physicalDisplayHeight,
+             int displayWidth, int displayHeight) {
+-        return pathAndDisplayCutoutFromSpec(getDisplayCutoutPath(res, displayUniqueId),
+-                getDisplayCutoutApproximationRect(res, displayUniqueId), physicalDisplayWidth,
+-                physicalDisplayHeight, displayWidth, displayHeight,
+-                DENSITY_DEVICE_STABLE / (float) DENSITY_DEFAULT,
+-                getWaterfallInsets(res, displayUniqueId),
+-                getDisplayCutoutSideOverrides(res, displayUniqueId)).second;
++        try {
++            return pathAndDisplayCutoutFromSpec(getDisplayCutoutPath(res, displayUniqueId),
++                    getDisplayCutoutApproximationRect(res, displayUniqueId), physicalDisplayWidth,
++                    physicalDisplayHeight, displayWidth, displayHeight,
++                    DENSITY_DEVICE_STABLE / (float) DENSITY_DEFAULT,
++                    getWaterfallInsets(res, displayUniqueId),
++                    getDisplayCutoutSideOverrides(res, displayUniqueId)).second;
++        } catch(Throwable t) {
++            return pathAndDisplayCutoutFromSpec(getDisplayCutoutPath(res, displayUniqueId),
++                    null, physicalDisplayWidth,
++                    physicalDisplayHeight, displayWidth, displayHeight,
++                    DENSITY_DEVICE_STABLE / (float) DENSITY_DEFAULT,
++                    getWaterfallInsets(res, displayUniqueId),
++                    getDisplayCutoutSideOverrides(res, displayUniqueId)).second;
++        }
+     }
+ 
+     /**

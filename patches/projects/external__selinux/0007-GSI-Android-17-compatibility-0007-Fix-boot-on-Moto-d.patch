@@ -1,0 +1,60 @@
+From 4e68cbc3265c939371c16c0e0faf2d8afb93b488 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:39 +0800
+Subject: [PATCH 07/12] GSI Android 17 compatibility:
+ 0007-Fix-boot-on-Moto-devices-using-unknown-class.patch
+
+Change-Id: I6bf23f13a079e368c17d8ff190695a9cd050323f
+---
+ libsepol/cil/src/cil_build_ast.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/libsepol/cil/src/cil_build_ast.c b/libsepol/cil/src/cil_build_ast.c
+index 2de6a87..7b0265b 100644
+--- a/libsepol/cil/src/cil_build_ast.c
++++ b/libsepol/cil/src/cil_build_ast.c
+@@ -587,6 +587,14 @@ int cil_gen_class(struct cil_db *db, struct cil_tree_node *parse_current, struct
+ 	struct cil_tree_node *perms = NULL;
+ 	int rc = SEPOL_ERR;
+ 
++        {
++            const char* path = cil_tree_get_cil_path(parse_current);
++            if(strstr(path, "vendor/")) {
++                cil_clear_node(ast_node);
++                return SEPOL_OK;
++            }
++        }
++
+ 	rc = __cil_verify_syntax(parse_current, syntax, syntax_len);
+ 	if (rc != SEPOL_OK) {
+ 		goto exit;
+@@ -882,6 +890,14 @@ int cil_gen_classpermission(struct cil_db *db, struct cil_tree_node *parse_curre
+ 	};
+ 	size_t syntax_len = sizeof(syntax)/sizeof(*syntax);
+ 
++        {
++            const char* path = cil_tree_get_cil_path(parse_current);
++            if(strstr(path, "vendor/")) {
++                cil_clear_node(ast_node);
++                return SEPOL_OK;
++            }
++        }
++
+ 	if (db == NULL || parse_current == NULL || ast_node == NULL) {
+ 		goto exit;
+ 	}
+@@ -2112,6 +2128,14 @@ int cil_gen_avrule(struct cil_tree_node *parse_current, struct cil_tree_node *as
+ 	rule->src_str = parse_current->next->data;
+ 	rule->tgt_str = parse_current->next->next->data;
+ 
++        {
++            const char *classname = parse_current->next->next->next->cl_head->data;
++            if(strcmp(classname, "keystore_moto_key") == 0) {
++                cil_clear_node(ast_node);
++                return SEPOL_OK;
++            }
++        }
++
+ 	rc = cil_fill_classperms_list(parse_current->next->next->next, &rule->perms.classperms);
+ 	if (rc != SEPOL_OK) {
+ 		goto exit;

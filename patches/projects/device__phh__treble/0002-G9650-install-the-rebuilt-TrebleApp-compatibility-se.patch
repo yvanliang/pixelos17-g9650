@@ -1,0 +1,20 @@
+From 299d047ecc2e43d89b27a352478af1d4a54d802e Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:47:50 +0800
+Subject: [PATCH 02/38] G9650: install the rebuilt TrebleApp compatibility
+ service
+
+---
+ custom_g9650.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 448b035..e77c361 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -24,3 +24,5 @@ PRODUCT_COPY_FILES += \
+     device/g9650/compat/g9650-boot-kmsg.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-boot-kmsg.sh \
+     device/g9650/compat/g9650-boot-kmsg.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-boot-kmsg.rc
+ PRODUCT_SYSTEM_PROPERTIES += persist.sys.samsung.full_brightness=true
++
++PRODUCT_PACKAGES += G9650TrebleApp

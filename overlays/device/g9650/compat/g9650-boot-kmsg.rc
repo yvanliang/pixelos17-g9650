@@ -1,0 +1,23 @@
+# Temporary diagnostics and unattended recovery guard.
+on post-fs-data
+    mkdir /data/g9650-debug 0750 root shell
+    chmod 0750 /data/g9650-debug
+    chown root shell /data/g9650-debug
+    start g9650-boot-kmsg
+    start g9650-bootguard
+
+service g9650-boot-kmsg /system/bin/sh /system/bin/g9650-boot-kmsg.sh
+    disabled
+    oneshot
+    user root
+    group root shell log readproc
+    seclabel u:r:init:s0
+    capabilities SYSLOG
+
+service g9650-bootguard /system/bin/sh /system/bin/g9650-bootguard.sh
+    disabled
+    oneshot
+    user root
+    group root shell
+    seclabel u:r:init:s0
+    capabilities SYS_BOOT SYSLOG

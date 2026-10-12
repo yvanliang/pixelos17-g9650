@@ -1,0 +1,33 @@
+From c2035a57da6b2eb1bc69785f22013f10702a5724 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:41:12 +0800
+Subject: [PATCH 24/60] GSI Android 17 compatibility:
+ 0026-Set-old-fingerprint-sensors-to-security-strong.patch
+
+Change-Id: I62d2fc1a6a817beb2e2a408749bc74ff4324e6d9
+---
+ .../core/java/com/android/server/biometrics/AuthService.java  | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
+index 393b67e84..be84c00e9 100644
+--- a/services/core/java/com/android/server/biometrics/AuthService.java
++++ b/services/core/java/com/android/server/biometrics/AuthService.java
+@@ -939,7 +939,7 @@ public class AuthService extends SystemService {
+             final int firstApiLevel = SystemProperties.getInt(SYSPROP_FIRST_API_LEVEL, 0);
+             final int apiLevel = SystemProperties.getInt(SYSPROP_API_LEVEL, firstApiLevel);
+             String[] configStrings = mInjector.getConfiguration(getContext());
+-            if (configStrings.length == 0 && apiLevel == Build.VERSION_CODES.R) {
++            if (configStrings.length == 0 && apiLevel <= Build.VERSION_CODES.R) {
+                 // For backwards compatibility with R where biometrics could work without being
+                 // configured in config_biometric_sensors. In the absence of a vendor provided
+                 // configuration, we assume the weakest biometric strength (i.e. convenience).
+@@ -1125,7 +1125,7 @@ public class AuthService extends SystemService {
+         if (pm.hasSystemFeature(PackageManager.FEATURE_FACE)) {
+             modalities.add(String.valueOf(BiometricAuthenticator.TYPE_FACE));
+         }
+-        final String strength = String.valueOf(Authenticators.BIOMETRIC_CONVENIENCE);
++        final String strength = String.valueOf(Authenticators.BIOMETRIC_STRONG);
+         final String[] configStrings = new String[modalities.size()];
+         for (int i = 0; i < modalities.size(); ++i) {
+             final String id = String.valueOf(i);

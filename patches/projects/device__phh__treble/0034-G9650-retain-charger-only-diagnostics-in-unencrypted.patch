@@ -1,0 +1,73 @@
+From 531ba89d1ab355fb8bcd0ddc20f1ecbacf27ffb9 Mon Sep 17 00:00:00 2001
+From: yvanliang <42460514+yvanliang@users.noreply.github.com>
+Date: Thu, 15 Oct 2026 20:10:59 +0800
+Subject: [PATCH 34/38] G9650: retain charger-only diagnostics in unencrypted
+ Cache
+
+---
+ custom_g9650.mk            |  2 ++
+ g9650/g9650-charger-log.sh | 21 +++++++++++++++++++++
+ g9650/g9650-charger.rc     | 15 +++++++++++++++
+ 3 files changed, 38 insertions(+)
+ create mode 100644 g9650/g9650-charger-log.sh
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 99dde14..f201138 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -86,3 +86,5 @@ PRODUCT_DEX_PREOPT_BOOT_FLAGS += --runtime-arg -Xgc:CC
+ 
+ # Give the offline charger reboot/poweroff capability on FVA4 only.
+ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-charger.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-charger.rc
++
++PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-charger-log.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-charger-log.sh
+diff --git a/g9650/g9650-charger-log.sh b/g9650/g9650-charger-log.sh
+new file mode 100644
+index 0000000..b864819
+--- /dev/null
++++ b/g9650/g9650-charger-log.sh
+@@ -0,0 +1,21 @@
++#!/system/bin/sh
++umask 077
++dir=/dev/g9650-charger-cache
++grep -q " $dir " /proc/mounts || exit 1
++touch "$dir/g9650-charger-action.log"
++chown system:system "$dir/g9650-charger-action.log"
++chmod 0600 "$dir/g9650-charger-action.log"
++{
++    echo "mode=$(getprop ro.bootmode) charger=$(pidof charger)"
++    for pid in $(pidof charger); do grep -E '^(Name|Uid|Gid|Cap)' "/proc/$pid/status"; done
++} > "$dir/g9650-charger-environment.log"
++dmesg -w > "$dir/g9650-charger-kernel.log" 2>&1 &
++reader=$!
++while kill -0 "$reader" 2>/dev/null; do
++    sync
++    size=$(stat -c %s "$dir/g9650-charger-kernel.log")
++    [ "$size" -lt 33554432 ] || break
++    sleep 1
++done
++kill "$reader" 2>/dev/null
++sync
+diff --git a/g9650/g9650-charger.rc b/g9650/g9650-charger.rc
+index cf635fa..6aa95c5 100644
+--- a/g9650/g9650-charger.rc
++++ b/g9650/g9650-charger.rc
+@@ -10,3 +10,18 @@ service g9650-charger /system/bin/charger
+     group system graphics input wakelock
+     capabilities SYS_BOOT
+     seclabel u:r:charger:s0
++
++# Cache is unencrypted and available before charger-mode /data mounting.
++on charger
++    mkdir /dev/g9650-charger-cache 0770 root system
++    mount ext4 /dev/block/platform/soc/1d84000.ufshc/by-name/cache /dev/g9650-charger-cache nosuid nodev noexec
++    start g9650-charger-log
++
++service g9650-charger-log /system/bin/sh /system/bin/g9650-charger-log.sh
++    class charger
++    disabled
++    oneshot
++    user root
++    group root log readproc
++    capabilities SYSLOG
++    seclabel u:r:init:s0

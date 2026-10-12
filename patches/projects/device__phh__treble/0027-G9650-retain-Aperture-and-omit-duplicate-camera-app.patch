@@ -1,0 +1,20 @@
+From c8a082af669f67a8bf7ddaedafba3d7ff8ba0557 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:16:00 +0800
+Subject: [PATCH 27/38] G9650: retain Aperture and omit duplicate camera app
+
+---
+ custom_g9650.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 01afcb8..695468c 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -61,3 +61,6 @@ PRODUCT_PRODUCT_PROPERTIES += ro.sf.lcd_density=560
+ PRODUCT_COPY_FILES += \
+     device/phh/treble/g9650/g9650-network-defaults.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-network-defaults.rc \
+     device/phh/treble/g9650/g9650-network-defaults.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-network-defaults.sh
++
++# Keep PixelOS's Material3 Aperture camera; omit the extra recovery-reference app.
++PRODUCT_PACKAGES := $(filter-out G9650CameraCompat,$(PRODUCT_PACKAGES))

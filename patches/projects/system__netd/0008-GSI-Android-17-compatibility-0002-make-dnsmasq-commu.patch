@@ -1,0 +1,42 @@
+From 04043008a9ae6e7285403fea40f9e4d5504c6f35 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:56:41 +0800
+Subject: [PATCH 08/11] GSI Android 17 compatibility:
+ 0002-make-dnsmasq-communication-failures-non-fatal-for-te.patch
+
+Change-Id: Ia075184663d6fc75ed56440ac45e66cfb0d35d30
+---
+ server/TetherController.cpp | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/server/TetherController.cpp b/server/TetherController.cpp
+index 1f0e483..5611b89 100644
+--- a/server/TetherController.cpp
++++ b/server/TetherController.cpp
+@@ -406,9 +406,10 @@ int TetherController::setDnsForwarders(unsigned netId, char **servers, int numSe
+     mDnsmasqState.update_dns_cmd = std::move(daemonCmd);
+     if (mDaemonFd != -1) {
+         if (mDnsmasqState.sendAllState(mDaemonFd) != 0) {
+-            mDnsForwarders.clear();
+-            errno = EREMOTEIO;
+-            return -errno;
++            // on GSI builds dnsmasq may not be running; the modern tethering
++            // stack (NetworkStackService) provides its own DHCP/DNS server,
++            // so a dnsmasq communication failure is not fatal.
++            ALOGW("Failed to send DNS state to dnsmasq (non-fatal on GSI)");
+         }
+     }
+     return 0;
+@@ -446,7 +447,11 @@ bool TetherController::applyDnsInterfaces() {
+         mDnsmasqState.update_ifaces_cmd.clear();
+     } else {
+         mDnsmasqState.update_ifaces_cmd = std::move(daemonCmd);
+-        if (mDaemonFd != -1) return (mDnsmasqState.sendAllState(mDaemonFd) == 0);
++        if (mDaemonFd != -1) {
++            if (mDnsmasqState.sendAllState(mDaemonFd) != 0) {
++                ALOGW("Failed to send iface state to dnsmasq (non-fatal on GSI)");
++            }
++        }
+     }
+     return true;
+ }

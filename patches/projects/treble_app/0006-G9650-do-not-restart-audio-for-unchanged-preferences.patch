@@ -1,0 +1,46 @@
+From 3babd86c25e5171f03efd1fee97e99ffdba348b3 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:39:38 +0800
+Subject: [PATCH 6/6] G9650: do not restart audio for unchanged preferences
+
+---
+ app/src/main/java/me/phh/treble/app/Misc.kt | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/app/src/main/java/me/phh/treble/app/Misc.kt b/app/src/main/java/me/phh/treble/app/Misc.kt
+index 6ae2449..138d847 100644
+--- a/app/src/main/java/me/phh/treble/app/Misc.kt
++++ b/app/src/main/java/me/phh/treble/app/Misc.kt
+@@ -20,6 +20,14 @@ import vendor.mediatek.hardware.agolddaemon.IAgoldDaemon
+ object Misc: EntryStartup {
+     fun safeSetprop(key: String, value: String?) {
+         try {
++            // Reopening preferences must not restart audio on the legacy G9650 HAL.
++            val audioKeys = setOf("persist.sys.phh.caf.audio_policy",
++                    "persist.sys.phh.disable_audio_effects",
++                    "persist.bluetooth.system_audio_hal.enabled")
++            if (SystemProperties.get("ro.boot.bootloader", "").startsWith("G9650")
++                    && key in audioKeys && SystemProperties.get(key, "") == (value ?: "")) {
++                return
++            }
+             Log.d("PHH", "Setting property $key to $value")
+             SystemProperties.set(key, value)
+         } catch (e: Exception) {
+@@ -211,7 +219,7 @@ object Misc: EntryStartup {
+             }
+             MiscSettings.disableAudioEffects -> {
+                 val value = sp.getBoolean(key, false)
+-                SystemProperties.set("persist.sys.phh.disable_audio_effects", if (value) "1" else "0")
++                safeSetprop("persist.sys.phh.disable_audio_effects", if (value) "1" else "0")
+             }
+             MiscSettings.disableFastAudio -> {
+                 val value = sp.getBoolean(key, false)
+@@ -219,7 +227,7 @@ object Misc: EntryStartup {
+             }
+             MiscSettings.sysbta -> {
+                 val value = sp.getBoolean(key, false)
+-                SystemProperties.set("persist.bluetooth.system_audio_hal.enabled", if (value) "true" else "false")
++                safeSetprop("persist.bluetooth.system_audio_hal.enabled", if (value) "true" else "false")
+             }
+             MiscSettings.noHwcomposer -> {
+                 val value = sp.getBoolean(key, false)

@@ -1,0 +1,23 @@
+From b49d947a335e32a40bd3cf9639389c9b0d0bb3a8 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 09:40:37 +0800
+Subject: [PATCH 19/38] G9650: gate unsupported SELinux NLMSG extended
+ permissions
+
+---
+ tdgsi_arm64_ab/BoardConfig.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tdgsi_arm64_ab/BoardConfig.mk b/tdgsi_arm64_ab/BoardConfig.mk
+index 4f5d0c3..239aaa5 100644
+--- a/tdgsi_arm64_ab/BoardConfig.mk
++++ b/tdgsi_arm64_ab/BoardConfig.mk
+@@ -24,3 +24,8 @@ endif
+ ifeq ($(TARGET_PRODUCT),custom_g9650)
+ BOARD_SEPOLICY_M4DEFS += g9650_fva4_genfs_compat=true
+ endif
++
++# G9650 kernel 4.9 misreads NLMSG xperms (kernel 6.13 feature).
++ifeq ($(TARGET_PRODUCT),custom_g9650)
++BOARD_SEPOLICY_M4DEFS += g9650_legacy_nlmsg_compat=true
++endif

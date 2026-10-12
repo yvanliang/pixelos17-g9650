@@ -1,0 +1,24 @@
+From 71ce124dc2cfa642a63a5c876b0e412c97d646e3 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:46 +0800
+Subject: [PATCH 03/11] GSI Android 17 compatibility:
+ 0003-Support-no-bpf-usecase.patch
+
+Change-Id: If6b30292db2328793b0e0ec71e86cef266ad517e
+---
+ server/Controllers.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/Controllers.cpp b/server/Controllers.cpp
+index 8a2c3be..5c1d594 100644
+--- a/server/Controllers.cpp
++++ b/server/Controllers.cpp
+@@ -335,7 +335,7 @@ void Controllers::init() {
+         // As such simply exit netd.  This may crash loop the system, but by failing
+         // to bootup we will trigger rollback and thus this offers us protection against
+         // a mainline update breaking things.
+-        exit(2);
++        // exit(2);
+     }
+     gLog.info("Enabling bandwidth control: %" PRId64 "us", s.getTimeAndResetUs());
+ 

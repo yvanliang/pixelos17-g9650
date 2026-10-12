@@ -1,0 +1,25 @@
+From a23f4bd80d150a4cc2524afaffbef59354de1585 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:24 +0800
+Subject: [PATCH 03/60] GSI Android 17 compatibility:
+ 0003-Fix-env-empty-string-ANDROID_STORAGE.patch
+
+Change-Id: Ie40099b7ce43d6a332b7715fc317eb71b80b100f
+---
+ core/java/android/os/Environment.java | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/core/java/android/os/Environment.java b/core/java/android/os/Environment.java
+index 1bddf271f..b088d7b40 100644
+--- a/core/java/android/os/Environment.java
++++ b/core/java/android/os/Environment.java
+@@ -216,7 +216,8 @@ public class Environment {
+      */
+     @RavenwoodRedirect(comment = "Use java props on Ravenwood")
+     private static String getEnvPath(String variableName) {
+-        return System.getenv(variableName);
++        String path = System.getenv(variableName);
++        return (path == null || path.isEmpty()) ? null : path;
+     }
+ 
+     static {

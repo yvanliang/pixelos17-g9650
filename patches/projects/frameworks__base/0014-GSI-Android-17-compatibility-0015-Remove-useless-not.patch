@@ -1,0 +1,25 @@
+From 2fd07d4206bffc9d09375ac3d2c17d1c7798534c Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:48 +0800
+Subject: [PATCH 14/60] GSI Android 17 compatibility:
+ 0015-Remove-useless-notification-about-console-service-be.patch
+
+Change-Id: If6d2d850778560d5a0496fa9cb375beaa712e8cf
+---
+ .../java/com/android/server/am/ActivityManagerService.java     | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/services/core/java/com/android/server/am/ActivityManagerService.java b/services/core/java/com/android/server/am/ActivityManagerService.java
+index ac9dde0dc..0db2b2d71 100644
+--- a/services/core/java/com/android/server/am/ActivityManagerService.java
++++ b/services/core/java/com/android/server/am/ActivityManagerService.java
+@@ -6019,8 +6019,7 @@ public class ActivityManagerService extends IActivityManager.Stub
+                     });
+             mUserController.scheduleStartProfiles();
+         }
+-        // UART is on if init's console service is running, send a warning notification.
+-        showConsoleNotificationIfActive();
++        // Treble GSI: omit the vendor UART console notification.
+         showMteOverrideNotificationIfActive();
+ 
+         t.traceEnd();

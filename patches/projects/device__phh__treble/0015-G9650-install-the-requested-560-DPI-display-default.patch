@@ -1,0 +1,20 @@
+From 01bc25f1c0909b493d9bb4ff345ed3b67e862386 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 23:57:27 +0800
+Subject: [PATCH 15/38] G9650: install the requested 560 DPI display default
+
+---
+ custom_g9650.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index f47d170..c6aaec9 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -39,3 +39,6 @@ PRODUCT_BUILD_PROP_OVERRIDES += CustomDevice=g9650
+ 
+ # Preserve the Wi-Fi state; only align the existing vendor CID cache path.
+ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-wifi-cache.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-wifi-cache.rc
++
++# TARGET_SCREEN_DENSITY alone does not emit the runtime display property.
++PRODUCT_SYSTEM_PROPERTIES += ro.sf.lcd_density=560

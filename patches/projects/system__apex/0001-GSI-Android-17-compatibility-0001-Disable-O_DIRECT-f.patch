@@ -1,0 +1,45 @@
+From 9ceff8cb713f9ecd42c73a92c8c0048e8349ce44 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:56:40 +0800
+Subject: [PATCH] GSI Android 17 compatibility:
+ 0001-Disable-O_DIRECT-for-old-kernels.patch
+
+Change-Id: I4ff85b5d6aeece14fe17732660b1856ab78bdbfc
+---
+ apexd/apexd_loop.cpp | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/apexd/apexd_loop.cpp b/apexd/apexd_loop.cpp
+index bd406e7..a66528d 100644
+--- a/apexd/apexd_loop.cpp
++++ b/apexd/apexd_loop.cpp
+@@ -35,6 +35,7 @@
+ #include <sys/statfs.h>
+ #include <sys/sysmacros.h>
+ #include <sys/types.h>
++#include <sys/utsname.h>
+ #include <unistd.h>
+ #include <utils/Trace.h>
+ 
+@@ -609,7 +610,20 @@ Result<LoopbackDeviceUniqueFd> CreateAndConfigureLoopDevice(
+    * condition is now met.
+    */
+   bool use_buffered_io = false;
+-  unique_fd target_fd(open(target.c_str(), O_RDONLY | O_CLOEXEC | O_DIRECT));
++  bool enable_odirect = false;
++  struct utsname uts;
++  unsigned int major, minor;
++  if (uname(&uts) == 0 && sscanf(uts.release, "%u.%u", &major, &minor) == 2) {
++    if(major > 4) enable_odirect = true;
++    if(major == 4 && minor > 19) enable_odirect = true;
++  }
++  unique_fd target_fd;
++  if (enable_odirect) {
++    target_fd = unique_fd(open(target.c_str(), O_RDONLY | O_CLOEXEC | O_DIRECT));
++  } else {
++    target_fd = unique_fd(open(target.c_str(), O_RDONLY | O_CLOEXEC));
++  }
++  //unique_fd target_fd(open(target.c_str(), O_RDONLY | O_CLOEXEC));
+   if (target_fd.get() == -1) {
+     struct statfs stbuf;
+     int saved_errno = errno;

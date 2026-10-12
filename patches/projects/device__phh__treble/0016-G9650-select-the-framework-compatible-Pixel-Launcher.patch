@@ -1,0 +1,20 @@
+From 34d860964e4e88923cf40f6e49e7bb3fe7756925 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 00:33:37 +0800
+Subject: [PATCH 16/38] G9650: select the framework-compatible Pixel Launcher
+
+---
+ custom_g9650.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index c6aaec9..b60f0d4 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -42,3 +42,6 @@ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-wifi-cache.rc:$(TARGET_COPY_
+ 
+ # TARGET_SCREEN_DENSITY alone does not emit the runtime display property.
+ PRODUCT_SYSTEM_PROPERTIES += ro.sf.lcd_density=560
++
++# Use the Launcher adapted to this product framework.
++PRODUCT_PACKAGES += G9650NexusLauncherCompat

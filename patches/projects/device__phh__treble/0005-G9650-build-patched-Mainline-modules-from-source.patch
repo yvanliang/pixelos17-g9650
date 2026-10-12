@@ -1,0 +1,20 @@
+From d4430277638ba16d9a98c003c774bed8825e1f76 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:31:06 +0800
+Subject: [PATCH 05/38] G9650: build patched Mainline modules from source
+
+---
+ custom_g9650.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 7c19310..22de9b0 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -27,3 +27,6 @@ PRODUCT_SYSTEM_PROPERTIES += persist.sys.samsung.full_brightness=true
+ 
+ 
+ PRODUCT_PACKAGES += TrebleApp
++
++# Use patched Mainline source instead of Google-private prebuilt selectors.
++PRODUCT_MODULE_BUILD_FROM_SOURCE := true

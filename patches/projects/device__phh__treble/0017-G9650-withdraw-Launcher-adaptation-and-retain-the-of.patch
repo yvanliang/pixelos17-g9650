@@ -1,0 +1,20 @@
+From dd6f2b6482139da175c4aebd1b16b64fa1321905 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 07:29:58 +0800
+Subject: [PATCH 17/38] G9650: withdraw Launcher adaptation and retain the
+ official signed APK
+
+---
+ custom_g9650.mk | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index b60f0d4..0893d23 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -43,5 +43,3 @@ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-wifi-cache.rc:$(TARGET_COPY_
+ # TARGET_SCREEN_DENSITY alone does not emit the runtime display property.
+ PRODUCT_SYSTEM_PROPERTIES += ro.sf.lcd_density=560
+ 
+-# Use the Launcher adapted to this product framework.
+-PRODUCT_PACKAGES += G9650NexusLauncherCompat

@@ -1,0 +1,32 @@
+From 39762173110f0b87b35db5aacb4d54975deee775 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:21 +0800
+Subject: [PATCH 02/60] GSI Android 17 compatibility:
+ 0002-Fallback-to-stupid-autobrightness-if-brightness-valu.patch
+
+Change-Id: I1ba16c955b74369dc8cb8b922c3bb0e5a588031b
+---
+ .../com/android/server/display/DisplayDeviceConfig.java  | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/services/core/java/com/android/server/display/DisplayDeviceConfig.java b/services/core/java/com/android/server/display/DisplayDeviceConfig.java
+index f25b593c2..36a322a69 100644
+--- a/services/core/java/com/android/server/display/DisplayDeviceConfig.java
++++ b/services/core/java/com/android/server/display/DisplayDeviceConfig.java
+@@ -1026,9 +1026,14 @@ public class DisplayDeviceConfig {
+      */
+     public static DisplayDeviceConfig create(Context context, boolean useConfigXml,
+             DisplayManagerFlags flags) {
+-        final DisplayDeviceConfig config;
++        DisplayDeviceConfig config;
+         if (useConfigXml) {
+-            config = getConfigFromGlobalXml(context, flags);
++            try {
++                config = getConfigFromGlobalXml(context, flags);
++            } catch(Exception e) {
++                android.util.Log.e("PHH", "Failed parsing automatic brightness values, fallbacking", e);
++                config = getConfigFromPmValues(context, flags);
++            }
+         } else {
+             config = getConfigFromPmValues(context, flags);
+         }

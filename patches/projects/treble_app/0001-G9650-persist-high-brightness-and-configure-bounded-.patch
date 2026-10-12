@@ -1,0 +1,37 @@
+From 81c6c62b173ac0dc16b0fca694ef137145ce6daf Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:11:11 +0800
+Subject: [PATCH 1/6] G9650: persist high brightness and configure bounded
+ Gradle workers
+
+---
+ app/src/main/java/me/phh/treble/app/Samsung.kt | 5 +++++
+ gradle.properties                              | 3 +++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/app/src/main/java/me/phh/treble/app/Samsung.kt b/app/src/main/java/me/phh/treble/app/Samsung.kt
+index 9456e30..e007a31 100644
+--- a/app/src/main/java/me/phh/treble/app/Samsung.kt
++++ b/app/src/main/java/me/phh/treble/app/Samsung.kt
+@@ -124,6 +124,11 @@ class Samsung: EntryStartup {
+         Log.d("PHH", "Registered telecom listener for Samsung")
+         //Reset wirelesss charging transmit at every boot
+         val sp = PreferenceManager.getDefaultSharedPreferences(ctxt)
++        // G9650: persist the validated extended brightness default once.
++        if (SystemProperties.get("ro.boot.bootloader", "") == "G9650ZCS9FVA4"
++                && !sp.contains(SamsungSettings.highBrightess)) {
++            sp.edit().putBoolean(SamsungSettings.highBrightess, true).commit()
++        }
+ 
+         sp.edit().putBoolean(SamsungSettings.wirelessChargingTransmit, false).apply()
+ 
+diff --git a/gradle.properties b/gradle.properties
+index 9eb9df0..efa26f5 100644
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -1,2 +1,5 @@
+ android.useAndroidX=true
+ org.gradle.jvmargs=-Xmx4096m
++
++kotlin.compiler.execution.strategy=in-process
++org.gradle.workers.max=32

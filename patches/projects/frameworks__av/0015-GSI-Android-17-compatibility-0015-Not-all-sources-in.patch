@@ -1,0 +1,24 @@
+From 27b41c95860e152dcf35b8d93b8b3ec7bdd09e8e Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:09 +0800
+Subject: [PATCH 15/25] GSI Android 17 compatibility:
+ 0015-Not-all-sources-in-a-route-are-valid.-Dont-ignore-th.patch
+
+Change-Id: I098721bb5e7ac325c4b639e626b2c0a9915ddda1
+---
+ .../audiopolicy/common/managerdefinitions/src/Serializer.cpp    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/services/audiopolicy/common/managerdefinitions/src/Serializer.cpp b/services/audiopolicy/common/managerdefinitions/src/Serializer.cpp
+index 6ee0766..146c78b 100644
+--- a/services/audiopolicy/common/managerdefinitions/src/Serializer.cpp
++++ b/services/audiopolicy/common/managerdefinitions/src/Serializer.cpp
+@@ -670,7 +670,7 @@ std::variant<status_t, RouteTraits::Element> PolicySerializer::deserialize<Route
+                 source = ctx->findPortByTagName(trim(devTag));
+             }
+             if (source == NULL) {
+-                if (!mIgnoreVendorExtensions) {
++                if (false && !mIgnoreVendorExtensions) {
+                     ALOGE("%s: no source found with name \"%s\"", __func__, devTag);
+                     return BAD_VALUE;
+                 } else {

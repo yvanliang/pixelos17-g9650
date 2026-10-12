@@ -1,0 +1,66 @@
+From 2538deb7efec4eda04e5c3edf959d90a54810f45 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 17:05:34 +0800
+Subject: [PATCH 3/3] GSI Android 17 compatibility:
+ 0004-bionic-tolerate-MADV_WIPEONFORK-failure-on-pre-4.14-.patch
+
+Change-Id: Ifbde5886ddfa9bd4949cf141f10467a1c6eef824
+---
+ .../android/include/arc4random.h              | 23 +++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/libc/upstream-openbsd/android/include/arc4random.h b/libc/upstream-openbsd/android/include/arc4random.h
+index 1940398..f35464b 100644
+--- a/libc/upstream-openbsd/android/include/arc4random.h
++++ b/libc/upstream-openbsd/android/include/arc4random.h
+@@ -18,6 +18,9 @@
+  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  */
+ 
++#include <errno.h>
++#include <stdbool.h>
++#include <unistd.h>
+ #include <pthread.h>
+ #include <sys/mman.h>
+ #include <sys/prctl.h>
+@@ -25,6 +28,8 @@
+ #include <async_safe/log.h>
+ 
+ static pthread_mutex_t g_arc4random_mutex = PTHREAD_MUTEX_INITIALIZER;
++static bool g_arc4random_wipe_on_fork = true;
++static pid_t g_arc4random_pid;
+ 
+ void arc4random_mutex_lock() {
+   pthread_mutex_lock(&g_arc4random_mutex);
+@@ -42,7 +47,17 @@ static inline void _getentropy_fail(void) {
+ }
+ 
+ static inline void _rs_forkdetect(void) {
+-  // Not needed thanks to the MADV_WIPEONFORK below.
++  // Old kernels lack MADV_WIPEONFORK. Force fresh entropy after fork there.
++  if (!g_arc4random_wipe_on_fork) {
++    const pid_t pid = getpid();
++    if (pid != g_arc4random_pid) {
++      g_arc4random_pid = pid;
++      if (rs != NULL) {
++        rs->rs_have = 0;
++        rs->rs_count = 0;
++      }
++    }
++  }
+ }
+ 
+ static inline int _rs_allocate(struct _rs** rsp, struct _rsx** rsxp) {
+@@ -61,7 +76,11 @@ static inline int _rs_allocate(struct _rs** rsp, struct _rsx** rsxp) {
+ 
+   // Equivalent to OpenBSD's minherit(MAP_INHERIT_ZERO).
+   if (madvise(p, size, MADV_WIPEONFORK) == -1) {
+-    async_safe_fatal("arc4random data MADV_WIPEONFORK failed: %m");
++    if (errno != EINVAL) {
++      async_safe_fatal("arc4random data MADV_WIPEONFORK failed: %m");
++    }
++    g_arc4random_wipe_on_fork = false;
++    g_arc4random_pid = getpid();
+   }
+ 
+   // Give the allocation a name to make tombstones more intelligible.

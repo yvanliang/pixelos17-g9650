@@ -1,0 +1,77 @@
+From 2d62b07b568ada596b2b4425eb384572cbad54e6 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:56:40 +0800
+Subject: [PATCH 13/18] GSI Android 17 compatibility:
+ 0003-libeventpolling-degrade-gracefully-when-the-ringbuf-maps-m.patch
+
+Change-Id: I0c2089247cebe7650f87a85c34626b7ea72bc7b5
+---
+ .../libs/libeventpolling/LoopbackEventHandler.cpp     | 11 ++++++++++-
+ .../include/libeventpolling/LocalNetEventHandler.h    |  9 +++++++--
+ .../server/connectivity/LocalNetEventListener.java    | 10 ++++++++--
+ 3 files changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/service/native/libs/libeventpolling/LoopbackEventHandler.cpp b/service/native/libs/libeventpolling/LoopbackEventHandler.cpp
+index 942bbf6..7e4ea50 100644
+--- a/service/native/libs/libeventpolling/LoopbackEventHandler.cpp
++++ b/service/native/libs/libeventpolling/LoopbackEventHandler.cpp
+@@ -53,8 +53,17 @@ bpf::RingbufEventPoller<LoopbackAccessEvent> *
+ LoopbackEventHandler::GetPoller() {
+     static bpf::RingbufEventPoller<LoopbackAccessEvent> *const sPoller =
+         []() -> bpf::RingbufEventPoller<LoopbackAccessEvent> * {
+-        auto rb = std::make_unique<BpfRingbuf<LoopbackAccessEvent>>(
++        // ringbuf maps need kernel 5.8+ and a successful bpfloader pin; on
++        // legacy kernels neither is guaranteed, so degrade to no poller
++        // instead of aborting (the fatal ctor would kill system_server)
++        auto rbResult = BpfRingbuf<LoopbackAccessEvent>::Create(
+             LOOPBACK_ACCESS_RINGBUF_NETD_PATH);
++        if (!rbResult.ok()) {
++            ALOGE("Failed to create loopback access ringbuf: %s",
++                  rbResult.error().message().c_str());
++            return nullptr;
++        }
++        auto rb = std::move(rbResult).value();
+ 
+         auto callback = [](const std::vector<LoopbackAccessEvent> &events) {
+             for (const LoopbackAccessEvent &event : events) {
+diff --git a/service/native/libs/libeventpolling/include/libeventpolling/LocalNetEventHandler.h b/service/native/libs/libeventpolling/include/libeventpolling/LocalNetEventHandler.h
+index ce46620..532f3fa 100644
+--- a/service/native/libs/libeventpolling/include/libeventpolling/LocalNetEventHandler.h
++++ b/service/native/libs/libeventpolling/include/libeventpolling/LocalNetEventHandler.h
+@@ -48,8 +48,13 @@ class LocalNetEventHandler {
+   private:
+     class LocalNetEventRingbuf : public bpf::BpfRingbuf<LocalNetNoteOp> {
+       public:
+-        LocalNetEventRingbuf(const char *path)
+-            : BpfRingbuf<LocalNetNoteOp>(path) {}
++        LocalNetEventRingbuf(const char *path) {
++            // the fatal base ctor aborts on init failure; ringbuf maps need
++            // kernel 5.8+ and a successful bpfloader pin, neither guaranteed
++            // on legacy kernels -- degrade to an inert ringbuf instead of
++            // killing system_server
++            (void)Init(path);
++        }
+ 
+         android::base::unique_fd GetDuplicateFd() {
+             return android::base::unique_fd(
+diff --git a/service/src/com/android/server/connectivity/LocalNetEventListener.java b/service/src/com/android/server/connectivity/LocalNetEventListener.java
+index e8d495c..1c3431a 100644
+--- a/service/src/com/android/server/connectivity/LocalNetEventListener.java
++++ b/service/src/com/android/server/connectivity/LocalNetEventListener.java
+@@ -99,8 +99,14 @@ public class LocalNetEventListener {
+             return;
+         }
+         if (mMetricsEnabled || mNoteOpsEnabled) {
+-            mLooper.getQueue().addOnFileDescriptorEventListener(mRingbufFd,
+-                    EVENT_INPUT | EVENT_ERROR, this::consumeEvents);
++            if (mRingbufFd == null) {
++                // the ringbuf map does not exist on kernels without ringbuf
++                // support (pre-5.8) or when the bpfloader skipped pinning it
++                Log.w(TAG, "No local net event ringbuf fd, not registering listener");
++            } else {
++                mLooper.getQueue().addOnFileDescriptorEventListener(mRingbufFd,
++                        EVENT_INPUT | EVENT_ERROR, this::consumeEvents);
++            }
+         }
+         mStarted = true;
+     }

@@ -1,0 +1,24 @@
+From 76fdb3274655077dfa0f29c336440171994948b4 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:36 +0800
+Subject: [PATCH 04/23] GSI Android 17 compatibility:
+ 0004-Panic-into-recovery-rather-than-bootloader.patch
+
+Change-Id: Ie659d8acba187a715fae594753ade58c7174f8e3
+---
+ init/reboot_utils.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/init/reboot_utils.cpp b/init/reboot_utils.cpp
+index 5c402fe..92049ca 100644
+--- a/init/reboot_utils.cpp
++++ b/init/reboot_utils.cpp
+@@ -38,7 +38,7 @@
+ namespace android {
+ namespace init {
+ 
+-[[clang::no_destroy]] static std::string init_fatal_reboot_target = "bootloader";
++[[clang::no_destroy]] static std::string init_fatal_reboot_target = "recovery";
+ static bool init_fatal_panic = false;
+ 
+ // this needs to read the /proc/* files directly because it is called before

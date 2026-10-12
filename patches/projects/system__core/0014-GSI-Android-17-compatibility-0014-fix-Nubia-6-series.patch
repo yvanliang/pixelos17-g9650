@@ -1,0 +1,23 @@
+From 88266a2a4ec990848e5a99f8e512ced389895dff Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:42 +0800
+Subject: [PATCH 14/23] GSI Android 17 compatibility:
+ 0014-fix-Nubia-6-series-custom-rc-action-prop-validation.patch
+
+Change-Id: I05d0fa037792b8e27c4eb0eaf831666fd3566852
+---
+ init/action_parser.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/init/action_parser.cpp b/init/action_parser.cpp
+index 4c88c31..8c8fcf3 100644
+--- a/init/action_parser.cpp
++++ b/init/action_parser.cpp
+@@ -48,6 +48,7 @@ bool IsActionableProperty(Subcontext* subcontext, const std::string& prop_name)
+             "init.svc.vendor.", "ro.vendor.",    "persist.vendor.",
+             "vendor.",          "init.svc.odm.", "ro.odm.",
+             "persist.odm.",     "odm.",          "ro.boot.",
++            "nubia.perf."
+     };
+ 
+     for (const auto& prefix : kPartnerPrefixes) {

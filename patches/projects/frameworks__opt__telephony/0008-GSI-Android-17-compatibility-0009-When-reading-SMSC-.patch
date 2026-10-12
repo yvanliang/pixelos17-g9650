@@ -1,0 +1,38 @@
+From 4a4cb879160319efb359c650e4ae56b154304e5d Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:54 +0800
+Subject: [PATCH 08/10] GSI Android 17 compatibility:
+ 0009-When-reading-SMSC-ignore-invalid-SMSC.patch
+
+Change-Id: Ica280f435d324f9a8ff4003a90d0895f4e15d445
+---
+ src/java/com/android/internal/telephony/MessagingResponse.java | 2 ++
+ src/java/com/android/internal/telephony/RadioResponse.java     | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/src/java/com/android/internal/telephony/MessagingResponse.java b/src/java/com/android/internal/telephony/MessagingResponse.java
+index 19211e1..3ddf676 100644
+--- a/src/java/com/android/internal/telephony/MessagingResponse.java
++++ b/src/java/com/android/internal/telephony/MessagingResponse.java
+@@ -170,6 +170,8 @@ public class MessagingResponse extends IRadioMessagingResponse.Stub {
+      * @param smsc Short Message Service Center address on the device
+      */
+     public void getSmscAddressResponse(RadioResponseInfo responseInfo, String smsc) {
++        if(smsc.contains("\"") || smsc.contains(","))
++            smsc = "";
+         RadioResponse.responseString(HAL_SERVICE_MESSAGING, mRil, responseInfo, smsc);
+     }
+ 
+diff --git a/src/java/com/android/internal/telephony/RadioResponse.java b/src/java/com/android/internal/telephony/RadioResponse.java
+index 84e15c6..5663dc8 100644
+--- a/src/java/com/android/internal/telephony/RadioResponse.java
++++ b/src/java/com/android/internal/telephony/RadioResponse.java
+@@ -1237,6 +1237,8 @@ public class RadioResponse extends IRadioResponse.Stub {
+      * @param smsc Short Message Service Center address on the device
+      */
+     public void getSmscAddressResponse(RadioResponseInfo responseInfo, String smsc) {
++        if(smsc.contains("\"") || smsc.contains(","))
++            smsc = "";
+         responseString(responseInfo, smsc);
+     }
+ 

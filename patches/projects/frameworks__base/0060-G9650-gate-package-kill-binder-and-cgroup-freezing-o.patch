@@ -1,0 +1,51 @@
+From 46218bf580af0f481f76ba8519475c6af3e9583e Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 14:16:13 +0800
+Subject: [PATCH 60/60] G9650: gate package-kill binder and cgroup freezing on
+ legacy capability
+
+Change-Id: Ib63311e70e26d08228651e0692ca189bcc5500b4
+---
+ services/core/java/com/android/server/am/Freezer.java     | 5 +++++
+ services/core/java/com/android/server/am/ProcessList.java | 5 +++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/services/core/java/com/android/server/am/Freezer.java b/services/core/java/com/android/server/am/Freezer.java
+index 723142072..34f8678f5 100644
+--- a/services/core/java/com/android/server/am/Freezer.java
++++ b/services/core/java/com/android/server/am/Freezer.java
+@@ -89,6 +89,11 @@ class Freezer {
+         return !LEGACY_FREEZER_UNAVAILABLE && nativeIsFreezerSupported();
+     }
+ 
++    /** Package-kill paths must use the same legacy capability as cached apps. */
++    static boolean legacyKernelLacksFreezer() {
++        return LEGACY_FREEZER_UNAVAILABLE;
++    }
++
+     // Native methods
+ 
+     /**
+diff --git a/services/core/java/com/android/server/am/ProcessList.java b/services/core/java/com/android/server/am/ProcessList.java
+index b3c1b3a27..ec2d3b9c5 100644
+--- a/services/core/java/com/android/server/am/ProcessList.java
++++ b/services/core/java/com/android/server/am/ProcessList.java
+@@ -3115,6 +3115,8 @@ public final class ProcessList extends ProcessListInternal
+     }
+ 
+     private static boolean freezePackageCgroup(int packageUID, boolean freeze) {
++        // Unsupported is not a successful freeze. Process termination still runs.
++        if (Freezer.legacyKernelLacksFreezer()) return false;
+         try {
+             Process.freezeCgroupUid(packageUID, freeze);
+         } catch (RuntimeException e) {
+@@ -3131,6 +3133,9 @@ public final class ProcessList extends ProcessListInternal
+ 
+     private void freezeBinderAndPackageCgroup(List<Pair<ProcessRecord, Boolean>> procs,
+                                                      int packageUID) {
++        // G9650's 4.9 binder/cgroup cannot freeze. Skip this preparatory step,
++        // without skipping killPackageProcessesLSP's process termination loop.
++        if (Freezer.legacyKernelLacksFreezer()) return;
+         // Freeze all binder processes under the target UID (whose cgroup is about to be frozen).
+         // Since we're going to kill these, we don't need to unfreze them later.
+         // The procs list may not include all processes under the UID cgroup, but unincluded

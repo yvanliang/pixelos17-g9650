@@ -1,0 +1,72 @@
+From ad8174093e8b8280bb5c443fed55a061c673041b Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 10:07:32 +0800
+Subject: [PATCH 21/38] G9650: source-built early logger without replacing init
+
+---
+ g9650/early-debug/g9650-init-trace.c | 29 ++++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
+
+diff --git a/g9650/early-debug/g9650-init-trace.c b/g9650/early-debug/g9650-init-trace.c
+index 00d7117..896540b 100644
+--- a/g9650/early-debug/g9650-init-trace.c
++++ b/g9650/early-debug/g9650-init-trace.c
+@@ -32,7 +32,7 @@ static void pause20(void) {
+ }
+ static void die(U code) {call(94,code,0,0,0,0,0); for(;;){} }
+ static char buffer[65536];
+-static void capture(int snapshot,char **argv) {
++static void capture(int snapshot,char **argv,char **env) {
+     if(!snapshot) {
+         /* Private mount namespace: init sees its original /cache and /dev. */
+         if(call(97,0x20000,0,0,0,0,0)<0) die(111);
+@@ -58,15 +58,32 @@ static void capture(int snapshot,char **argv) {
+         if(at==begin || (major!=259 && major!=8) || minor>1048575) die(119);
+         U dev=(minor&255)|((major&4095)<<8)|((minor&~255UL)<<12)|((major&~4095UL)<<32);
+         call(33,(U)-100,(U)"/dev/g9650-cache-log",0060000|0600,dev,0,0);
+-        if(call(40,(U)"/dev/g9650-cache-log",(U)"/cache",(U)"ext4",2|4|1024,(U)"",0)<0) die(114);
++        /* init may already have /cache mounted. Mount on a private, distinct
++         * path: an overmount of the existing /cache returns EBUSY here. */
++        call(34,(U)-100,(U)"/dev/g9650-log-cache",0700,0,0,0);
++        if(call(40,(U)"/dev/g9650-cache-log",(U)"/dev/g9650-log-cache",(U)"ext4",2|4|1024,(U)"",0)<0) die(114);
+     }
+-    L out=openfile(snapshot?"/cache/g9650-trace-probe.log":"/cache/g9650-early-kernel.log",
++    L out=openfile(snapshot?"/cache/g9650-trace-probe.log":"/dev/g9650-log-cache/g9650-early-kernel.log",
+                    1|64|1024|4096|524288,0600);
+     if(out<0) die(115);
+     const char *header="\n=== G9650 temporary init trace: original init preserved ===\n";
+     put(out,header,len(header));
+     for(U i=0;argv[i];i++) {put(out,argv[i],len(argv[i])); put(out," ",1);}
+     put(out,"\n",1); call(83,out,0,0,0,0,0);
++    if(!snapshot && call(220,17,0,0,0,0,0)==0) {
++        /* Keep native service/VINTF messages too. Wait for logd's reader
++         * socket, after bootstrap APEXes and the logger become available. */
++        for(U i=0;i<1500;i++) {
++            if(call(48,(U)-100,(U)"/dev/socket/logdr",0,0,0,0)==0) {
++                char *args[]={"/system/bin/logcat","-b","all","-v","threadtime",
++                    "-f","/dev/g9650-log-cache/g9650-early-logcat.log",
++                    "-r","4096","-n","2",0};
++                call(221,(U)args[0],(U)args,(U)env,0,0,0);
++            }
++            pause20();
++        }
++        die(120);
++    }
+     L in=openfile("/dev/kmsg",0x800|524288,0);
+     if(in<0) {put(out,"cannot open /dev/kmsg\n",21); die(116);}
+     U bytes=0,idle=0,used=0;
+@@ -89,11 +106,11 @@ static void capture(int snapshot,char **argv) {
+ }
+ __attribute__((used,noreturn)) void entry(U *stack) {
+     U argc=stack[0]; char **argv=(char **)(stack+1); char **env=argv+argc+1;
+-    if(argc==2 && same(argv[1],"--probe")) capture(1,argv);
+-    if(argc==2 && same(argv[1],"--early-trace")) capture(0,argv);
++    if(argc==2 && same(argv[1],"--probe")) capture(1,argv,env);
++    if(argc==2 && same(argv[1],"--early-trace")) capture(0,argv,env);
+     if(call(178,0,0,0,0,0,0)==1 && (argc==1 || same(argv[1],"selinux_setup"))) {
+         L child=call(220,17,0,0,0,0,0);
+-        if(child==0) capture(0,argv);
++        if(child==0) capture(0,argv,env);
+         /* Let the reader open cache before original init; no dependency on it. */
+         for(U i=0;i<5;i++) pause20();
+     }

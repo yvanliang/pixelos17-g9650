@@ -1,0 +1,26 @@
+From 50d18ae849df16fc4b2c9c3241f3d834aaacb9a9 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:41:46 +0800
+Subject: [PATCH 37/60] GSI Android 17 compatibility:
+ 0039-Add-a-prop-to-use-linear-backlight-control.patch
+
+Change-Id: I3c18a5572a859eaa8b56fd786de56948d3f392da
+---
+ .../src/com/android/settingslib/display/BrightnessUtils.java  | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java b/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
+index 204a738dd..af0aa759b 100644
+--- a/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
++++ b/packages/SettingsLib/DisplayUtils/src/com/android/settingslib/display/BrightnessUtils.java
+@@ -90,6 +90,10 @@ public class BrightnessUtils {
+      * @return The corresponding setting value.
+      */
+     public static final float convertGammaToLinearFloat(int val, float min, float max) {
++        if (SystemProperties.getBoolean("persist.sys.phh.linear_brightness", false)) {
++            android.util.Log.e("PHH", "Linear brightness val " + val + " from " + min + " to " + max + " makes " + (val / 65536.0f));
++            return val / 65536.0f;
++        }
+         if (LowGammaBrightness) {
+             return MathUtils.constrain(BrightnessSynchronizer.brightnessIntToFloat(val),
+                     min, max);

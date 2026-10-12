@@ -1,0 +1,377 @@
+From 56a610f48e37a3f60c83c56415c09c06afaca8b2 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 09:40:37 +0800
+Subject: [PATCH 4/4] GSI Android 17 compatibility:
+ g9650-fva4-nlmsg-xperms.patch
+
+Change-Id: I92af7b11375c215ee0b8becc55035d29c275b422
+---
+ private/app_neverallows.te          | 2 ++
+ private/auditctl.te                 | 2 ++
+ private/dhcp.te                     | 2 ++
+ private/dumpstate.te                | 6 ++++++
+ private/hal_telephony.te            | 2 ++
+ private/hal_wifi_hostapd.te         | 2 ++
+ private/hal_wifi_supplicant.te      | 2 ++
+ private/init.te                     | 2 ++
+ private/logd.te                     | 2 ++
+ private/net.te                      | 2 ++
+ private/netd.te                     | 2 ++
+ private/network_stack.te            | 2 ++
+ private/policy_capabilities         | 2 ++
+ private/priv_app_all.te             | 2 ++
+ private/recovery.te                 | 4 ++++
+ private/shell.te                    | 2 ++
+ private/system_server.te            | 2 ++
+ private/untrusted_app_25.te         | 4 ++++
+ private/untrusted_app_27.te         | 4 ++++
+ private/untrusted_app_29.te         | 4 ++++
+ private/untrusted_app_30.te         | 4 ++++
+ private/wifi_mainline_supplicant.te | 2 ++
+ vendor/ot_rcp.te                    | 4 ++++
+ 23 files changed, 62 insertions(+)
+
+diff --git a/private/app_neverallows.te b/private/app_neverallows.te
+index f9f2bbe..fa10540 100644
+--- a/private/app_neverallows.te
++++ b/private/app_neverallows.te
+@@ -148,7 +148,9 @@ neverallow all_untrusted_apps *:vsock_socket ~{ getattr getopt read write };
+ 
+ # Disallow sending RTM_GETLINK messages on netlink sockets.
+ neverallow all_untrusted_apps domain:netlink_route_socket { bind nlmsg_readpriv };
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ neverallowxperm all_untrusted_apps domain:netlink_route_socket nlmsg RTM_GETLINK;
++')
+ 
+ # Disallow sending RTM_GETNEIGH{TBL} messages on netlink sockets.
+ neverallow {
+diff --git a/private/auditctl.te b/private/auditctl.te
+index b6d191a..890e0c4 100644
+--- a/private/auditctl.te
++++ b/private/auditctl.te
+@@ -21,4 +21,6 @@ allow auditctl self:netlink_audit_socket create_socket_perms_no_ioctl;
+ allow auditctl self:netlink_audit_socket nlmsg_write;
+ # For kernel >= 6.13
+ allow auditctl self:netlink_audit_socket nlmsg;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm auditctl self:netlink_audit_socket nlmsg AUDIT_SET;
++')
+diff --git a/private/dhcp.te b/private/dhcp.te
+index 437fa0c..88ed824 100644
+--- a/private/dhcp.te
++++ b/private/dhcp.te
+@@ -13,7 +13,9 @@ allow dhcp cgroup_v2:dir { create write add_name };
+ allow dhcp self:global_capability_class_set { setgid setuid net_admin net_raw net_bind_service };
+ allow dhcp self:packet_socket create_socket_perms_no_ioctl;
+ allow dhcp self:netlink_route_socket nlmsg_write;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm dhcp self:netlink_route_socket nlmsg priv_route_socket_nlmsgs;
++')
+ allow dhcp shell_exec:file rx_file_perms;
+ allow dhcp system_file:file rx_file_perms;
+ not_full_treble(`allow dhcp vendor_file:file rx_file_perms;')
+diff --git a/private/dumpstate.te b/private/dumpstate.te
+index ff88fe9..c081cac 100644
+--- a/private/dumpstate.te
++++ b/private/dumpstate.te
+@@ -434,8 +434,12 @@ allow dumpstate self:netlink_tcpdiag_socket create_socket_perms_no_ioctl;
+ allow dumpstate self:netlink_tcpdiag_socket nlmsg_read;
+ # For kernel >= 6.13
+ allow dumpstate self:netlink_tcpdiag_socket nlmsg;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm dumpstate self:netlink_tcpdiag_socket nlmsg SOCK_DIAG_BY_FAMILY;
++')
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm dumpstate self:netlink_route_socket nlmsg { RTM_GETLINK RTM_GETNEIGH };
++')
+ 
+ # Access /data/tombstones.
+ allow dumpstate tombstone_data_file:dir r_dir_perms;
+@@ -543,7 +547,9 @@ allow dumpstate self:netlink_xfrm_socket create_socket_perms_no_ioctl;
+ allow dumpstate self:netlink_xfrm_socket nlmsg_read;
+ # For kernel >= 6.13
+ allow dumpstate self:netlink_xfrm_socket nlmsg;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm dumpstate self:netlink_xfrm_socket nlmsg XFRM_MSG_GETPOLICY;
++')
+ 
+ # Allow dumpstate to run iotop
+ allow dumpstate self:netlink_socket create_socket_perms_no_ioctl;
+diff --git a/private/hal_telephony.te b/private/hal_telephony.te
+index c44f748..fdbc649 100644
+--- a/private/hal_telephony.te
++++ b/private/hal_telephony.te
+@@ -8,7 +8,9 @@ hal_attribute_service(hal_telephony, hal_radio_service)
+ allowxperm hal_telephony_server self:udp_socket ioctl priv_sock_ioctls;
+ 
+ allow hal_telephony_server self:netlink_route_socket nlmsg_write;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm hal_telephony_server self:netlink_route_socket nlmsg priv_route_socket_nlmsgs;
++')
+ allow hal_telephony_server self:global_capability_class_set { setpcap setgid setuid net_admin net_raw };
+ allow hal_telephony_server cgroup:dir create_dir_perms;
+ allow hal_telephony_server cgroup:{ file lnk_file } r_file_perms;
+diff --git a/private/hal_wifi_hostapd.te b/private/hal_wifi_hostapd.te
+index f5dbfb9..6364134 100644
+--- a/private/hal_wifi_hostapd.te
++++ b/private/hal_wifi_hostapd.te
+@@ -22,7 +22,9 @@ allow hal_wifi_hostapd_server self:netlink_socket create_socket_perms_no_ioctl;
+ allow hal_wifi_hostapd_server self:netlink_generic_socket create_socket_perms_no_ioctl;
+ allow hal_wifi_hostapd_server self:packet_socket create_socket_perms_no_ioctl;
+ allow hal_wifi_hostapd_server self:netlink_route_socket nlmsg_write;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm hal_wifi_hostapd_server self:netlink_route_socket nlmsg priv_route_socket_nlmsgs;
++')
+ 
+ ###
+ ### neverallow rules
+diff --git a/private/hal_wifi_supplicant.te b/private/hal_wifi_supplicant.te
+index fbe8316..cc17870 100644
+--- a/private/hal_wifi_supplicant.te
++++ b/private/hal_wifi_supplicant.te
+@@ -15,7 +15,9 @@ allow hal_wifi_supplicant self:global_capability_class_set { net_admin net_raw }
+ allow hal_wifi_supplicant cgroup:dir create_dir_perms;
+ allow hal_wifi_supplicant cgroup_v2:dir create_dir_perms;
+ allow hal_wifi_supplicant self:netlink_route_socket nlmsg_write;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm hal_wifi_supplicant self:netlink_route_socket nlmsg priv_route_socket_nlmsgs;
++')
+ allow hal_wifi_supplicant self:netlink_socket create_socket_perms_no_ioctl;
+ allow hal_wifi_supplicant self:netlink_generic_socket create_socket_perms_no_ioctl;
+ allow hal_wifi_supplicant self:packet_socket create_socket_perms;
+diff --git a/private/init.te b/private/init.te
+index f1baa5b..9241baf 100644
+--- a/private/init.te
++++ b/private/init.te
+@@ -721,7 +721,9 @@ allow init self:netlink_audit_socket create_socket_perms_no_ioctl;
+ allow init self:netlink_audit_socket nlmsg_relay;
+ # For kernel >= 6.13
+ allow init self:netlink_audit_socket nlmsg;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm init self:netlink_audit_socket nlmsg AUDIT_USER_AVC;
++')
+ 
+ allow init self:global_capability_class_set audit_write;
+ 
+diff --git a/private/logd.te b/private/logd.te
+index d3a77f0..4e8cfda 100644
+--- a/private/logd.te
++++ b/private/logd.te
+@@ -64,7 +64,9 @@ allow logd self:netlink_audit_socket create_socket_perms_no_ioctl;
+ allow logd self:netlink_audit_socket nlmsg_write;
+ # For kernel >= 6.13
+ allow logd self:netlink_audit_socket nlmsg;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm logd self:netlink_audit_socket nlmsg { AUDIT_SET AUDIT_USER_AVC };
++')
+ 
+ allow logd kernel:system syslog_read;
+ allow logd kmsg_device:chr_file { getattr w_file_perms };
+diff --git a/private/net.te b/private/net.te
+index 046d554..75548ea 100644
+--- a/private/net.te
++++ b/private/net.te
+@@ -33,7 +33,9 @@ allow { netdomain -pcc_component } self:{ icmp_socket udp_socket rawip_socket }
+ allow { netdomain -pcc_component } port_type:tcp_socket name_connect;
+ # See changes to the routing table.
+ allow netdomain self:netlink_route_socket { create read getattr write setattr lock append connect getopt setopt shutdown nlmsg_read nlmsg };
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm netdomain self:netlink_route_socket nlmsg unpriv_route_socket_nlmsgs;
++')
+ 
+ # Talks to netd via dnsproxyd socket.
+ unix_socket_connect(netdomain, dnsproxyd, netd)
+diff --git a/private/netd.te b/private/netd.te
+index 38e3730..6b4454d 100644
+--- a/private/netd.te
++++ b/private/netd.te
+@@ -64,7 +64,9 @@ allow netd self:tun_socket create;
+ 
+ allow netd self:netlink_kobject_uevent_socket create_socket_perms_no_ioctl;
+ allow netd self:netlink_route_socket nlmsg_write;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm netd self:netlink_route_socket nlmsg priv_route_socket_nlmsgs;
++')
+ allow netd self:netlink_nflog_socket create_socket_perms_no_ioctl;
+ allow netd self:netlink_socket create_socket_perms_no_ioctl;
+ allow netd self:netlink_tcpdiag_socket create_socket_perms_no_ioctl;
+diff --git a/private/network_stack.te b/private/network_stack.te
+index 70f9332..b1d1cea 100644
+--- a/private/network_stack.te
++++ b/private/network_stack.te
+@@ -23,7 +23,9 @@ allow network_stack self:packet_socket create_socket_perms_no_ioctl;
+ 
+ # Monitor neighbors via netlink.
+ allow network_stack self:netlink_route_socket nlmsg_write;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm network_stack self:netlink_route_socket nlmsg priv_route_socket_nlmsgs;
++')
+ 
+ # Use netlink uevent sockets.
+ allow network_stack self:netlink_kobject_uevent_socket create_socket_perms_no_ioctl;
+diff --git a/private/policy_capabilities b/private/policy_capabilities
+index d9c2721..7be56f3 100644
+--- a/private/policy_capabilities
++++ b/private/policy_capabilities
+@@ -23,4 +23,6 @@ policycap nnp_nosuid_transition;
+ policycap functionfs_seclabel;
+ 
+ # Enable extended permissions for netlink sockets.
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ policycap netlink_xperm;
++')
+diff --git a/private/priv_app_all.te b/private/priv_app_all.te
+index 49cbc8f..9453e88 100644
+--- a/private/priv_app_all.te
++++ b/private/priv_app_all.te
+@@ -303,7 +303,9 @@ neverallow priv_app_all *:{
+ 
+ # Disallow sending RTM_GETLINK messages on netlink sockets.
+ neverallow priv_app_all domain:netlink_route_socket { bind nlmsg_readpriv };
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ neverallowxperm priv_app_all domain:netlink_route_socket nlmsg RTM_GETLINK;
++')
+ 
+ # Structurally guarantee priv_app cannot open, write, mutate PCC storage or traverse PCC directory
+ neverallow priv_app_all pcc_data_file:file { open write append create rename setattr unlink };
+diff --git a/private/recovery.te b/private/recovery.te
+index f2d8008..9677484 100644
+--- a/private/recovery.te
++++ b/private/recovery.te
+@@ -31,8 +31,12 @@ recovery_only(`
+   allow recovery self:netlink_route_socket { nlmsg_readpriv nlmsg_read };
+   # For kernel >= 6.13
+   allow recovery self:netlink_route_socket nlmsg;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+   allowxperm recovery self:netlink_route_socket nlmsg unpriv_route_socket_nlmsgs;
++')
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+   allowxperm recovery self:netlink_route_socket nlmsg RTM_GETLINK;
++')
+   allow recovery self:global_capability_class_set net_admin;
+   allow recovery self:tcp_socket { create ioctl };
+   allowxperm recovery self:tcp_socket ioctl { SIOCGIFFLAGS SIOCSIFFLAGS };
+diff --git a/private/shell.te b/private/shell.te
+index 5d3cabc..48d2cd0 100644
+--- a/private/shell.te
++++ b/private/shell.te
+@@ -412,7 +412,9 @@ allow shell hwservicemanager:hwservice_manager list;
+ r_dir_file(shell, proc_net_type)
+ 
+ # allow shell to query the network links via netlink.
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm shell self:netlink_route_socket nlmsg RTM_GETLINK;
++')
+ 
+ allow shell {
+   proc_asound
+diff --git a/private/system_server.te b/private/system_server.te
+index 355e5b9..31fe23d 100644
+--- a/private/system_server.te
++++ b/private/system_server.te
+@@ -185,7 +185,9 @@ allow system_server self:socket create_socket_perms_no_ioctl;
+ 
+ # Set and get routes directly via netlink.
+ allow system_server self:netlink_route_socket nlmsg_write;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm system_server self:netlink_route_socket nlmsg priv_route_socket_nlmsgs;
++')
+ 
+ # Use XFRM (IPsec) netlink sockets
+ allow system_server self:netlink_xfrm_socket create_socket_perms_no_ioctl;
+diff --git a/private/untrusted_app_25.te b/private/untrusted_app_25.te
+index a8e73ca..b8960bc 100644
+--- a/private/untrusted_app_25.te
++++ b/private/untrusted_app_25.te
+@@ -52,8 +52,12 @@ allow untrusted_app_25 mnt_sdcard_file:lnk_file r_file_perms;
+ # allow sending RTM_GETNEIGH{TBL} messages.
+ allow untrusted_app_25 self:netlink_route_socket nlmsg_getneigh;
+ auditallow untrusted_app_25 self:netlink_route_socket nlmsg_getneigh;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm untrusted_app_25 self:netlink_route_socket nlmsg { RTM_GETNEIGH RTM_GETNEIGHTBL };
++')
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ auditallowxperm untrusted_app_25 self:netlink_route_socket nlmsg { RTM_GETNEIGH RTM_GETNEIGHTBL };
++')
+ 
+ # Connect to mdnsd via mdnsd socket.
+ unix_socket_connect(untrusted_app_25, mdnsd, mdnsd)
+diff --git a/private/untrusted_app_27.te b/private/untrusted_app_27.te
+index 484355b..bf66b84 100644
+--- a/private/untrusted_app_27.te
++++ b/private/untrusted_app_27.te
+@@ -40,8 +40,12 @@ allow untrusted_app_27 mnt_sdcard_file:lnk_file r_file_perms;
+ # allow sending RTM_GETNEIGH{TBL} messages.
+ allow untrusted_app_27 self:netlink_route_socket nlmsg_getneigh;
+ auditallow untrusted_app_27 self:netlink_route_socket nlmsg_getneigh;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm untrusted_app_27 self:netlink_route_socket nlmsg { RTM_GETNEIGH RTM_GETNEIGHTBL };
++')
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ auditallowxperm untrusted_app_27 self:netlink_route_socket nlmsg { RTM_GETNEIGH RTM_GETNEIGHTBL };
++')
+ 
+ # Connect to mdnsd via mdnsd socket.
+ unix_socket_connect(untrusted_app_27, mdnsd, mdnsd)
+diff --git a/private/untrusted_app_29.te b/private/untrusted_app_29.te
+index 5ce4e79..64eca78 100644
+--- a/private/untrusted_app_29.te
++++ b/private/untrusted_app_29.te
+@@ -18,8 +18,12 @@ bluetooth_domain(untrusted_app_29)
+ # allow sending RTM_GETNEIGH{TBL} messages.
+ allow untrusted_app_29 self:netlink_route_socket nlmsg_getneigh;
+ auditallow untrusted_app_29 self:netlink_route_socket nlmsg_getneigh;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm untrusted_app_29 self:netlink_route_socket nlmsg { RTM_GETNEIGH RTM_GETNEIGHTBL };
++')
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ auditallowxperm untrusted_app_29 self:netlink_route_socket nlmsg { RTM_GETNEIGH RTM_GETNEIGHTBL };
++')
+ 
+ # Connect to mdnsd via mdnsd socket.
+ unix_socket_connect(untrusted_app_29, mdnsd, mdnsd)
+diff --git a/private/untrusted_app_30.te b/private/untrusted_app_30.te
+index 74d8d7f..a01af50 100644
+--- a/private/untrusted_app_30.te
++++ b/private/untrusted_app_30.te
+@@ -20,8 +20,12 @@ bluetooth_domain(untrusted_app_30)
+ # allow sending RTM_GETNEIGH{TBL} messages.
+ allow untrusted_app_30 self:netlink_route_socket nlmsg_getneigh;
+ auditallow untrusted_app_30 self:netlink_route_socket nlmsg_getneigh;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm untrusted_app_30 self:netlink_route_socket nlmsg { RTM_GETNEIGH RTM_GETNEIGHTBL };
++')
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ auditallowxperm untrusted_app_30 self:netlink_route_socket nlmsg { RTM_GETNEIGH RTM_GETNEIGHTBL };
++')
+ 
+ # Connect to mdnsd via mdnsd socket.
+ unix_socket_connect(untrusted_app_30, mdnsd, mdnsd)
+diff --git a/private/wifi_mainline_supplicant.te b/private/wifi_mainline_supplicant.te
+index 2619373..82e3afa 100644
+--- a/private/wifi_mainline_supplicant.te
++++ b/private/wifi_mainline_supplicant.te
+@@ -28,7 +28,9 @@ allowxperm wifi_mainline_supplicant self:packet_socket ioctl { unpriv_sock_ioctl
+ 
+ # Netlink sockets
+ allow wifi_mainline_supplicant self:netlink_route_socket { bind create read write nlmsg_readpriv nlmsg_write };
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm wifi_mainline_supplicant self:netlink_route_socket nlmsg priv_route_socket_nlmsgs;
++')
+ allow wifi_mainline_supplicant self:netlink_socket create_socket_perms_no_ioctl;
+ allow wifi_mainline_supplicant self:netlink_generic_socket create_socket_perms_no_ioctl;
+ 
+diff --git a/vendor/ot_rcp.te b/vendor/ot_rcp.te
+index fd9cae2..d4a0beb 100644
+--- a/vendor/ot_rcp.te
++++ b/vendor/ot_rcp.te
+@@ -19,5 +19,9 @@ allow ot_rcp self:netlink_route_socket create_socket_perms_no_ioctl;
+ allow ot_rcp self:netlink_route_socket { nlmsg_read nlmsg_readpriv };
+ # For kernel >= 6.13
+ allow ot_rcp self:netlink_route_socket nlmsg;
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm ot_rcp self:netlink_route_socket nlmsg unpriv_route_socket_nlmsgs;
++')
++ifelse(g9650_legacy_nlmsg_compat, `true', `', `
+ allowxperm ot_rcp self:netlink_route_socket nlmsg RTM_GETLINK;
++')

@@ -1,0 +1,46 @@
+From 550d930b9b3024421a83646ab16c7830d026ac92 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 17:38:38 +0800
+Subject: [PATCH 53/60] GSI Android 17 compatibility:
+ 0019-core-api-add-entries-for-restored-FDE-and-network-class-apis.patch
+
+Change-Id: Ie9fdd3a50d88520fe85bc8dbfec329285e846db3
+---
+ core/api/current.txt | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/core/api/current.txt b/core/api/current.txt
+index 572012ca4..a0c467c9f 100644
+--- a/core/api/current.txt
++++ b/core/api/current.txt
+@@ -36933,11 +36933,18 @@ package android.os.storage {
+     method @NonNull public java.util.List<android.os.storage.StorageVolume> getStorageVolumes();
+     method @NonNull @RequiresPermission(android.Manifest.permission.MANAGE_EXTERNAL_STORAGE) public java.util.List<android.os.storage.StorageVolume> getStorageVolumesIncludingSharedProfiles();
+     method @NonNull public java.util.UUID getUuidForPath(@NonNull java.io.File) throws java.io.IOException;
++    method public static boolean inCryptKeeperBounce();
+     method public boolean isAllocationSupported(@NonNull java.io.FileDescriptor);
++    method public static boolean isBlockEncrypted();
++    method public static boolean isBlockEncrypting();
+     method public boolean isCacheBehaviorGroup(java.io.File) throws java.io.IOException;
+     method public boolean isCacheBehaviorTombstone(java.io.File) throws java.io.IOException;
+     method public boolean isCheckpointSupported();
++    method public static boolean isEncryptable();
+     method public boolean isEncrypted(java.io.File);
++    method @Deprecated public static boolean isFileEncryptedNativeOnly();
++    method @Deprecated public static boolean isFileEncryptedNativeOrEmulated();
++    method public static boolean isNonDefaultBlockEncrypted();
+     method public boolean isObbMounted(String);
+     method public boolean mountObb(String, String, android.os.storage.OnObbStateChangeListener);
+     method @NonNull public android.os.ParcelFileDescriptor openProxyFileDescriptor(int, android.os.ProxyFileDescriptorCallback, android.os.Handler) throws java.io.IOException;
+@@ -48243,6 +48250,11 @@ package android.telephony {
+     field public static final int MULTISIM_ALLOWED = 0; // 0x0
+     field public static final int MULTISIM_NOT_SUPPORTED_BY_CARRIER = 2; // 0x2
+     field public static final int MULTISIM_NOT_SUPPORTED_BY_HARDWARE = 1; // 0x1
++    field public static final int NETWORK_CLASS_2_G = 1; // 0x1
++    field public static final int NETWORK_CLASS_3_G = 2; // 0x2
++    field public static final int NETWORK_CLASS_4_G = 3; // 0x3
++    field public static final int NETWORK_CLASS_5_G = 4; // 0x4
++    field public static final int NETWORK_CLASS_UNKNOWN = 0; // 0x0
+     field public static final int NETWORK_SELECTION_MODE_AUTO = 1; // 0x1
+     field public static final int NETWORK_SELECTION_MODE_MANUAL = 2; // 0x2
+     field public static final int NETWORK_SELECTION_MODE_UNKNOWN = 0; // 0x0

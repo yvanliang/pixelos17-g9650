@@ -1,0 +1,24 @@
+From 8ff1e087b9cfbffb8a010cea4e1086c15fdf3e2a Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:57 +0800
+Subject: [PATCH 5/7] GSI Android 17 compatibility:
+ 0005-Every-voldmanaged-storage-is-adoptable.patch
+
+Change-Id: Ibffc73d28dc67cb813130df09e5db22961b06f3d
+---
+ main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/main.cpp b/main.cpp
+index 8956cd5..ef290aa 100644
+--- a/main.cpp
++++ b/main.cpp
+@@ -245,7 +245,7 @@ static int process_config(VolumeManager* vm, VoldConfigs* configs) {
+     }
+ 
+     /* Loop through entries looking for ones that vold manages */
+-    configs->has_adoptable = false;
++    configs->has_adoptable = true;
+     configs->has_quota = false;
+     configs->has_reserved = false;
+     configs->has_compress = false;

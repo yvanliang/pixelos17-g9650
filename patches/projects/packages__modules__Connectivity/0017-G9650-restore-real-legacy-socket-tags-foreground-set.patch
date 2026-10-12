@@ -1,0 +1,137 @@
+From cb6cc77cc1e618acda68b0da91d44e4805ed8231 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 12:28:41 +0800
+Subject: [PATCH 17/18] G9650: restore real legacy socket tags, foreground sets
+ and removed UID cleanup
+
+Change-Id: Ia9490141d5dfc6aa48840a222868854d2aaab93a
+---
+ bpf/netd/BpfHandler.cpp                       | 37 ++++++++++++++++++-
+ .../server/net/NetworkStatsService.java       | 30 +++++++++++++++
+ 2 files changed, 66 insertions(+), 1 deletion(-)
+
+diff --git a/bpf/netd/BpfHandler.cpp b/bpf/netd/BpfHandler.cpp
+index 0c226df..90b4178 100644
+--- a/bpf/netd/BpfHandler.cpp
++++ b/bpf/netd/BpfHandler.cpp
+@@ -22,6 +22,11 @@
+ #include <inttypes.h>
+ 
+ #include <android-base/result.h>
++#include <android-base/properties.h>
++#include <android-base/stringprintf.h>
++#include <fcntl.h>
++#include <sys/utsname.h>
++#include <unistd.h>
+ #include <android-base/unique_fd.h>
+ #include <bpf/WaitForProgsLoaded.h>
+ #include <log/log.h>
+@@ -51,6 +56,25 @@ using bpf::isUserspace64bit;
+ using bpf::queryProgram;
+ using bpf::retrieveProgram;
+ 
++// Keep the legacy kernel's actual socket tags, not successful no-op stubs.
++static bool useLegacyQtaguidControl() {
++    static const bool legacy = [] {
++        struct utsname u = {};
++        return base::GetProperty("ro.boot.bootloader", "").rfind("G9650", 0) == 0
++                && uname(&u) == 0 && std::string(u.release).rfind("4.9.", 0) == 0
++                && access("/proc/net/xt_qtaguid/ctrl", F_OK) == 0;
++    }();
++    return legacy;
++}
++
++static int writeLegacyQtaguidControl(const std::string& command) {
++    unique_fd fd(TEMP_FAILURE_RETRY(open("/proc/net/xt_qtaguid/ctrl", O_WRONLY | O_CLOEXEC)));
++    if (!fd.ok()) return -errno;
++    const ssize_t written = TEMP_FAILURE_RETRY(write(fd.get(), command.data(), command.size()));
++    if (written < 0) return -errno;
++    return written == static_cast<ssize_t>(command.size()) ? 0 : -EIO;
++}
++
+ constexpr int PER_UID_STATS_ENTRIES_LIMIT = 500;
+ // At most 90% of the stats map may be used by tagged traffic entries. This ensures
+ // that 10% of the map is always available to count untagged traffic, one entry per UID.
+@@ -562,7 +586,8 @@ bool BpfHandler::hasUpdateDeviceStatsPermission(uid_t uid) {
+ }
+ 
+ int BpfHandler::tagSocket(int sockFd, uint32_t tag, uid_t chargeUid, uid_t realUid) {
+-    if (!mCookieTagMap.isValid()) return -EPERM;
++    const bool legacy = useLegacyQtaguidControl();
++    if (!legacy && !mCookieTagMap.isValid()) return -EPERM;
+ 
+     if (chargeUid != realUid && !hasUpdateDeviceStatsPermission(realUid)) return -EPERM;
+ 
+@@ -608,6 +633,13 @@ int BpfHandler::tagSocket(int sockFd, uint32_t tag, uid_t chargeUid, uid_t realU
+         }
+     }
+ 
++    if (legacy) {
++        // qtaguid stores the application tag in the upper 32 bits. All existing
++        // UID authorization, CLAT and socket family/protocol checks above apply.
++        return writeLegacyQtaguidControl(base::StringPrintf("t %d %" PRIu64 " %u",
++                sockFd, static_cast<uint64_t>(tag) << 32, chargeUid));
++    }
++
+     uint64_t sock_cookie = getSocketCookie(sockFd);
+     if (!sock_cookie) return -errno;
+ 
+@@ -668,6 +700,9 @@ int BpfHandler::tagSocket(int sockFd, uint32_t tag, uid_t chargeUid, uid_t realU
+ }
+ 
+ int BpfHandler::untagSocket(int sockFd) {
++    if (useLegacyQtaguidControl()) {
++        return writeLegacyQtaguidControl(base::StringPrintf("u %d", sockFd));
++    }
+     uint64_t sock_cookie = getSocketCookie(sockFd);
+     if (!sock_cookie) return -errno;
+ 
+diff --git a/service-t/src/com/android/server/net/NetworkStatsService.java b/service-t/src/com/android/server/net/NetworkStatsService.java
+index 270ac89..514ee12 100644
+--- a/service-t/src/com/android/server/net/NetworkStatsService.java
++++ b/service-t/src/com/android/server/net/NetworkStatsService.java
+@@ -2095,7 +2095,31 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
+         }
+     }
+ 
++    private void writeLegacyQtaguidControl(String command) {
++        java.io.FileDescriptor fd = null;
++        try {
++            fd = android.system.Os.open("/proc/net/xt_qtaguid/ctrl",
++                    android.system.OsConstants.O_WRONLY | android.system.OsConstants.O_CLOEXEC, 0);
++            final byte[] bytes = command.getBytes(java.nio.charset.StandardCharsets.US_ASCII);
++            if (android.system.Os.write(fd, bytes, 0, bytes.length) != bytes.length) {
++                Log.e(TAG, "Short qtaguid control write: " + command);
++            }
++        } catch (ErrnoException | java.io.InterruptedIOException e) {
++            Log.e(TAG, "Failed qtaguid control command: " + command, e);
++        } finally {
++            if (fd != null) {
++                try { android.system.Os.close(fd); }
++                catch (ErrnoException e) { Log.e(TAG, "Failed closing qtaguid control", e); }
++            }
++        }
++    }
++
+     private void setKernelCounterSet(int uid, int set) {
++        if (NetworkStatsFactory.nativeIsLegacyStatsBackend()) {
++            writeLegacyQtaguidControl("s " + set + " " + uid);
++            return;
++        }
++
+         if (mUidCounterSetMap == null) {
+             Log.wtf(TAG, "Fail to set UidCounterSet: Null bpf map");
+             return;
+@@ -2886,6 +2910,12 @@ public class NetworkStatsService extends INetworkStatsService.Stub {
+      * @param uid
+      */
+     private void deleteKernelTagData(int uid) {
++        if (NetworkStatsFactory.nativeIsLegacyStatsBackend()) {
++            writeLegacyQtaguidControl("d 0 " + uid);
++            mActiveUidCounterSet.delete(uid);
++            return;
++        }
++
+         if(mCookieTagMap == null) return;
+         try {
+             mCookieTagMap.forEach((key, value) -> {

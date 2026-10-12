@@ -1,0 +1,60 @@
+From 1ef3ddbe90d132a16bd1691c5cb3d8a571bf88b5 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 10:34:44 +0800
+Subject: [PATCH] G9650: tolerate only missing DNS BPF maps on the FVA4 4.9
+ kernel
+
+Change-Id: I1b61710f31ed5003aa7e758b1556dc19206f8c03
+---
+ DnsProxyListener.cpp | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
+
+diff --git a/DnsProxyListener.cpp b/DnsProxyListener.cpp
+index f55d2c5..1372e90 100644
+--- a/DnsProxyListener.cpp
++++ b/DnsProxyListener.cpp
+@@ -28,6 +28,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sys/socket.h>
++#include <sys/utsname.h>
+ 
+ #define LOG_TAG "resolv"
+ 
+@@ -685,9 +686,20 @@ std::string makeThreadName(unsigned netId, uint32_t uid) {
+ extern "C" int ADnsHelper_init();
+ extern "C" int ADnsHelper_isUidNetworkingBlocked(uid_t, bool);
+ 
++// Missing BPF maps on the FVA4 4.9 kernel must not abort netd. Keep the
++// normal fail-fast behavior for other devices and for unexpected failures.
++static bool sDnsBpfHelperReady = false;
++
++bool allowLegacyDnsBpfFallback(int error) {
++    struct utsname kernel = {};
++    return error == -ENOENT &&
++            android::base::GetProperty("ro.custom.device", "") == "g9650" &&
++            uname(&kernel) == 0 && strncmp(kernel.release, "4.9.", 4) == 0;
++}
++
+ bool isUidNetworkingBlocked(uid_t uid, unsigned netId) {
+     static const bool hasBPF = isAtLeastT();  // Related BPF maps were only mainlined from T.
+-    if (!hasBPF) return false;
++    if (!hasBPF || !sDnsBpfHelperReady) return false;
+ 
+     // The enforceDnsUid is an OEM feature that sets DNS packet with AID_DNS instead of the
+     // application's UID. Its DNS packets are not subject to certain network restriction features.
+@@ -717,7 +729,13 @@ DnsProxyListener::DnsProxyListener() : FrameworkListener(SOCKET_NAME) {
+     mGetDnsNetIdCommand = std::make_unique<GetDnsNetIdCommand>();
+     registerCmd(mGetDnsNetIdCommand.get());
+ 
+-    if (ADnsHelper_init()) abort();
++    const int helperResult = ADnsHelper_init();
++    if (helperResult != 0) {
++        if (!allowLegacyDnsBpfFallback(helperResult)) abort();
++        LOG(WARNING) << "G9650 legacy DNS: BPF maps unavailable; retaining normal DNS";
++    } else {
++        sDnsBpfHelperReady = true;
++    }
+ }
+ 
+ void DnsProxyListener::Handler::spawn() {

@@ -1,0 +1,24 @@
+From 10e490ad93eb2d9f0d8c7baf7525a73be9aebf86 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:36 +0800
+Subject: [PATCH 01/12] GSI Android 17 compatibility:
+ 0001-Increase-default-log_level-to-get-actual-selinux-err.patch
+
+Change-Id: I7c0d8a248bd5374bde1bd94915bfc20331d90ffa
+---
+ secilc/secilc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/secilc/secilc.c b/secilc/secilc.c
+index f3102ca..29862fd 100644
+--- a/secilc/secilc.c
++++ b/secilc/secilc.c
+@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
+ 	int opt_index = 0;
+ 	char *fc_buf = NULL;
+ 	size_t fc_size;
+-	enum cil_log_level log_level = CIL_ERR;
++	enum cil_log_level log_level = CIL_WARN;
+ 	static struct option long_opts[] = {
+ 		{"help", no_argument, 0, 'h'},
+ 		{"verbose", no_argument, 0, 'v'},

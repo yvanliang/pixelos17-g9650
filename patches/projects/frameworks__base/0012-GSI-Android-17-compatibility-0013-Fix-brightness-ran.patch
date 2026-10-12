@@ -1,0 +1,29 @@
+From 3010955440f8869f89fba206a04e709ff023baea Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:43 +0800
+Subject: [PATCH 12/60] GSI Android 17 compatibility:
+ 0013-Fix-brightness-range-not-being-complete-on-Samsung-d.patch
+
+Change-Id: If12f623470b9b69bb898f266bb4f9e260275289c
+---
+ .../java/com/android/server/power/PowerManagerService.java  | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/services/core/java/com/android/server/power/PowerManagerService.java b/services/core/java/com/android/server/power/PowerManagerService.java
+index f7bfab4f6..c78f1a5a0 100644
+--- a/services/core/java/com/android/server/power/PowerManagerService.java
++++ b/services/core/java/com/android/server/power/PowerManagerService.java
+@@ -1323,9 +1323,11 @@ public final class PowerManagerService extends SystemService
+ 
+         if (min == INVALID_BRIGHTNESS_IN_CONFIG || max == INVALID_BRIGHTNESS_IN_CONFIG
+                 || def == INVALID_BRIGHTNESS_IN_CONFIG) {
++            int correctedMin = mContext.getResources().getInteger(com.android.internal.R.integer
++                            .config_screenBrightnessSettingMinimum);
++            if(correctedMin == 0) correctedMin = 1;
+             mScreenBrightnessMinimum = BrightnessSynchronizer.brightnessIntToFloat(
+-                    mContext.getResources().getInteger(com.android.internal.R.integer
+-                            .config_screenBrightnessSettingMinimum));
++                    correctedMin);
+             mScreenBrightnessMaximum = BrightnessSynchronizer.brightnessIntToFloat(
+                     mContext.getResources().getInteger(com.android.internal.R.integer
+                             .config_screenBrightnessSettingMaximum));

@@ -1,0 +1,24 @@
+From 9ae47e33de0c03bc26dd7ce4662c2541d2239b23 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:59 +0800
+Subject: [PATCH 10/18] GSI Android 17 compatibility:
+ 0010-guard-bpf-less-interface-teardown.patch
+
+Change-Id: I4fd3ce260ac45b5316e7e7517c3fd8e7a315e8b6
+---
+ service/src/com/android/server/BpfNetMaps.java | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/service/src/com/android/server/BpfNetMaps.java b/service/src/com/android/server/BpfNetMaps.java
+index 183938d..cb0c605 100644
+--- a/service/src/com/android/server/BpfNetMaps.java
++++ b/service/src/com/android/server/BpfNetMaps.java
+@@ -2030,6 +2030,8 @@ public class BpfNetMaps {
+     @RequiresApi(Build.VERSION_CODES.BAKLAVA)
+     public void removeLocalNetHostAllowlistForInterface(final int ifIndex) {
+         throwIfPre25Q2("removeLocalNetHostAllowlistForInterface is not available on pre-B devices");
++        if (sLocalNetCacheGenerationIdMap == null
++                || sLocalNetUidHostAllowlistMap == null) return;
+         synchronized (sLocalNetAccessLock) {
+             incrementLnpGenerationId(true);
+             try {

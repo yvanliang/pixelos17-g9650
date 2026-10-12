@@ -1,0 +1,78 @@
+From b0e53a06a1b06ab078f4c61b3cb34cd6a471573b Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:06 +0800
+Subject: [PATCH 11/25] GSI Android 17 compatibility:
+ 0011-FIH-devices-Fix-Earpiece-audio-output.patch
+
+Change-Id: I0ca4a2dcb391610ab532f395be6c1482b026e950
+---
+ .../managerdefinitions/src/Serializer.cpp     | 27 ++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
+
+diff --git a/services/audiopolicy/common/managerdefinitions/src/Serializer.cpp b/services/audiopolicy/common/managerdefinitions/src/Serializer.cpp
+index 21d3282..6ee0766 100644
+--- a/services/audiopolicy/common/managerdefinitions/src/Serializer.cpp
++++ b/services/audiopolicy/common/managerdefinitions/src/Serializer.cpp
+@@ -416,23 +416,32 @@ std::variant<status_t, AudioGainTraits::Element> PolicySerializer::deserialize<A
+     }
+ }
+ 
++static bool fixedEarpieceChannels = false;
+ template<>
+ std::variant<status_t, AudioProfileTraits::Element>
+ PolicySerializer::deserialize<AudioProfileTraits>(
+-        const xmlNode *cur, AudioProfileTraits::PtrSerializingCtx /*serializingContext*/)
++        const xmlNode *cur, AudioProfileTraits::PtrSerializingCtx serializingContext)
+ {
+     using Attributes = AudioProfileTraits::Attributes;
++    bool isOutput = serializingContext != nullptr;
+ 
+     std::string samplingRates = getXmlAttribute(cur, Attributes::samplingRates);
+     std::string format = getXmlAttribute(cur, Attributes::format);
+     std::string channels = getXmlAttribute(cur, Attributes::channelMasks);
++    ChannelTraits::Collection channelsMask = channelMasksFromString(channels, mChannelMasksSeparator.c_str());
++
++    //Some Foxconn devices have wrong earpiece channel mask, leading to no channel mask
++    if(channelsMask.size() == 1 && *channelsMask.begin() == AUDIO_CHANNEL_IN_MONO && isOutput) {
++        fixedEarpieceChannels = true;
++        channelsMask = channelMasksFromString("AUDIO_CHANNEL_OUT_MONO", ",");
++    }
+ 
+     if (mIgnoreVendorExtensions && maybeVendorExtension(format)) {
+         ALOGI("%s: vendor extension format \"%s\" skipped", __func__, format.c_str());
+         return NO_INIT;
+     }
+     AudioProfileTraits::Element profile = new AudioProfile(formatFromString(format, gDynamicFormat),
+-            channelMasksFromString(channels, mChannelMasksSeparator.c_str()),
++            channelsMask,
+             samplingRatesFromString(samplingRates, mSamplingRatesSeparator.c_str()));
+ 
+     profile->setDynamicFormat(profile->getFormat() == gDynamicFormat);
+@@ -571,7 +580,11 @@ std::variant<status_t, DevicePortTraits::Element> PolicySerializer::deserialize<
+             new DeviceDescriptor(type, name, address, encodedFormats);
+ 
+     AudioProfileTraits::Collection profiles;
+-    status_t status = deserializeCollection<AudioProfileTraits>(cur, &profiles, NULL);
++    status_t status;
++    if(audio_is_output_devices(type))
++        status = deserializeCollection<AudioProfileTraits>(cur, &profiles, (AudioProfileTraits::PtrSerializingCtx)1);
++    else
++        status = deserializeCollection<AudioProfileTraits>(cur, &profiles, NULL);
+     if (status != NO_ERROR) {
+         return status;
+     }
+@@ -892,6 +905,14 @@ std::variant<status_t, ModuleTraits::Element> PolicySerializer::deserialize<Modu
+             }
+         }
+     }
++
++    if(fixedEarpieceChannels) {
++        sp<DeviceDescriptor> device =
++            module->getDeclaredDevices().getDeviceFromTagName("Earpiece");
++        if(device != 0)
++            ctx->addDevice(device);
++        fixedEarpieceChannels = false;
++    }
+     return module;
+ }
+ 

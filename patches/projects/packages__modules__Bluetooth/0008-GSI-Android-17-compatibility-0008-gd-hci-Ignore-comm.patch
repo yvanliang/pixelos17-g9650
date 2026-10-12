@@ -1,0 +1,37 @@
+From 4cc478a6e4c742496a3f80bfb63f7ee3b25080b8 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:20 +0800
+Subject: [PATCH 8/9] GSI Android 17 compatibility:
+ 0008-gd-hci-Ignore-command-READ_REMOTE_VERSION_INFORMATIO.patch
+
+Change-Id: I3e36159ddc7417c125a13b02b180928278c2738b
+---
+ system/gd/hci/hci_layer.cc | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/system/gd/hci/hci_layer.cc b/system/gd/hci/hci_layer.cc
+index c4f765e..6aebef4 100644
+--- a/system/gd/hci/hci_layer.cc
++++ b/system/gd/hci/hci_layer.cc
+@@ -492,6 +492,10 @@ struct HciLayer::impl {
+         auto view = CommandCompleteView::Create(event);
+         log::assert_that(view.IsValid(), "assert failed: view.IsValid()");
+         auto op_code = view.GetCommandOpCode();
++        if (op_code == OpCode::READ_REMOTE_VERSION_INFORMATION) {
++            log::warn("OpCode 0x%02hx (%s) is not in the command queue, skipped.", op_code, OpCodeText(op_code).c_str());
++            return;
++        }
+         log::assert_that(op_code == OpCode::NONE,
+                          "Received {} event with OpCode {} without a waiting command(is the HAL "
+                          "sending commands, but not handling the events?)",
+@@ -501,6 +505,10 @@ struct HciLayer::impl {
+         auto view = CommandStatusView::Create(event);
+         log::assert_that(view.IsValid(), "assert failed: view.IsValid()");
+         auto op_code = view.GetCommandOpCode();
++        if (op_code == OpCode::READ_REMOTE_VERSION_INFORMATION) {
++            log::warn("OpCode 0x%02hx (%s) is not in the command queue, skipped.", op_code, OpCodeText(op_code).c_str());
++            return;
++        }
+         log::assert_that(op_code == OpCode::NONE,
+                          "Received {} event with OpCode {} without a waiting command(is the HAL "
+                          "sending commands, but not handling the events?)",

@@ -1,0 +1,22 @@
+From 6c13ac3ee9b02e53bd165759a0fbfee2e402c7b9 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 09:29:58 +0800
+Subject: [PATCH 18/38] G9650: preserve FVA4 vendor filesystem genfs labels
+
+---
+ tdgsi_arm64_ab/BoardConfig.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tdgsi_arm64_ab/BoardConfig.mk b/tdgsi_arm64_ab/BoardConfig.mk
+index e09da16..4f5d0c3 100644
+--- a/tdgsi_arm64_ab/BoardConfig.mk
++++ b/tdgsi_arm64_ab/BoardConfig.mk
+@@ -19,3 +19,8 @@ ifeq ($(TARGET_PRODUCT),custom_g9650)
+ TARGET_SYSTEM_PROP := $(filter-out device/phh/treble/system.prop,$(TARGET_SYSTEM_PROP)) device/phh/treble/g9650/g9650-system.prop
+ TARGET_SYSTEM_EXT_PROP := device/phh/treble/g9650/g9650-system_ext.prop
+ endif
++
++# G9650/FVA4: vendor owns existing iso9660/udf root genfs labels.
++ifeq ($(TARGET_PRODUCT),custom_g9650)
++BOARD_SEPOLICY_M4DEFS += g9650_fva4_genfs_compat=true
++endif

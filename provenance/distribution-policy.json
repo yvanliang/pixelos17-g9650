@@ -1,0 +1,27 @@
+{
+  "review_date": "2026-10-12",
+  "repository_source_only": true,
+  "current_system_image_public_distribution": true,
+  "current_boot_image_public_distribution": true,
+  "release_tag": "android17-g9650-20261010",
+  "automatic_rom_build": false,
+  "automatic_binary_release": false,
+  "description": "Source references, patches, kernel configuration, build tools and documentation are kept in Git. Compiled images are distributed through manual GitHub Releases.",
+  "permitted_repository_content": [
+    "manifest references",
+    "source patches",
+    "maintenance scripts",
+    "device overlays",
+    "documentation",
+    "source provenance",
+    "kernel configuration"
+  ],
+  "excluded_repository_content": [
+    "SYSTEM/BOOT/VENDOR/RECOVERY images",
+    "APK/APEX and prebuilt libraries",
+    "vendor fonts",
+    "personal backups",
+    "Data/EFS and calibration",
+    "accounts and private keys"
+  ]
+}

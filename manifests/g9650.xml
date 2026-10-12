@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <project name="platform/prebuilts/vndk/v28" path="prebuilts/vndk/v28" remote="aosp" revision="204f1bad00aaf480ba33233f7b8c2ddaa03155dd" />
+  <project name="platform/prebuilts/vndk/v29" path="prebuilts/vndk/v29" remote="aosp" revision="bef5d37dda9360940964f097d612c8032e140961" />
+  <project name="platform/prebuilts/vndk/v30" path="prebuilts/vndk/v30" remote="aosp" revision="5f9884aa352825291757dfd6694b874ad8c1805e" />
+  <project name="cawilliamson/treble_restlessos" path="g9650-upstream/restless" remote="github" revision="b08c00d759e07ca32e8325b04c3744bed1a5babf">
+    <!-- Android's source finder prunes this snapshot to avoid duplicate modules. -->
+    <copyfile src="README.md" dest="g9650-upstream/restless/.find-ignore" />
+  </project>
+</manifest>

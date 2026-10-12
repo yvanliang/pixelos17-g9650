@@ -1,0 +1,48 @@
+From 9c6a4065069800ef07b713c52c9f95505ed22c3e Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:56 +0800
+Subject: [PATCH 18/60] GSI Android 17 compatibility:
+ 0019-Automatically-detect-pick-up-sensor-so-that-an-overl.patch
+
+Change-Id: I5c2e34c6acf1757e10b0a306420aa69f918f350a
+---
+ .../display/AmbientDisplayConfiguration.java  | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/core/java/android/hardware/display/AmbientDisplayConfiguration.java b/core/java/android/hardware/display/AmbientDisplayConfiguration.java
+index ec459412d..246f83108 100644
+--- a/core/java/android/hardware/display/AmbientDisplayConfiguration.java
++++ b/core/java/android/hardware/display/AmbientDisplayConfiguration.java
+@@ -28,6 +28,9 @@ import android.text.TextUtils;
+ import android.util.ArrayMap;
+ import android.util.SparseArray;
+ 
++import android.hardware.SensorManager;
++import android.hardware.Sensor;
++
+ import com.android.internal.R;
+ import com.android.internal.util.ArrayUtils;
+ 
+@@ -138,8 +141,20 @@ public class AmbientDisplayConfiguration {
+ 
+     /** @hide */
+     public boolean dozePickupSensorAvailable() {
+-        return mContext.getResources().getBoolean(R.bool.config_dozePulsePickup);
+-    }
++        SensorManager sm = mContext.getSystemService(SensorManager.class);
++        boolean found = false;
++        if(sm == null) {
++            android.util.Log.d("PHH", "Failed getting sensor manager, can't detect pickup sensor");
++        } else {
++            java.util.List<Sensor> sensors = sm.getSensorList(Sensor.TYPE_ALL);
++            for(Sensor s : sensors) {
++                if(Sensor.STRING_TYPE_PICK_UP_GESTURE.equals(s.getStringType())) {
++                    found = true;
++                    break;
++                }
++            }
++        }
++        return mContext.getResources().getBoolean(R.bool.config_dozePulsePickup) || found;    }
+ 
+     /** @hide */
+     public boolean tapGestureEnabled(int user) {

@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+/source/
+/out/
+/artifacts/
+/.cache/
+*.img
+*.apk
+*.apex
+*.idsig
+*.zip
+*.tar.gz
+*.xz
+*.part[0-9]*
+*.pem
+*.key
+.DS_Store

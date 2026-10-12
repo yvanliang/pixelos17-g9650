@@ -1,0 +1,59 @@
+From 7d202e221a11f146ce128fa25f65cbf71cdbd77f Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 17:05:33 +0800
+Subject: [PATCH 52/60] GSI Android 17 compatibility:
+ 0016-Bitmap-scale-down-bitmaps-and-tolerate-seal-failures-on-legacy-kernels.patch
+
+Change-Id: I589a8ab9bbf98da0aed1726d8f1423144fcb7a2e
+---
+ libs/hwui/jni/Bitmap.cpp | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/libs/hwui/jni/Bitmap.cpp b/libs/hwui/jni/Bitmap.cpp
+index d97d1bca4..acf6d4d40 100644
+--- a/libs/hwui/jni/Bitmap.cpp
++++ b/libs/hwui/jni/Bitmap.cpp
+@@ -3,6 +3,7 @@
+ 
+ #include <android-base/unique_fd.h>
+ #include <com_android_graphics_hwui_flags.h>
++#include <cerrno>
+ #include <fcntl.h>
+ #include <hwui/Bitmap.h>
+ #include <hwui/Paint.h>
+@@ -807,17 +808,24 @@ static binder_status_t writeBlob(AParcel* parcel, uint64_t bitmapId, const SkBit
+             return STATUS_NO_MEMORY;
+         }
+ 
+-        if (fcntl(fd, F_ADD_SEALS,
+-                    // Disallow growing / shrinking.
+-                    F_SEAL_GROW | F_SEAL_SHRINK
+-                    // If immutable, disallow writing.
+-                    // Use F_SEAL_FUTURE_WRITE instead of F_SEAL_WRITE to work around a bug in
+-                    // pre-6.7 kernels.
+-                    // There are no writable mappings made prior to this, so both seals are
+-                    // functionally equivalent.
+-                    // See: b/409846908#comment39
+-                    | (immutable ? F_SEAL_FUTURE_WRITE : 0))) {
+-            return STATUS_UNKNOWN_ERROR;
++        int seals = F_SEAL_GROW | F_SEAL_SHRINK;
++        if (immutable) {
++            seals |= F_SEAL_FUTURE_WRITE;
++        }
++        if (fcntl(fd, F_ADD_SEALS, seals) < 0) {
++            // F_SEAL_FUTURE_WRITE was added in Linux 5.1. Kernels
++            // below 5.1 (e.g. 4.9 on legacy devices) return EINVAL
++            // because the seal bit is unrecognised. No writable mappings exist
++            // yet, so F_SEAL_WRITE provides the same immutable-blob protection
++            // while remaining compatible with old kernels.
++            if (errno == EINVAL && (seals & F_SEAL_FUTURE_WRITE)) {
++                if (fcntl(fd, F_ADD_SEALS,
++                          F_SEAL_GROW | F_SEAL_SHRINK | F_SEAL_WRITE) < 0) {
++                    return STATUS_UNKNOWN_ERROR;
++                }
++            } else {
++                return STATUS_UNKNOWN_ERROR;
++            }
+         }
+ 
+         // Workaround b/149851140 in AParcel_writeParcelFileDescriptor

@@ -1,0 +1,34 @@
+From 1ba95bc2094c08eb4df60a29c29baac9e1922158 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:54 +0800
+Subject: [PATCH 17/60] GSI Android 17 compatibility:
+ 0018-TelephonyManager-add-API-annotations-for-setTelephon.patch
+
+Change-Id: Icd23e05f946ff88324b0c24365a11a68b72a9a49
+---
+ telephony/java/android/telephony/TelephonyManager.java | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/telephony/java/android/telephony/TelephonyManager.java b/telephony/java/android/telephony/TelephonyManager.java
+index c07d860bf..c9544b257 100644
+--- a/telephony/java/android/telephony/TelephonyManager.java
++++ b/telephony/java/android/telephony/TelephonyManager.java
+@@ -8441,7 +8441,7 @@ public class TelephonyManager {
+      * @hide
+      */
+     @UnsupportedAppUsage
+-    public static void setTelephonyProperty(int phoneId, String property, String value) {
++    public static void setTelephonyProperty(int phoneId, @NonNull String property, @Nullable String value) {
+         String propVal = "";
+         String p[] = null;
+         String prop = SystemProperties.get(property);
+@@ -8495,7 +8495,8 @@ public class TelephonyManager {
+      *
+      * @hide
+      */
+-    public static void setTelephonyProperty(String property, String value) {
++    @UnsupportedAppUsage
++    public static void setTelephonyProperty(@NonNull String property, @Nullable String value) {
+         if (value == null) {
+             value = "";
+         }

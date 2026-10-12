@@ -1,0 +1,33 @@
+From 70d131c810483678caff7f3179f282290a5898e6 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:56 +0800
+Subject: [PATCH 2/7] GSI Android 17 compatibility:
+ 0002-Failing-to-create-facedata-shouldn-t-be-fatal.patch
+
+Change-Id: I2b3da3275597bacf50fb85cfd3f935a766671355
+---
+ vold_prepare_subdirs.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/vold_prepare_subdirs.cpp b/vold_prepare_subdirs.cpp
+index bd7ec4f..e8c334d 100644
+--- a/vold_prepare_subdirs.cpp
++++ b/vold_prepare_subdirs.cpp
+@@ -219,7 +219,7 @@ static bool prepare_subdirs(const std::string& volume_uuid, int user_id, int fla
+             }
+             auto facedata_path = vendor_de_path + "/facedata";
+             if (!prepare_dir(sehandle, 0700, AID_SYSTEM, AID_SYSTEM, facedata_path)) {
+-                return false;
++                LOG(ERROR) << "Failed preparing folder for de facedata";
+             }
+         }
+     }
+@@ -272,7 +272,7 @@ static bool prepare_subdirs(const std::string& volume_uuid, int user_id, int fla
+             auto vendor_ce_path = android::vold::BuildDataVendorCePath(user_id);
+             auto facedata_path = vendor_ce_path + "/facedata";
+             if (!prepare_dir(sehandle, 0700, AID_SYSTEM, AID_SYSTEM, facedata_path)) {
+-                return false;
++                LOG(ERROR) << "Failed preparing folder for de facedata";
+             }
+             auto wifidata_path = vendor_ce_path + "/wifi";
+             if (!prepare_dir(sehandle, 0700, AID_WIFI, AID_WIFI, wifidata_path)) {

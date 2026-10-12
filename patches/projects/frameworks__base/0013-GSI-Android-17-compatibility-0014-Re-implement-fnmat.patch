@@ -1,0 +1,32 @@
+From 462dc062e865fb2aa71b70741994b48d230481a9 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:46 +0800
+Subject: [PATCH 13/60] GSI Android 17 compatibility:
+ 0014-Re-implement-fnmatch-like-behaviour-for-RRO-java-sid.patch
+
+Change-Id: Ia8ad96075eaad545c0f948740a60d505877f8f35
+---
+ .../pm/parsing/FrameworkParsingPackageUtils.java       | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/core/java/android/content/pm/parsing/FrameworkParsingPackageUtils.java b/core/java/android/content/pm/parsing/FrameworkParsingPackageUtils.java
+index ac2676236..43a06bd1a 100644
+--- a/core/java/android/content/pm/parsing/FrameworkParsingPackageUtils.java
++++ b/core/java/android/content/pm/parsing/FrameworkParsingPackageUtils.java
+@@ -232,6 +232,16 @@ public class FrameworkParsingPackageUtils {
+             if ("*".equals(propValues[i])) {
+                 continue;
+             }
++            // Treble overlays support a leading plus and glob-like property patterns.
++            final String value = propValues[i];
++            if (value.startsWith("+")) {
++                final java.util.regex.Pattern regex = java.util.regex.Pattern.compile(
++                        value.substring(1).replace("*", ".*"));
++                if (!regex.matcher(currValue).find()) {
++                    return false;
++                }
++                continue;
++            }
+             // 3. Check if prop is equal to expected value.
+             if (!currValue.equals(propValues[i])) {
+                 return false;

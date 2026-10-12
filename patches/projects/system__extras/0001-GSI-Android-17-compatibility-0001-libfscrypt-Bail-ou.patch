@@ -1,0 +1,24 @@
+From 5375dd001000b4392714fe499fd08c042728caf2 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:45 +0800
+Subject: [PATCH] GSI Android 17 compatibility:
+ 0001-libfscrypt-Bail-out-if-we-can-t-open-directory.patch
+
+Change-Id: I7c259d08c658fca1b5710378335566d2ef3b311b
+---
+ libfscrypt/fscrypt.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libfscrypt/fscrypt.cpp b/libfscrypt/fscrypt.cpp
+index 7835bbc..b32b04d 100644
+--- a/libfscrypt/fscrypt.cpp
++++ b/libfscrypt/fscrypt.cpp
+@@ -363,7 +363,7 @@ bool EnsurePolicy(const EncryptionPolicy& policy, const std::string& directory)
+     android::base::unique_fd fd(open(directory.c_str(), O_DIRECTORY | O_NOFOLLOW | O_CLOEXEC));
+     if (fd == -1) {
+         PLOG(ERROR) << "Failed to open directory " << directory;
+-        return false;
++        return true;
+     }
+ 
+     bool already_encrypted = fscrypt_is_encrypted(fd);

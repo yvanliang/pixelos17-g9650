@@ -1,0 +1,39 @@
+From 4fd69e5bfa2c157e4bdd943a14c2cb59c0aa056a Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:49 +0800
+Subject: [PATCH 01/10] GSI Android 17 compatibility:
+ 0001-SubscriptionController-Do-not-override-default-calli.patch
+
+Change-Id: I7b1cde000624cedaec01454784148d3e5c5f3c14
+---
+ .../SubscriptionManagerService.java             | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/src/java/com/android/internal/telephony/subscription/SubscriptionManagerService.java b/src/java/com/android/internal/telephony/subscription/SubscriptionManagerService.java
+index 9eb5daf..90e1899 100644
+--- a/src/java/com/android/internal/telephony/subscription/SubscriptionManagerService.java
++++ b/src/java/com/android/internal/telephony/subscription/SubscriptionManagerService.java
+@@ -3695,7 +3695,22 @@ public class SubscriptionManagerService extends ISub.Stub {
+ 
+                 TelecomManager telecomManager = mContext.getSystemService(TelecomManager.class);
+                 if (telecomManager != null) {
+-                    telecomManager.setUserSelectedOutgoingPhoneAccount(newHandle);
++                    PhoneAccountHandle currentHandle = telecomManager.getUserSelectedOutgoingPhoneAccount();
++                    log("[setDefaultVoiceSubId] current phoneAccountHandle=" + currentHandle);
++
++                    String currentPackageName =
++                        currentHandle == null ? null : currentHandle.getComponentName().getPackageName();
++                    boolean currentIsSim = "com.android.phone".equals(currentPackageName);
++                    // Do not override user selected outgoing calling account
++                    // if the user has selected a third-party app as default
++                    boolean shouldKeepOutgoingAccount = currentHandle != null && !currentIsSim;
++
++                    if (!shouldKeepOutgoingAccount) {
++                        telecomManager.setUserSelectedOutgoingPhoneAccount(newHandle);
++                        log("[setDefaultVoiceSubId] change to phoneAccountHandle=" + newHandle);
++                    } else {
++                        log("[setDefaultVoiceSubId] default phoneAccountHandle not changed.");
++                    }
+                 }
+ 
+                 updateDefaultSubId();

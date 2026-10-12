@@ -1,0 +1,34 @@
+From ed760d001753021d9621964099b755f9889597fa Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:05 +0800
+Subject: [PATCH 10/25] GSI Android 17 compatibility:
+ 0010-Add-a-property-to-force-camera-timestamp-source.patch
+
+Change-Id: I847b5c047c18740209f82c6cbf9e3f8093478cdf
+---
+ .../libcameraservice/device3/Camera3Device.cpp       | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/services/camera/libcameraservice/device3/Camera3Device.cpp b/services/camera/libcameraservice/device3/Camera3Device.cpp
+index cb1dd22..b04d4fd 100644
+--- a/services/camera/libcameraservice/device3/Camera3Device.cpp
++++ b/services/camera/libcameraservice/device3/Camera3Device.cpp
+@@ -241,8 +241,16 @@ status_t Camera3Device::initializeCommonLocked(sp<CameraProviderManager> manager
+     mTimestampOffset = getMonoToBoottimeOffset();
+     camera_metadata_entry timestampSource =
+             mDeviceInfo.find(ANDROID_SENSOR_INFO_TIMESTAMP_SOURCE);
+-    if (timestampSource.count > 0 && timestampSource.data.u8[0] ==
+-            ANDROID_SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME) {
++    int timestampSourceValue = 0;
++    if ((timestampSource.count > 0 && timestampSource.data.u8[0] ==
++            ANDROID_SENSOR_INFO_TIMESTAMP_SOURCE_REALTIME)) {
++        timestampSourceValue = 1;
++    }
++    int forceTimestampSource = property_get_int32("persist.sys.phh.camera.force_timestampsource", -1);
++    //Don't override if it's -1, default value
++    if(forceTimestampSource == 0) timestampSourceValue = 0;
++    if(forceTimestampSource == 1) timestampSourceValue = 1;
++    if (timestampSourceValue == 1) {
+         mDeviceTimeBaseIsRealtime = true;
+     }
+ 

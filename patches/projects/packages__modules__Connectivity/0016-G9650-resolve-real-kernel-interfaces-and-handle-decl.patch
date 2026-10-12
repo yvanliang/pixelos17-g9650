@@ -1,0 +1,76 @@
+From 1534ec6da7e32d233d4f1acfe07452d6ed956b79 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 12:12:01 +0800
+Subject: [PATCH 16/18] G9650: resolve real kernel interfaces and handle
+ declared missing BPF maps
+
+Change-Id: Ia6c93b1ea6de087a9a12708e6bea646467c016a8
+---
+ framework/src/android/net/BpfNetMapsUtils.java | 10 ++++++++++
+ .../server/net/BpfInterfaceMapHelper.java      | 18 ++++++++++++++++++
+ 2 files changed, 28 insertions(+)
+
+diff --git a/framework/src/android/net/BpfNetMapsUtils.java b/framework/src/android/net/BpfNetMapsUtils.java
+index 2c79f25..1c956bf 100644
+--- a/framework/src/android/net/BpfNetMapsUtils.java
++++ b/framework/src/android/net/BpfNetMapsUtils.java
+@@ -312,6 +312,16 @@ public class BpfNetMapsUtils {
+             return BLOCKED_REASON_NONE;
+         }
+ 
++        // The legacy G9650 port has explicitly declared BPF maps unavailable.
++        // Keep that capability error visible once; do not repeatedly dereference
++        // missing maps and pretend the unsupported firewall has been restored.
++        if (isBpfBroken()
++                && SystemProperties.get("ro.boot.bootloader", "").startsWith("G9650")
++                && Os.uname().release.startsWith("4.9.")) {
++            markBpfBroken();
++            return BLOCKED_REASON_NONE;
++        }
++
+         long uidRuleConfig = 0;
+         long uidMatch = 0;
+         try {
+diff --git a/service-t/src/com/android/server/net/BpfInterfaceMapHelper.java b/service-t/src/com/android/server/net/BpfInterfaceMapHelper.java
+index d569b78..a873906 100644
+--- a/service-t/src/com/android/server/net/BpfInterfaceMapHelper.java
++++ b/service-t/src/com/android/server/net/BpfInterfaceMapHelper.java
+@@ -20,6 +20,9 @@ import android.system.ErrnoException;
+ import android.util.IndentingPrintWriter;
+ import android.util.Log;
+ 
++import java.net.NetworkInterface;
++import java.net.SocketException;
++
+ import androidx.annotation.RequiresApi;
+ 
+ import com.android.internal.annotations.VisibleForTesting;
+@@ -67,6 +70,17 @@ public class BpfInterfaceMapHelper {
+ 
+     /** get interface name by interface index from bpf map */
+     public String getIfNameByIndex(final int index) {
++        if (mIndexToIfaceBpfMap == null) {
++            // Legacy qtaguid counters contain interface names; resolve indexes
++            // from the actual kernel instead of dereferencing an absent BPF map.
++            try {
++                final NetworkInterface iface = NetworkInterface.getByIndex(index);
++                return iface == null ? null : iface.getName();
++            } catch (SocketException e) {
++                Log.e(TAG, "Kernel interface lookup failed for index " + index, e);
++                return null;
++            }
++        }
+         try {
+             final InterfaceMapValue value = mIndexToIfaceBpfMap.getValue(new S32(index));
+             if (value == null) {
+@@ -91,6 +105,10 @@ public class BpfInterfaceMapHelper {
+         BpfDump.dumpMapStatus(mIndexToIfaceBpfMap, pw, "IfaceIndexNameMap",
+                 IFACE_INDEX_NAME_MAP_PATH);
+         pw.decreaseIndent();
++        if (mIndexToIfaceBpfMap == null) {
++            pw.println("Interface indexes resolved from kernel; BPF map is unavailable.");
++            return;
++        }
+         pw.println("BPF map content:");
+         pw.increaseIndent();
+         BpfDump.dumpMap(mIndexToIfaceBpfMap, pw, "IfaceIndexNameMap",

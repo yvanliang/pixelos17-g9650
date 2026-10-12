@@ -1,0 +1,23 @@
+From f2438c2c26005c6cd2336d377286b8b84d6f125a Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 17:15:38 +0800
+Subject: [PATCH] GSI Android 17 compatibility:
+ 0004-disable-require_gralloc4_or_newer-for-the-gsi.patch
+
+Change-Id: I8f276f765077a68f3935a2816753cb9b1220d745
+---
+ .../require_gralloc4_or_newer_flag_values.textproto             | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/aconfig/cp2a/com.android.graphics.libui.flags/require_gralloc4_or_newer_flag_values.textproto b/aconfig/cp2a/com.android.graphics.libui.flags/require_gralloc4_or_newer_flag_values.textproto
+index 234da30..f98b200 100644
+--- a/aconfig/cp2a/com.android.graphics.libui.flags/require_gralloc4_or_newer_flag_values.textproto
++++ b/aconfig/cp2a/com.android.graphics.libui.flags/require_gralloc4_or_newer_flag_values.textproto
+@@ -1,6 +1,6 @@
+ flag_value {
+   package: "com.android.graphics.libui.flags"
+   name: "require_gralloc4_or_newer"
+-  state: ENABLED
++  state: DISABLED
+   permission: READ_ONLY
+ }

@@ -1,0 +1,32 @@
+From ad225c3cfd5da1d73d2552de5d292d1bfaf517ca Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:35 +0800
+Subject: [PATCH 06/17] GSI Android 17 compatibility:
+ 0006-MIUI13-devices-hide-their-vibrator-HAL-behind-non-de.patch
+
+Change-Id: Ia9d04a5b2d04c2bb24ba077dbeb55464bf5d9431
+---
+ services/vibratorservice/VibratorHalController.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/services/vibratorservice/VibratorHalController.cpp b/services/vibratorservice/VibratorHalController.cpp
+index 302e3e1..5ad4aa8 100644
+--- a/services/vibratorservice/VibratorHalController.cpp
++++ b/services/vibratorservice/VibratorHalController.cpp
+@@ -56,6 +56,16 @@ std::shared_ptr<HalWrapper> connectHal(std::shared_ptr<CallbackScheduler> schedu
+         }
+     }
+ 
++    serviceName = std::string(IVibrator::descriptor) + "/vibratorfeature";
++    if (AServiceManager_isDeclared(serviceName.c_str())) {
++        std::shared_ptr<IVibrator> hal = IVibrator::fromBinder(
++                ndk::SpAIBinder(AServiceManager_waitForService(serviceName.c_str())));
++        if (hal) {
++            ALOGV("Successfully connected to Xiaomi Vibrator HAL AIDL service.");
++            return std::make_shared<AidlHalWrapper>(std::move(scheduler), std::move(hal));
++        }
++    }
++
+     ALOGV("Vibrator HAL service not available.");
+     gHalExists = false;
+     return nullptr;

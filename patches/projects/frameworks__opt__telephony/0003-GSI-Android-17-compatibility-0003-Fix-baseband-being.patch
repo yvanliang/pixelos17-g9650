@@ -1,0 +1,24 @@
+From 0fa27fb55260fbbd86cec4f8aa9edae14f5428e5 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:50 +0800
+Subject: [PATCH 03/10] GSI Android 17 compatibility:
+ 0003-Fix-baseband-being-too-long-to-fit-into-a-91-chars-p.patch
+
+Change-Id: I74071e45b39716d940c7810d8406b7a6e52c6d65
+---
+ src/java/com/android/internal/telephony/GsmCdmaPhone.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/java/com/android/internal/telephony/GsmCdmaPhone.java b/src/java/com/android/internal/telephony/GsmCdmaPhone.java
+index fde5422..47f2433 100644
+--- a/src/java/com/android/internal/telephony/GsmCdmaPhone.java
++++ b/src/java/com/android/internal/telephony/GsmCdmaPhone.java
+@@ -2943,7 +2943,7 @@ public class GsmCdmaPhone extends Phone {
+                 String version = (String)ar.result;
+                 if (version != null) {
+                     int length = version.length();
+-                    final int MAX_VERSION_LEN = SystemProperties.PROP_VALUE_MAX/2;
++                    final int MAX_VERSION_LEN = SystemProperties.PROP_VALUE_MAX/2 - 2;
+                     TelephonyManager.from(mContext).setBasebandVersionForPhone(getPhoneId(),
+                             length <= MAX_VERSION_LEN ? version
+                                 : version.substring(length - MAX_VERSION_LEN, length));

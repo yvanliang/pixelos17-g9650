@@ -1,0 +1,65 @@
+From 45f7e0515405f0a186be2128a6ca79cccf242fc7 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:06:54 +0800
+Subject: [PATCH 26/38] G9650: initialize reachable connectivity probes while
+ preserving custom settings
+
+---
+ custom_g9650.mk                 |  5 +++++
+ g9650/g9650-network-defaults.rc | 10 ++++++++++
+ g9650/g9650-network-defaults.sh | 16 ++++++++++++++++
+ 3 files changed, 31 insertions(+)
+ create mode 100644 g9650/g9650-network-defaults.rc
+ create mode 100644 g9650/g9650-network-defaults.sh
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 8067382..01afcb8 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -56,3 +56,8 @@ PRODUCT_PACKAGES := $(filter-out g9650-early-trace,$(PRODUCT_PACKAGES))
+ # Product properties load after the stock vendor's 420-DPI default.
+ # Retain the accepted logical density without changing physical panel resolution.
+ PRODUCT_PRODUCT_PROPERTIES += ro.sf.lcd_density=560
++
++# Reachable connectivity probes, initialized again after a factory reset.
++PRODUCT_COPY_FILES += \
++    device/phh/treble/g9650/g9650-network-defaults.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-network-defaults.rc \
++    device/phh/treble/g9650/g9650-network-defaults.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-network-defaults.sh
+diff --git a/g9650/g9650-network-defaults.rc b/g9650/g9650-network-defaults.rc
+new file mode 100644
+index 0000000..7e25b8e
+--- /dev/null
++++ b/g9650/g9650-network-defaults.rc
+@@ -0,0 +1,10 @@
++# Populate missing/default Google probes after SettingsProvider is available.
++on property:sys.boot_completed=1 && property:ro.custom.device=g9650
++    start g9650-network-defaults
++
++service g9650-network-defaults /system/bin/sh /system/bin/g9650-network-defaults.sh
++    disabled
++    oneshot
++    user root
++    group root shell inet
++    seclabel u:r:phhsu_daemon:s0
+diff --git a/g9650/g9650-network-defaults.sh b/g9650/g9650-network-defaults.sh
+new file mode 100644
+index 0000000..7fa31c9
+--- /dev/null
++++ b/g9650/g9650-network-defaults.sh
+@@ -0,0 +1,16 @@
++#!/system/bin/sh
++# Keep connectivity/captive-portal detection enabled; preserve user custom probes.
++[ "$(getprop ro.custom.device)" = g9650 ] || exit 0
++g9650_probe_default() {
++    g9650_current=$(settings get global "$1")
++    case "$g9650_current" in
++        null|''|*connectivitycheck.gstatic.com*|*connectivitycheck.android.com*|*www.google.com/generate_204*|*play.googleapis.com*)
++            settings put global "$1" "$2" ;;
++    esac
++}
++g9650_probe_default captive_portal_http_url http://connect.rom.miui.com/generate_204
++g9650_probe_default captive_portal_https_url https://connect.rom.miui.com/generate_204
++g9650_probe_default captive_portal_fallback_url http://connectivitycheck.platform.hicloud.com/generate_204
++g9650_probe_default captive_portal_other_fallback_urls http://connect.rom.miui.com/generate_204
++g9650_current=$(settings get global captive_portal_mode)
++case "$g9650_current" in null|'') settings put global captive_portal_mode 1 ;; esac

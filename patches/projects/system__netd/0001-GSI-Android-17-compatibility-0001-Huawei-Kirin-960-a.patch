@@ -1,0 +1,24 @@
+From ebd9e3936cb888ff228775ea95451cea43c95000 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:45 +0800
+Subject: [PATCH 01/11] GSI Android 17 compatibility:
+ 0001-Huawei-Kirin-960-accept-broken-rpfilter-match.patch
+
+Change-Id: I4d96f0960723be3fefecf6e10837d3ed5a35f00d
+---
+ server/TetherController.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/TetherController.cpp b/server/TetherController.cpp
+index b159d95..c41fe7a 100644
+--- a/server/TetherController.cpp
++++ b/server/TetherController.cpp
+@@ -718,7 +718,7 @@ int TetherController::setForwardRules(bool add, const char *intIface, const char
+         "*raw\n"
+         "%s %s -i %s -m rpfilter --invert ! -s fe80::/64 -j DROP\n"
+         "COMMIT\n", op, LOCAL_RAW_PREROUTING, intIface);
+-    if (iptablesRestoreFunction(V6, rpfilterCmd, nullptr) == -1 && add) {
++    if (iptablesRestoreFunction(V6, rpfilterCmd, nullptr) == -1 && add && false) {
+         return -EREMOTEIO;
+     }
+ 

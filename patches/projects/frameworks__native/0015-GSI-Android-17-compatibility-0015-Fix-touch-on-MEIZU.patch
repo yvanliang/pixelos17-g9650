@@ -1,0 +1,38 @@
+From f0be218bc43062a5aadd4d9d03ab52f5948b1864 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:42 +0800
+Subject: [PATCH 15/17] GSI Android 17 compatibility:
+ 0015-Fix-touch-on-MEIZU-21-Pro-1.patch
+
+Change-Id: I6fbcf96fbe0ef21dd3267c0deb987df4ef5b8729
+---
+ .../reader/mapper/accumulator/MultiTouchMotionAccumulator.cpp   | 2 +-
+ .../reader/mapper/accumulator/SingleTouchMotionAccumulator.cpp  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/services/inputflinger/reader/mapper/accumulator/MultiTouchMotionAccumulator.cpp b/services/inputflinger/reader/mapper/accumulator/MultiTouchMotionAccumulator.cpp
+index 8710abe..2e7f6b4 100644
+--- a/services/inputflinger/reader/mapper/accumulator/MultiTouchMotionAccumulator.cpp
++++ b/services/inputflinger/reader/mapper/accumulator/MultiTouchMotionAccumulator.cpp
+@@ -159,7 +159,7 @@ void MultiTouchMotionAccumulator::populateCurrentSlot(
+ 
+ MultiTouchMotionAccumulator::Slot::Slot() {
+     std::string targetDevice = android::base::GetProperty("ro.product.vendor.device", "");
+-    if (targetDevice == "meizu21" || targetDevice == "Meizu21Note") {
++    if (targetDevice == "meizu21" || targetDevice == "meizu21Pro" || targetDevice == "Meizu21Note") {
+         mAbsMtPositionXYRatio = 10;
+     }
+ }
+diff --git a/services/inputflinger/reader/mapper/accumulator/SingleTouchMotionAccumulator.cpp b/services/inputflinger/reader/mapper/accumulator/SingleTouchMotionAccumulator.cpp
+index 72d8cd3..4c91b19 100644
+--- a/services/inputflinger/reader/mapper/accumulator/SingleTouchMotionAccumulator.cpp
++++ b/services/inputflinger/reader/mapper/accumulator/SingleTouchMotionAccumulator.cpp
+@@ -27,7 +27,7 @@ SingleTouchMotionAccumulator::SingleTouchMotionAccumulator() {
+     clearAbsoluteAxes();
+ 
+     std::string targetDevice = android::base::GetProperty("ro.product.vendor.device", "");
+-    if (targetDevice == "meizu21" || targetDevice == "Meizu21Note") {
++    if (targetDevice == "meizu21" || targetDevice == "meizu21Pro" || targetDevice == "Meizu21Note") {
+         mAbsXYRatio = 10;
+     }
+ }

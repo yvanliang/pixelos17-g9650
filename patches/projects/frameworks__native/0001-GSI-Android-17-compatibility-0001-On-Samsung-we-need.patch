@@ -1,0 +1,32 @@
+From 0882d99ff77ba588c333fc7daca3d0402a6ee065 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:33 +0800
+Subject: [PATCH 01/17] GSI Android 17 compatibility:
+ 0001-On-Samsung-we-need-to-send-a-hack-message-to-HAL-to-.patch
+
+Change-Id: I17dc7b53a0a8c39f404096a83b4604013d8e4642
+---
+ services/sensorservice/SensorDevice.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/services/sensorservice/SensorDevice.cpp b/services/sensorservice/SensorDevice.cpp
+index ed0f8ad..fa2162f 100644
+--- a/services/sensorservice/SensorDevice.cpp
++++ b/services/sensorservice/SensorDevice.cpp
+@@ -41,6 +41,7 @@
+ #include "android/hardware/sensors/2.1/types.h"
+ #include "convertV2_1.h"
+ 
++#include <android-base/properties.h>
+ using namespace android::hardware::sensors;
+ using android::util::ProtoOutputStream;
+ namespace sensorservice_flags = com::android::frameworks::sensorservice::flags;
+@@ -80,6 +81,8 @@ SensorDevice::SensorDevice() : mInHalBypassMode(false) {
+ }
+ 
+ void SensorDevice::initializeSensorList() {
++    if(::android::base::GetBoolProperty("persist.sys.phh.samsung_sensors", false))
++        setMode(5555);
+     if (mHalWrapper == nullptr) {
+         return;
+     }

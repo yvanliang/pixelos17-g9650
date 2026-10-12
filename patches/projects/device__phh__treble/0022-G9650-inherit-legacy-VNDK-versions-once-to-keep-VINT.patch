@@ -1,0 +1,23 @@
+From 1f8ee78acd1169fad5f963be7b97b5db246cc485 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 10:18:41 +0800
+Subject: [PATCH 22/38] G9650: inherit legacy VNDK versions once to keep VINTF
+ manifest valid
+
+---
+ custom_g9650.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 5863047..f8582cf 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -16,7 +16,7 @@ PRODUCT_CHARACTERISTICS := device
+ PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
+ PRODUCT_DEFAULT_APEX_PAYLOAD_TYPE := ext4
+ WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+-PRODUCT_EXTRA_VNDK_VERSIONS += 28 29
++# Legacy VNDK 28/29 are inherited from base.mk; do not append them twice.
+ PRODUCT_PACKAGES += g9650-lights-service g9650-wifi-vendor-path G9650CameraCompat
+ PRODUCT_COPY_FILES += \
+     device/g9650/compat/g9650-netd-oneshot.sh:$(TARGET_COPY_OUT_SYSTEM)/bin/g9650-netd-oneshot.sh \

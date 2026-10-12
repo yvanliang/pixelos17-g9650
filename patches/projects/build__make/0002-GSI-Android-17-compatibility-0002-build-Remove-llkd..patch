@@ -1,0 +1,23 @@
+From 4ef7491eb253284e5087cf6ca98df6f9b3a829e4 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:36 +0800
+Subject: [PATCH 2/3] GSI Android 17 compatibility:
+ 0002-build-Remove-llkd.patch
+
+Change-Id: I9ab5f7d2e0bd4851b6978a4dc008b874f721640f
+---
+ target/product/base_system.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/target/product/base_system.mk b/target/product/base_system.mk
+index 771a449..9cfa46b 100644
+--- a/target/product/base_system.mk
++++ b/target/product/base_system.mk
+@@ -219,7 +219,6 @@ PRODUCT_PACKAGES += \
+     libvintf_jni \
+     libvulkan \
+     libwilhelm \
+-    llkd \
+     llndk_libs \
+     lmkd \
+     LocalTransport \

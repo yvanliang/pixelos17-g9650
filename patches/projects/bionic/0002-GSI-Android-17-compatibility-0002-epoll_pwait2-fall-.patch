@@ -1,0 +1,34 @@
+From 662cbc6eb64c249e68508ac419e1ee3e4ea383f2 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:56:40 +0800
+Subject: [PATCH 2/3] GSI Android 17 compatibility:
+ 0002-epoll_pwait2-fall-back-to-epoll_pwait-on-kernels-5.1.patch
+
+Change-Id: I9182d74fc28cbf8ef470dbf2f2cb97f965983bf1
+---
+ libc/bionic/sys_epoll.cpp | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/libc/bionic/sys_epoll.cpp b/libc/bionic/sys_epoll.cpp
+index be97818..d3d841e 100644
+--- a/libc/bionic/sys_epoll.cpp
++++ b/libc/bionic/sys_epoll.cpp
+@@ -80,7 +80,17 @@ int epoll_pwait2_64(int fd, epoll_event* events, int max_events, const timespec*
+     kts_ptr = &kts;
+   }
+ #endif
+-  return __epoll_pwait2(fd, events, max_events, kts_ptr, ss, sizeof(*ss));
++  int result = __epoll_pwait2(fd, events, max_events, kts_ptr, ss, sizeof(*ss));
++  if (result == -1 && errno == ENOSYS) {
++    // Fall back to epoll_pwait for kernels that don't support epoll_pwait2 (< 5.11).
++    // The only loss is timeout precision (milliseconds instead of nanoseconds).
++    int timeout_ms = -1;
++    if (timeout) {
++      timeout_ms = static_cast<int>(timeout->tv_sec * 1000 + timeout->tv_nsec / 1000000);
++    }
++    result = __epoll_pwait(fd, events, max_events, timeout_ms, ss, sizeof(*ss));
++  }
++  return result;
+ }
+ 
+ int epoll_wait(int fd, struct epoll_event* events, int max_events, int timeout) {

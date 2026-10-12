@@ -1,0 +1,24 @@
+From 088d73789a4abc45e7aacd7ccee923d504ca1410 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:25 +0800
+Subject: [PATCH 07/18] GSI Android 17 compatibility:
+ 0007-Revert-netdupdatable-add-back-abort-on-init-fail.patch
+
+Change-Id: I393f48cba235324ce8d74df8e7f798dbedf4574d
+---
+ bpf/netd/NetdUpdatable.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/bpf/netd/NetdUpdatable.cpp b/bpf/netd/NetdUpdatable.cpp
+index 8b2b4dc..20323a3 100644
+--- a/bpf/netd/NetdUpdatable.cpp
++++ b/bpf/netd/NetdUpdatable.cpp
+@@ -32,7 +32,7 @@ int libnetd_updatable_init(const char* cg2_path) {
+     android::base::Result<void> ret = sBpfHandler.init(cg2_path);
+     if (!ret.ok()) {
+         LOG(ERROR) << __func__ << ": Failed: " << ret.error().message();
+-        abort();
++        return -ret.error().code();
+     }
+     return 0;
+ }

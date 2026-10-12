@@ -1,0 +1,30 @@
+From 48ac30433aca16cccb3d3f9d27d632c1a293127d Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:39:38 +0800
+Subject: [PATCH 28/38] Audio: restart each declared HAL once with a valid
+ service name
+
+---
+ phh-prop-handler.sh | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/phh-prop-handler.sh b/phh-prop-handler.sh
+index d036f24..6338fbb 100644
+--- a/phh-prop-handler.sh
++++ b/phh-prop-handler.sh
+@@ -64,10 +64,11 @@ xiaomi_toggle_dt2w_ioctl() {
+ 
+ restartAudio() {
+     setprop ctl.restart audioserver
+-    audioHal="$(getprop |sed -nE 's/.*init\.svc\.(.*audio-hal[^]]*).*/\1/p')"
+-    setprop ctl.restart "$audioHal"
+-    setprop ctl.restart vendor.audio-hal-2-0
+-    setprop ctl.restart audio-hal-2-0
++    # A property dump can contain several HAL services. Restart each declared
++    # service once; a newline-joined service name is not a valid init command.
++    for audioHal in $(getprop | sed -nE 's/^\[init\.svc\.(.*audio-hal[^]]*)\]:.*/\1/p'); do
++        setprop ctl.restart "$audioHal"
++    done
+ }
+ 
+ if [ "$1" == "persist.sys.phh.asus.dt2w" ]; then

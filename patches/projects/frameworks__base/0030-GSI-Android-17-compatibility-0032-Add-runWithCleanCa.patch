@@ -1,0 +1,60 @@
+From f52741affb485c3c6bbebbfd82db7e8b481ff51a Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:41:25 +0800
+Subject: [PATCH 30/60] GSI Android 17 compatibility:
+ 0032-Add-runWithCleanCallingIdentity-variant-with-both-ex.patch
+
+Change-Id: Id5e8daaa37a59470b40ded72ed088d70d5292e62
+---
+ .../telephony/util/TelephonyUtils.java        | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/telephony/common/com/android/internal/telephony/util/TelephonyUtils.java b/telephony/common/com/android/internal/telephony/util/TelephonyUtils.java
+index acfb8658c..89b2708d6 100644
+--- a/telephony/common/com/android/internal/telephony/util/TelephonyUtils.java
++++ b/telephony/common/com/android/internal/telephony/util/TelephonyUtils.java
+@@ -51,7 +51,9 @@ import com.android.internal.telephony.ITelephony;
+ import java.io.PrintWriter;
+ import java.util.Collections;
+ import java.util.List;
++import java.util.concurrent.CompletableFuture;
+ import java.util.concurrent.CountDownLatch;
++import java.util.concurrent.ExecutionException;
+ import java.util.concurrent.Executor;
+ import java.util.concurrent.TimeUnit;
+ import java.util.function.Supplier;
+@@ -174,6 +176,34 @@ public final class TelephonyUtils {
+         }
+     }
+ 
++    /**
++     * Convenience method for running the provided action in the provided
++     * executor enclosed in
++     * {@link Binder#clearCallingIdentity}/{@link Binder#restoreCallingIdentity} and return
++     * the result.
++     *
++     * Any exception thrown by the given action will need to be handled by caller.
++     *
++     */
++    public static <T> T runWithCleanCallingIdentity(
++            @NonNull Supplier<T> action, @NonNull Executor executor) {
++        if (action != null) {
++            if (executor != null) {
++                try {
++                    return CompletableFuture.supplyAsync(
++                            () -> runWithCleanCallingIdentity(action), executor).get();
++                } catch (ExecutionException | InterruptedException e) {
++                    Log.w(LOG_TAG, "TelephonyUtils : runWithCleanCallingIdentity exception: "
++                            + e.getMessage());
++                    return null;
++                }
++            } else {
++                return runWithCleanCallingIdentity(action);
++            }
++        }
++        return null;
++    }
++
+     /**
+      * Filter values in bundle to only basic types.
+      */

@@ -1,0 +1,22 @@
+From d07fb39a9643761abd72de23daf7f951332f5857 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 21:15:03 +0800
+Subject: [PATCH 13/38] G9650: reconcile PixelOS device identity and
+ authenticated ADB properties
+
+---
+ tdgsi_arm64_ab/BoardConfig.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tdgsi_arm64_ab/BoardConfig.mk b/tdgsi_arm64_ab/BoardConfig.mk
+index ada02bb..e09da16 100644
+--- a/tdgsi_arm64_ab/BoardConfig.mk
++++ b/tdgsi_arm64_ab/BoardConfig.mk
+@@ -15,5 +15,7 @@ TARGET_NO_KERNEL_IMAGE := true
+ BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE :=
+ 
+ # G9650: preserve all generic properties except the unauthenticated ADB default.
++ifeq ($(TARGET_PRODUCT),custom_g9650)
+ TARGET_SYSTEM_PROP := $(filter-out device/phh/treble/system.prop,$(TARGET_SYSTEM_PROP)) device/phh/treble/g9650/g9650-system.prop
+ TARGET_SYSTEM_EXT_PROP := device/phh/treble/g9650/g9650-system_ext.prop
++endif

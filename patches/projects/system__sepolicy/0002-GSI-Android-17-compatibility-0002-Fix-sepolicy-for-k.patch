@@ -1,0 +1,26 @@
+From 7e7d45c3a399cad9719778c75f92e2590ba52979 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:54 +0800
+Subject: [PATCH 2/4] GSI Android 17 compatibility:
+ 0002-Fix-sepolicy-for-kernel-5.10-that-doesn-t-support-bp.patch
+
+Change-Id: I6a953555b17f82d338631c2adbdc4b2ecaea3814
+---
+ private/network_stack.te | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/private/network_stack.te b/private/network_stack.te
+index 4146519..70f9332 100644
+--- a/private/network_stack.te
++++ b/private/network_stack.te
+@@ -81,8 +81,8 @@ hal_client_domain(network_stack, hal_tetheroffload)
+ allow network_stack self:netlink_netfilter_socket create_socket_perms_no_ioctl;
+ allow network_stack network_stack_service:service_manager find;
+ # allow Tethering(network_stack process) to run/update/read the eBPF maps to offload tethering traffic by eBPF.
+-allow network_stack { fs_bpf_net_private fs_bpf_net_shared fs_bpf_netd_readonly fs_bpf_netd_shared fs_bpf_tethering }:dir search;
+-allow network_stack { fs_bpf_net_private fs_bpf_net_shared fs_bpf_netd_readonly fs_bpf_netd_shared fs_bpf_tethering }:file { getattr read write };
++allow network_stack { fs_bpf fs_bpf_net_private fs_bpf_net_shared fs_bpf_netd_readonly fs_bpf_netd_shared fs_bpf_tethering }:dir search;
++allow network_stack { fs_bpf fs_bpf_net_private fs_bpf_net_shared fs_bpf_netd_readonly fs_bpf_netd_shared fs_bpf_tethering }:file { getattr read write };
+ allow network_stack bpfloader:bpf prog_run;
+ allow network_stack self:bpf map_create;
+ allow network_stack { bpfloader netd network_stack system_server }:bpf { map_read map_write };

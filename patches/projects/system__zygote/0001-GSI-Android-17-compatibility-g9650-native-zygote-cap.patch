@@ -1,0 +1,35 @@
+From 9515037bba65094f2bd1f3af48e3195dd588a494 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 17:38:23 +0800
+Subject: [PATCH] GSI Android 17 compatibility:
+ g9650-native-zygote-capability-bound.patch
+
+Change-Id: I9ed6cbe7dab6b31fbe0fca4fce680b0112332b59
+---
+ zygote/src/child_process.rs | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/zygote/src/child_process.rs b/zygote/src/child_process.rs
+index f6ec741..94a2b61 100644
+--- a/zygote/src/child_process.rs
++++ b/zygote/src/child_process.rs
+@@ -83,7 +83,18 @@ pub(crate) fn re_initialize(
+     if let Some(cap_bound) = spawn_params.cap_bound {
+         for flag in cap_bound.complement().iter() {
+             let cap = Capability::try_from(flag.bits().trailing_zeros()).unwrap();
+-            if cap::cap_within_bound(cap).expect("Failed to check capability bound") {
++            // The userspace capability enum can be newer than the running kernel.
++            // PR_CAPBSET_READ returns EINVAL for an unsupported capability number;
++            // such a capability cannot be held or regained on this kernel. Keep
++            // failing closed for all other errors and still drop every supported
++            // capability excluded by the requested bounding set.
++            let in_bound = match cap::cap_within_bound(cap) {
++                Ok(in_bound) => in_bound,
++                Err(cap::CapabilityError::GetCapBoundFailure(errno))
++                    if errno as i32 == libc::EINVAL => false,
++                Err(error) => panic!("Failed to check capability bound: {error}"),
++            };
++            if in_bound {
+                 cap::cap_drop_bound(cap).expect("Failed to drop capability bound");
+             }
+         }

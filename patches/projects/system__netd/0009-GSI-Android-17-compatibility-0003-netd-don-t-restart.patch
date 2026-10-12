@@ -1,0 +1,32 @@
+From 9232915e9ece267a467925eb5028f48453009eb3 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:56:41 +0800
+Subject: [PATCH 09/11] GSI Android 17 compatibility:
+ 0003-netd-don-t-restart-zygote-when-netd-restarts.patch
+
+Change-Id: I756f6b60c4f1a34fdb58b74e3dc2f422795440b3
+---
+ server/netd.rc | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/server/netd.rc b/server/netd.rc
+index 65ab813..94e452a 100644
+--- a/server/netd.rc
++++ b/server/netd.rc
+@@ -28,9 +28,13 @@ service netd /system/bin/netd
+     # netd is not updatable, but depends on libs provided by tethering apex.
+     # Mark it as updatable so init won't start it until all APEX packages are ready.
+     updatable
+-    # for obvious reasons 'onrestart' doesn't apply to netd1shot above
+-    onrestart restart zygote
+-    onrestart restart zygote_secondary
++    # upstream restarts zygote whenever netd restarts so the framework rebinds
++    # after mainline module updates.  on a gsi with legacy bpf-less kernels netd
++    # can restart during boot, and zygote's own onrestart restarts netd -- the
++    # two hooks feed each other and produce an endless zygote/netd restart
++    # ping-pong that prevents boot completion (watchdog eventually resets the
++    # device).  connectivityservice rebinds to netd via binder death
++    # recipients anyway, so the zygote kill is unnecessary here.
+ 
+ # Moved from external/android-clat/vendor-464xlat.rc. Since
+ # clatd is modularized and shipped in apex, migrate the

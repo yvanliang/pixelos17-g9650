@@ -1,0 +1,23 @@
+From e6a6980bc5f12d59cb0f2f09be2477ccd3608f3f Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:39 +0800
+Subject: [PATCH 12/17] GSI Android 17 compatibility:
+ 0012-Disable-gpuservice-on-old-BPF-less-kernel.patch
+
+Change-Id: I809aea355845273fd7fa26d77f1d8db8b07a45be
+---
+ services/gpuservice/gpumem/GpuMem.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/services/gpuservice/gpumem/GpuMem.cpp b/services/gpuservice/gpumem/GpuMem.cpp
+index d0783df..cdc4094 100644
+--- a/services/gpuservice/gpumem/GpuMem.cpp
++++ b/services/gpuservice/gpumem/GpuMem.cpp
+@@ -48,6 +48,7 @@ void GpuMem::initialize() {
+     if (fd < 0) {
+         ALOGE("Failed to retrieve pinned program from %s [%d(%s)]", kGpuMemTotalProgPath, errno,
+               strerror(errno));
++        while(true) sleep(1);
+         return;
+     }
+ 

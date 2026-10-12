@@ -1,0 +1,91 @@
+From db9abe8ca955b244b8c5c19ba89379c36fd8a332 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:02 +0800
+Subject: [PATCH 03/25] GSI Android 17 compatibility:
+ 0003-Add-partial-cam-id-is-hardcoded-support-for-Asus-ZF6.patch
+
+Change-Id: Ib6df1d5d1c63d9e252d66d88c63f9df41565064d
+---
+ .../camera/libcameraservice/CameraService.cpp | 26 +++++++++++++++++++
+ .../camera/libcameraservice/CameraService.h   |  3 +++
+ 2 files changed, 29 insertions(+)
+
+diff --git a/services/camera/libcameraservice/CameraService.cpp b/services/camera/libcameraservice/CameraService.cpp
+index a1eb497..0ef3a16 100644
+--- a/services/camera/libcameraservice/CameraService.cpp
++++ b/services/camera/libcameraservice/CameraService.cpp
+@@ -28,6 +28,7 @@
+ #include <sstream>
+ #include <string>
+ #include <sys/types.h>
++#include <sys/wait.h>
+ #include <inttypes.h>
+ #include <pthread.h>
+ #include <poll.h>
+@@ -196,6 +197,7 @@ CameraService::CameraService(
+         AttributionAndPermissionUtilsEncapsulator(attributionAndPermissionUtils == nullptr ?
+                 std::make_shared<AttributionAndPermissionUtils>()\
+                 : attributionAndPermissionUtils),
++        mPhysicalFrontCamStatus(false),
+         mCameraServiceProxyWrapper(cameraServiceProxyWrapper == nullptr ?
+                 std::make_shared<CameraServiceProxyWrapper>() : cameraServiceProxyWrapper),
+         mEventLog(DEFAULT_EVENT_LOG_LENGTH),
+@@ -2843,6 +2845,7 @@ Status CameraService::connectHelper(const sp<CALLBACK>& cameraCb, const std::str
+             mServiceLock.lock();
+         } else {
+             // Otherwise, add client to active clients list
++            physicalFrontCam(cameraId == "1");
+             finishConnectLocked(client, partial, oomScoreOffset, systemNativeClient);
+         }
+ 
+@@ -2969,6 +2972,27 @@ status_t CameraService::addOfflineClient(const std::string &cameraId,
+     return OK;
+ }
+ 
++void CameraService::physicalFrontCam(bool on) {
++    if(on == mPhysicalFrontCamStatus) return;
++    mPhysicalFrontCamStatus = on;
++
++    if(access("/dev/asusMotoDrv", F_OK) == 0) {
++        int pid = fork();
++        if(pid == 0) {
++            const char* cmd[] = {
++                "/system/bin/asus-motor",
++                "0",
++                NULL
++            };
++            cmd[1] = on ? "0" : "1";
++            execve("/system/bin/asus-motor", (char**)cmd, environ);
++            _exit(1);
++        } else {
++            waitpid(pid, NULL, 0);
++        }
++    }
++}
++
+ Status CameraService::turnOnTorchWithStrengthLevel(const std::string& unresolvedCameraId,
+         int32_t torchStrength, const sp<IBinder>& clientBinder,
+         const AttributionSourceState& clientAttribution, int32_t devicePolicy) {
+@@ -4332,6 +4356,8 @@ binder::Status CameraService::BasicClient::disconnect() {
+     }
+     mDisconnected = true;
+ 
++    sCameraService->physicalFrontCam(false);
++
+     sCameraService->removeByClient(this);
+     sCameraService->logDisconnected(mCameraIdStr, mCallingPid, getPackageName());
+     if (!mSharedMode || (mSharedMode &&
+diff --git a/services/camera/libcameraservice/CameraService.h b/services/camera/libcameraservice/CameraService.h
+index 3b6967b..65156ad 100644
+--- a/services/camera/libcameraservice/CameraService.h
++++ b/services/camera/libcameraservice/CameraService.h
+@@ -303,6 +303,9 @@ public:
+     // Register an offline client for a given active camera id
+     status_t addOfflineClient(const std::string &cameraId, sp<BasicClient> offlineClient);
+ 
++    bool mPhysicalFrontCamStatus;
++    void physicalFrontCam(bool on);
++
+     /////////////////////////////////////////////////////////////////////
+     // Client functionality
+ 

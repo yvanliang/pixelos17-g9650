@@ -1,0 +1,24 @@
+From 4ccc9aec41c7c61d2046bf80d3e6f8ff0a522f40 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:47:50 +0800
+Subject: [PATCH 4/6] G9650: include TrebleApp with the ROM platform
+ certificate
+
+---
+ Android.bp | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 Android.bp
+
+diff --git a/Android.bp b/Android.bp
+new file mode 100644
+index 0000000..8de7ede
+--- /dev/null
++++ b/Android.bp
+@@ -0,0 +1,7 @@
++android_app_import {
++    name: "G9650TrebleApp",
++    apk: "TrebleApp.apk",
++    certificate: "platform",
++    privileged: true,
++    dex_preopt: { enabled: false },
++}

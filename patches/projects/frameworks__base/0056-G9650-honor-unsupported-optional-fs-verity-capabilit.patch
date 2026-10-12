@@ -1,0 +1,57 @@
+From 6255d0de08e906b5d1435e6ea7ea76375a4bf638 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:45:29 +0800
+Subject: [PATCH 56/60] G9650: honor unsupported optional fs-verity capability
+
+Change-Id: I4a95e2c82e97fb1259184a18354326c38d6e5f09
+---
+ .../server/security/FileIntegrity.java        | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/services/core/java/com/android/server/security/FileIntegrity.java b/services/core/java/com/android/server/security/FileIntegrity.java
+index b8f187e0e..39e113a69 100644
+--- a/services/core/java/com/android/server/security/FileIntegrity.java
++++ b/services/core/java/com/android/server/security/FileIntegrity.java
+@@ -37,6 +37,26 @@ import java.io.IOException;
+ public final class FileIntegrity {
+     private FileIntegrity() {}
+ 
++    // The G9650 shipped at API 26. Its stock-derived 4.9 kernel has no fs-verity.
++    // This API promises protection "if supported"; retain actual I/O failures
++    // on other devices and report the missing optional capability once.
++    private static final boolean LEGACY_WITHOUT_FS_VERITY = isLegacyWithoutFsVerity();
++
++    private static boolean isLegacyWithoutFsVerity() {
++        try {
++            final boolean legacy = android.os.SystemProperties.get("ro.boot.bootloader", "")
++                    .startsWith("G9650")
++                    && android.os.Build.VERSION.DEVICE_INITIAL_SDK_INT < 30
++                    && android.system.Os.uname().release.startsWith("4.9.");
++            if (legacy) android.util.Slog.i("FileIntegrity",
++                    "G9650: optional fs-verity unavailable on the legacy 4.9 kernel");
++            return legacy;
++        } catch (RuntimeException e) {
++            return false;
++        }
++    }
++
++
+     /**
+      * Enables fs-verity, if supported by the filesystem. This operation is atomic, i.e. it's either
+      * enabled or not, even in case of power failure during or after the call.
+@@ -46,6 +66,7 @@ public final class FileIntegrity {
+      */
+     @SystemApi(client = SystemApi.Client.SYSTEM_SERVER)
+     public static void setUpFsVerity(@NonNull File file) throws IOException {
++        if (LEGACY_WITHOUT_FS_VERITY) return;
+         try (ParcelFileDescriptor pfd = ParcelFileDescriptor.open(file, MODE_READ_ONLY)) {
+             setUpFsVerity(pfd);
+         }
+@@ -63,6 +84,7 @@ public final class FileIntegrity {
+     @SystemApi(client = SystemApi.Client.SYSTEM_SERVER)
+     public static void setUpFsVerity(@NonNull ParcelFileDescriptor parcelFileDescriptor)
+             throws IOException {
++        if (LEGACY_WITHOUT_FS_VERITY) return;
+         VerityUtils.setUpFsverity(parcelFileDescriptor.getFd());
+     }
+ }

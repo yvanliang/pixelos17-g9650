@@ -1,0 +1,23 @@
+From d378be6c82f58e188d05698cc3b65caba84456a8 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 15:45:05 +0800
+Subject: [PATCH 32/38] G9650: explicitly select validated CC in boot and
+ system-server preoptimization
+
+---
+ custom_g9650.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index be38186..e8894ed 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -78,3 +78,8 @@ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-google-capabilities.xml:$(TA
+ # The FVA4 4.9 kernel cannot run ART's userfaultfd concurrent moving GC.
+ # Build matching CC/read-barrier boot images and emit the matching runtime property.
+ PRODUCT_ENABLE_UFFD_GC := false
++
++# Reproduce the explicit CC preoptimization validated on the FVA4 4.9 kernel.
++# Disabling UFFD alone leaves the host dex2oat collector selection implicit.
++PRODUCT_DEX_PREOPT_DEFAULT_FLAGS += --runtime-arg -Xgc:CC
++PRODUCT_DEX_PREOPT_BOOT_FLAGS += --runtime-arg -Xgc:CC

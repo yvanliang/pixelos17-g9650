@@ -1,0 +1,32 @@
+From 249dd1f8a7740c6f9d628bb76ae9b78c226f0abf Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 13:43:07 +0800
+Subject: [PATCH 59/60] G9650: map sealed immutable bitmap parcels privately on
+ legacy shmem
+
+Change-Id: Icdb5bdfd13b6cb814f9ae3e17238411e01ab19e1
+---
+ libs/hwui/jni/Bitmap.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/libs/hwui/jni/Bitmap.cpp b/libs/hwui/jni/Bitmap.cpp
+index acf6d4d40..cb777654b 100644
+--- a/libs/hwui/jni/Bitmap.cpp
++++ b/libs/hwui/jni/Bitmap.cpp
+@@ -949,6 +949,16 @@ static jobject Bitmap_createFromParcel(JNIEnv* env, jobject, jobject parcel) {
+                     flags |= PROT_WRITE;
+                 }
+                 void* addr = mmap(nullptr, size, flags, MAP_SHARED, fd.get(), 0);
++                if (addr == MAP_FAILED && errno == EPERM && !isMutable) {
++                    const int seals = fcntl(fd.get(), F_GET_SEALS);
++                    if (seals >= 0 && (seals & F_SEAL_WRITE)) {
++                        // Legacy shmem kernels reject MAP_SHARED even with
++                        // PROT_READ when an O_RDWR memfd has F_SEAL_WRITE.
++                        // A private read-only mapping preserves the immutable
++                        // pixels and cannot modify the sealed backing file.
++                        addr = mmap(nullptr, size, PROT_READ, MAP_PRIVATE, fd.get(), 0);
++                    }
++                }
+                 if (addr == MAP_FAILED) {
+                     const int err = errno;
+                     ALOGW("mmap failed, error %d (%s)", err, strerror(err));

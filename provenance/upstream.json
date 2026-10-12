@@ -1,0 +1,19 @@
+{
+  "manifest_url": "https://github.com/PixelOS-AOSP/android_manifest.git",
+  "manifest_branch": "seventeen",
+  "validated_manifest_commit": "c16cfd0c95c5c3d7f5f2ef85b5b3140787db2035",
+  "device": "SM-G9650",
+  "codename": "star2qltechn",
+  "bootloader": "G9650ZCS9FVA4",
+  "target": "custom_g9650-cp2a-userdebug",
+  "android_sdk": 37,
+  "kernel_upstream_url": "https://github.com/klabit87/android_kernel_samsung_sdm845.git",
+  "kernel_baseline": "408d5b0f04aebbae4265a056e9a235c8f5a7c133",
+  "kernel_exported_head_installed_on_phone": true,
+  "kernel_source_url": "https://github.com/yvanliang/pixelos17-g9650.git",
+  "kernel_source_branch": "g9650-seventeen-kernel",
+  "kernel_source_commit": "7baae628409b1665ade76a5b0d4baf9bb0019b15",
+  "kernel_code_commit": "ada5198184f4937b8dcb93e0ff5466ec93e7b87b",
+  "kernel_configuration_path": "g9650-validated.config",
+  "kernel_configuration_sha256": "7a4d98ff19810ebb4e57ab7775ff62c0ada14e386fb281fbd36f822eabded0dd"
+}

@@ -1,0 +1,32 @@
+From 7af128563f56cf12a176d7ded519960bbee649c4 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 23:41:33 +0800
+Subject: [PATCH 14/38] G9650: share the validated legacy Wi-Fi CID cache path
+
+---
+ custom_g9650.mk           | 3 +++
+ g9650/g9650-wifi-cache.rc | 4 ++++
+ 2 files changed, 7 insertions(+)
+ create mode 100644 g9650/g9650-wifi-cache.rc
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 6fb08c9..f47d170 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -36,3 +36,6 @@ PRODUCT_BUILD_VBMETA_IMAGE := false
+ 
+ # PixelOS identity differs from the generic board directory.
+ PRODUCT_BUILD_PROP_OVERRIDES += CustomDevice=g9650
++
++# Preserve the Wi-Fi state; only align the existing vendor CID cache path.
++PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-wifi-cache.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/g9650-wifi-cache.rc
+diff --git a/g9650/g9650-wifi-cache.rc b/g9650/g9650-wifi-cache.rc
+new file mode 100644
+index 0000000..6e26c03
+--- /dev/null
++++ b/g9650/g9650-wifi-cache.rc
+@@ -0,0 +1,4 @@
++# G9650/FVA4: share the kernel and macloader CID cache without altering Wi-Fi state.
++on post-fs-data
++    mkdir /data/vendor/conn 0771 wifi wifi
++    symlink /data/vendor/conn /data/misc/conn

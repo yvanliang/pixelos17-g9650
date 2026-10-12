@@ -1,0 +1,22 @@
+From b73d02fbef10960cc7cc61fc361dcbcee6e545ec Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 13:17:34 +0800
+Subject: [PATCH 31/38] G9650: preopt with CC matching the legacy kernel
+ instead of unsupported UFFD GC
+
+---
+ custom_g9650.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 87bdad2..be38186 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -74,3 +74,7 @@ PRODUCT_MANUFACTURER := samsung
+ PRODUCT_SYSTEM_MANUFACTURER := samsung
+ PRODUCT_SYSTEM_MODEL := G9650
+ PRODUCT_COPY_FILES += device/phh/treble/g9650/g9650-google-capabilities.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/sysconfig/g9650-google-capabilities.xml
++
++# The FVA4 4.9 kernel cannot run ART's userfaultfd concurrent moving GC.
++# Build matching CC/read-barrier boot images and emit the matching runtime property.
++PRODUCT_ENABLE_UFFD_GC := false

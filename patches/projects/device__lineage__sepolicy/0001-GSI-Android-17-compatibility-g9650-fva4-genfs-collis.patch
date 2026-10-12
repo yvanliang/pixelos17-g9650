@@ -1,0 +1,25 @@
+From 0688e3fa942907092d53fc3834a2d7e1862ea4fc Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 09:29:58 +0800
+Subject: [PATCH] GSI Android 17 compatibility:
+ g9650-fva4-genfs-collision.patch
+
+Change-Id: I78de2f3b3a8f0304c85ada09e7d1cd148e8c9b44
+---
+ common/private/genfs_contexts | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/common/private/genfs_contexts b/common/private/genfs_contexts
+index 57f7e0e..3f6d22c 100644
+--- a/common/private/genfs_contexts
++++ b/common/private/genfs_contexts
+@@ -1,5 +1,9 @@
+ genfscon sysfs /devices/virtual/timed_output/vibrator u:object_r:sysfs_vibrator:s0
+ genfscon sysfs /module/mmcblk/parameters/perdev_minors u:object_r:sysfs_perdev_minors:s0
+ 
++# Samsung G9650 FVA4 vendor already labels both filesystem roots as vfat.
++# Duplicate genfscon labels prevent init from compiling the combined policy.
++ifelse(g9650_fva4_genfs_compat, `true', `', `
+ genfscon iso9660 / u:object_r:iso9660:s0
+ genfscon udf / u:object_r:udf:s0
++')

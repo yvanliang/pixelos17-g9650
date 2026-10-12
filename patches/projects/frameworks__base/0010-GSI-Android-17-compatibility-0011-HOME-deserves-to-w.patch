@@ -1,0 +1,23 @@
+From 05772c4846de96500dd0d674fe5911298e922207 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:39 +0800
+Subject: [PATCH 10/60] GSI Android 17 compatibility:
+ 0011-HOME-deserves-to-wake-up-devices-just-as-well-as-bac.patch
+
+Change-Id: Ib85da612b656bf302519c4eda77a1587dc7fedda
+---
+ core/java/android/view/KeyEvent.java | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/core/java/android/view/KeyEvent.java b/core/java/android/view/KeyEvent.java
+index 229f172ae..f89853e20 100644
+--- a/core/java/android/view/KeyEvent.java
++++ b/core/java/android/view/KeyEvent.java
+@@ -2958,6 +2958,7 @@ public class KeyEvent extends InputEvent implements Parcelable {
+         switch (keyCode) {
+             case KeyEvent.KEYCODE_CAMERA:
+             case KeyEvent.KEYCODE_MENU:
++            case KeyEvent.KEYCODE_HOME:
+             case KeyEvent.KEYCODE_PAIRING:
+             case KeyEvent.KEYCODE_STEM_1:
+             case KeyEvent.KEYCODE_STEM_2:

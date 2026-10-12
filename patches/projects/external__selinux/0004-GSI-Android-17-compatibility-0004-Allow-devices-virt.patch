@@ -1,0 +1,40 @@
+From 45c5e3d0e437f2289a6353c38f1b524907be120d Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:38 +0800
+Subject: [PATCH 04/12] GSI Android 17 compatibility:
+ 0004-Allow-devices-virtual-block-genfscon-conflict-seen-o.patch
+
+Change-Id: I0726f8d359df6dbac2b4853afd7a7b6f04eab11a
+---
+ libsepol/cil/src/cil_post.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/libsepol/cil/src/cil_post.c b/libsepol/cil/src/cil_post.c
+index d63a549..b462649 100644
+--- a/libsepol/cil/src/cil_post.c
++++ b/libsepol/cil/src/cil_post.c
+@@ -498,7 +498,23 @@ static int cil_post_genfscon_context_compare(const void *a, const void *b)
+ {
+ 	struct cil_genfscon *a_genfscon = *(struct cil_genfscon**)a;
+ 	struct cil_genfscon *b_genfscon = *(struct cil_genfscon**)b;
+-	return context_compare(a_genfscon->context, b_genfscon->context);
++	int rc = context_compare(a_genfscon->context, b_genfscon->context);
++	if(rc) {
++		fprintf(stderr, "hello %s\n", a_genfscon->fs_str);
++		int bypass = 0;
++		/*
++		 * This conflict has been seen on Xiaomi Mi 9:
++		 * - AOSP Q says (genfscon sysfs /devices/virtual/block/ (u object_r sysfs_devices_block ((s0) (s0))))
++		 * - stock rom says (genfscon sysfs /devices/virtual/block/ (u object_r sysfs_ufs_target ((s0) (s0))))
++		 */
++		if(strcmp(a_genfscon->path_str, "/devices/virtual/block/") == 0)
++			bypass = 1;
++		if(bypass == 1) {
++			fprintf(stderr, "Received conflicting %s vs %s but ignore\n", a_genfscon->path_str, b_genfscon->path_str);
++			return 0;
++		}
++	}
++	return rc;
+ }
+ 
+ static int cil_post_netifcon_context_compare(const void *a, const void *b)

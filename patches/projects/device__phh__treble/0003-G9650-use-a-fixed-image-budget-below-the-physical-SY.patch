@@ -1,0 +1,37 @@
+From f87e8ac3e5068cc758c465f2158304d46da4afcb Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:05:31 +0800
+Subject: [PATCH 03/38] G9650: use a fixed image budget below the physical
+ SYSTEM capacity
+
+---
+ tdgsi_arm64_ab/BoardConfig.mk | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/tdgsi_arm64_ab/BoardConfig.mk b/tdgsi_arm64_ab/BoardConfig.mk
+index 9c6b810..ee91797 100644
+--- a/tdgsi_arm64_ab/BoardConfig.mk
++++ b/tdgsi_arm64_ab/BoardConfig.mk
+@@ -1,16 +1,15 @@
+ include build/make/target/board/generic_arm64/BoardConfig.mk
+ include device/phh/treble/board-base.mk
+ 
+-ifeq ($(BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE),)
+-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 2147483648
+-else
+-BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 33554432
+-endif
++# G9650 uses the fixed image budget below.
+ 
+ # G9650 physical SYSTEM constraints
+ BOARD_SYSTEMIMAGE_FILE_SYSTEM_TYPE := ext4
+-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 4796186624
+-BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 33554432
++# Image budget leaves 32 MiB below the 4796186624-byte physical partition.
++BOARD_SYSTEMIMAGE_PARTITION_SIZE := 4762632192
+ BOARD_EXT4_SHARE_DUP_BLOCKS := true
+ TARGET_NO_KERNEL := true
+ TARGET_NO_KERNEL_IMAGE := true
++
++# Clear any dynamic reserve inherited from the generic board.
++BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE :=

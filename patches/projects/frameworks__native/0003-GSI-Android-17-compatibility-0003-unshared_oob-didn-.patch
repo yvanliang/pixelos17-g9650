@@ -1,0 +1,24 @@
+From 244b9e2a1b0708269ac8b6cd91f1af51830b8b69 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:34 +0800
+Subject: [PATCH 03/17] GSI Android 17 compatibility:
+ 0003-unshared_oob-didn-t-exist-in-O-P-so-detect-its-suppo.patch
+
+Change-Id: Ib75ff93745035a77fc0ebfc52040fb533a9b7436
+---
+ cmds/installd/migrate_legacy_obb_data.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmds/installd/migrate_legacy_obb_data.sh b/cmds/installd/migrate_legacy_obb_data.sh
+index 7399681..9d5b73e 100644
+--- a/cmds/installd/migrate_legacy_obb_data.sh
++++ b/cmds/installd/migrate_legacy_obb_data.sh
+@@ -18,7 +18,7 @@
+ rm -rf /data/media/0/Android/obb/test_probe
+ mkdir -p /data/media/0/Android/obb/
+ touch /data/media/0/Android/obb/test_probe
+-if ! test -f /data/media/0/Android/obb/test_probe ; then
++if ! test -f /data/media/0/Android/obb/test_probe  || [ "$(adb shell getprop ro.vndk.version)" -le 28 ]; then
+   log -p i -t migrate_legacy_obb_data "No support for 'unshared_obb'. Not migrating"
+   rm -rf /data/media/0/Android/obb/test_probe
+   exit 0

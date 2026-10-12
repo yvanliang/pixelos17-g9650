@@ -1,0 +1,21 @@
+From da4ed4c030bd88e845cb4ed055a91274b63fa77f Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 18:06:40 +0800
+Subject: [PATCH 11/38] G9650: omit the standalone vbmeta image from the
+ SYSTEM-only GSI product
+
+---
+ custom_g9650.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 22de9b0..9973efe 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -30,3 +30,6 @@ PRODUCT_PACKAGES += TrebleApp
+ 
+ # Use patched Mainline source instead of Google-private prebuilt selectors.
+ PRODUCT_MODULE_BUILD_FROM_SOURCE := true
++
++# Keep the existing Samsung boot chain; deliver only SYSTEM.
++PRODUCT_BUILD_VBMETA_IMAGE := false

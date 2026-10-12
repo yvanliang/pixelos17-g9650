@@ -1,0 +1,23 @@
+From 2ae861497e32c06b144e3e297a3e0bd4c6a19f5b Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:40 +0800
+Subject: [PATCH 08/12] GSI Android 17 compatibility:
+ 0008-Improve-SELinux-policy-workaround-on-device-phh-treb.patch
+
+Change-Id: I389cc7f7c1a0d9e1ebbcbccc19a1f0123fed9bd1
+---
+ libsepol/cil/src/cil_build_ast.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/libsepol/cil/src/cil_build_ast.c b/libsepol/cil/src/cil_build_ast.c
+index 7b0265b..b318ea2 100644
+--- a/libsepol/cil/src/cil_build_ast.c
++++ b/libsepol/cil/src/cil_build_ast.c
+@@ -189,7 +189,6 @@ int cil_add_decl_to_symtab(struct cil_db *db, symtab_t *symtab, hashtab_key_t ke
+ 		/* multiple_decls is enabled and works for this datum type, add node */
+ 		cil_list_append(prev->nodes, CIL_NODE, node);
+ 		node->data = prev;
+-		return SEPOL_EEXIST;
+ 	}
+ 
+ 	return SEPOL_OK;

@@ -1,0 +1,45 @@
+From cb24251c71b91eb4eae5fe23d45dbb98c1aefe2b Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 17:56:59 +0800
+Subject: [PATCH 10/38] G9650: use PixelOS charger resources without duplicate
+ Treble installs
+
+---
+ base.mk            | 2 ++
+ charger/Android.mk | 4 ++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/base.mk b/base.mk
+index a29e402..06a3218 100644
+--- a/base.mk
++++ b/base.mk
+@@ -52,8 +52,10 @@ PRODUCT_COPY_FILES += \
+     device/phh/treble/charger.rc:system/etc/init/charger.rc
+ 
+ # Charger image
++ifneq ($(TARGET_PRODUCT),custom_g9650)
+ PRODUCT_PACKAGES += \
+     product_charger_res_images
++endif
+ 
+ # USB Audio
+ PRODUCT_COPY_FILES += \
+diff --git a/charger/Android.mk b/charger/Android.mk
+index cc18272..e146a30 100644
+--- a/charger/Android.mk
++++ b/charger/Android.mk
+@@ -15,6 +15,8 @@
+ #
+ #
+ 
++# G9650 uses the official PixelOS charger resources.
++ifneq ($(TARGET_PRODUCT),custom_g9650)
+ LOCAL_PATH := $(call my-dir)
+ 
+ ### pixel_charger_res_images ###
+@@ -66,3 +68,5 @@ _add-product-charger-animation-file :=
+ _img_modules :=
+ _anim_modules :=
+ endif # LOCAL_CHARGER_NO_UI
++
++endif # custom_g9650 uses PixelOS charger resources

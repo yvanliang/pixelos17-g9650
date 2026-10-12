@@ -1,0 +1,42 @@
+From 27aeba5dd3d9ee2b2c984ac8de36c112c336bbc6 Mon Sep 17 00:00:00 2001
+From: yvanliang <42460514+yvanliang@users.noreply.github.com>
+Date: Thu, 15 Oct 2026 20:51:34 +0800
+Subject: [PATCH 23/23] G9650: keep power control free of temporary Cache
+ diagnostics
+
+Change-Id: I7604363359e048f760ea74eb754e728fae348982
+---
+ healthd/healthd_mode_charger.cpp | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/healthd/healthd_mode_charger.cpp b/healthd/healthd_mode_charger.cpp
+index 6c28a2d..4892a17 100644
+--- a/healthd/healthd_mode_charger.cpp
++++ b/healthd/healthd_mode_charger.cpp
+@@ -100,8 +100,8 @@ char* locale;
+ 
+ namespace android {
+ 
+-// The FVA4 charger must release its display/input handles before rebooting.
+-// Delegate to init, which also passes a normal non-null reboot reason to Samsung.
++// The device shutdown trigger releases charging display/input handles.
++// Use init power control so that trigger runs before the kernel reboot.
+ static void RebootCharger(int command) {
+     char bootloader[PROPERTY_VALUE_MAX] = {};
+     property_get("ro.boot.bootloader", bootloader, "");
+@@ -110,15 +110,6 @@ static void RebootCharger(int command) {
+         return;
+     }
+     const bool poweroff = command == RB_POWER_OFF;
+-    const char* action = poweroff ? "shutdown,userrequested" : "reboot,userrequested";
+-    LOGW("G9650Charger: requesting init %s\n", action);
+-    int fd = open("/dev/g9650-charger-cache/g9650-charger-action.log",
+-                  O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC, 0600);
+-    if (fd >= 0) {
+-        dprintf(fd, "request %s uid=%d\n", action, static_cast<int>(getuid()));
+-        fsync(fd);
+-        close(fd);
+-    }
+     int result = android_reboot(poweroff ? ANDROID_RB_POWEROFF : ANDROID_RB_RESTART2,
+                                 0, "userrequested");
+     if (result != 0) LOGE("G9650Charger: init request failed result=%d errno=%d\n", result, errno);

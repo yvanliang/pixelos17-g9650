@@ -1,0 +1,26 @@
+From e40a22a4dde787104ab7dd9677806877bc2a1d58 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 12:28:45 +0800
+Subject: [PATCH 58/60] VerityUtils: use actual file flags when the kernel
+ lacks statx
+
+Change-Id: I4f7cf2534d963c49b556d6b7603e46beb4984b45
+---
+ core/jni/com_android_internal_security_VerityUtils.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/core/jni/com_android_internal_security_VerityUtils.cpp b/core/jni/com_android_internal_security_VerityUtils.cpp
+index d7449e049..1f5829b73 100644
+--- a/core/jni/com_android_internal_security_VerityUtils.cpp
++++ b/core/jni/com_android_internal_security_VerityUtils.cpp
+@@ -77,7 +77,9 @@ int statxForFsverity(JNIEnv *env, jobject /* clazz */, jstring filePath) {
+ 
+     struct statx out = {};
+     if (statx(AT_FDCWD, path.c_str(), 0 /* flags */, STATX_ALL, &out) != 0) {
+-        return -errno;
++        // Older kernels lack statx entirely. Query the real file flags through
++        // the existing ioctl fallback; keep permission/path/I/O errors intact.
++        if (errno != ENOSYS) return -errno;
+     }
+ 
+     if (out.stx_attributes_mask & STATX_ATTR_VERITY) {

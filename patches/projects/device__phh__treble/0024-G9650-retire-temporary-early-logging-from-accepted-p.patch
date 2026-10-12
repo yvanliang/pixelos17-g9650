@@ -1,0 +1,21 @@
+From cc2bd39454e66c463efbea11f042f6d34672e00e Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 10:51:30 +0800
+Subject: [PATCH 24/38] G9650: retire temporary early logging from accepted
+ product
+
+---
+ custom_g9650.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 62d69be..4a8f443 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -49,3 +49,6 @@ PRODUCT_PACKAGES += g9650-early-trace
+ 
+ # Supply writable aconfig storage before platform early-init on this legacy device.
+ PRODUCT_COPY_FILES += device/phh/treble/g9650/00-g9650-metadata.rc:$(TARGET_COPY_OUT_SYSTEM)/etc/init/00-g9650-metadata.rc
++
++# Diagnostic sources remain available, but accepted builds omit the temporary service.
++PRODUCT_PACKAGES := $(filter-out g9650-early-trace,$(PRODUCT_PACKAGES))

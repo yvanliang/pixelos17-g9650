@@ -1,0 +1,24 @@
+From 33be63ccedf042ad5dc2a246b60790dad4c16a6f Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:56:41 +0800
+Subject: [PATCH] GSI Android 17 compatibility:
+ 0001-Add-persist.sys.phh.wifi_disable_sae-property-to-dis.patch
+
+Change-Id: If7a83bb9aa61d2ada5b5a3ff30e1015dbff3ac63
+---
+ service/java/com/android/server/wifi/WifiGlobals.java | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/service/java/com/android/server/wifi/WifiGlobals.java b/service/java/com/android/server/wifi/WifiGlobals.java
+index d1d67ad..09bf5c4 100644
+--- a/service/java/com/android/server/wifi/WifiGlobals.java
++++ b/service/java/com/android/server/wifi/WifiGlobals.java
+@@ -352,6 +352,8 @@ public class WifiGlobals {
+      * @return boolean true if auto-upgrade is enabled, false otherwise.
+      */
+     public boolean isWpa3SaeUpgradeEnabled() {
++        var prop = android.os.SystemProperties.get("persist.sys.phh.wifi_disable_sae", null);
++        if (prop != null && "true".equals(prop)) return false;
+         return mWifiResourceCache
+                 .getBoolean(R.bool.config_wifiSaeUpgradeEnabled);
+     }

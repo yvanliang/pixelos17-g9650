@@ -1,0 +1,23 @@
+From 9fdffaacdce689503953037e32b3c3c16f918528 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:19:32 +0800
+Subject: [PATCH 2/6] TrebleApp: use SDK apksigner with original keys; fix
+ JDK17 JNI mismatch
+
+---
+ build.sh | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/build.sh b/build.sh
+index 429460a..ad7a065 100755
+--- a/build.sh
++++ b/build.sh
+@@ -19,4 +19,7 @@ if [ "$1" == "release" ];then
+     file=app-release-unsigned
+ fi
+ ./gradlew $gradleTarget
+-LD_LIBRARY_PATH=./signapk/ java -jar signapk/signapk.jar keys/platform.x509.pem keys/platform.pk8 ./app/build/outputs/apk/$target/${file}.apk TrebleApp.apk
++# Use the SDK signer with the same checked-in TrebleApp certificate/key.
++# The vendored signapk JNI library is incompatible with this JDK17.
++"$ANDROID_HOME/build-tools/33.0.2/apksigner" sign --key keys/platform.pk8 --cert keys/platform.x509.pem --out TrebleApp.apk ./app/build/outputs/apk/$target/${file}.apk
++"$ANDROID_HOME/build-tools/33.0.2/apksigner" verify TrebleApp.apk

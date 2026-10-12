@@ -1,0 +1,23 @@
+From 62f6fe9c22cb1d61f5e2e2ce080686420d2eb963 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:04 +0800
+Subject: [PATCH 43/60] GSI Android 17 compatibility:
+ 0045-Include-vendor.samsung.hardware.radio-V2.2-java-HIDL.patch
+
+Change-Id: I8567774b20401915b9fbb4170f60609d8576da85
+---
+ Android.bp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Android.bp b/Android.bp
+index 1488fcfb0..9ee63cc4a 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -228,6 +228,7 @@ java_library {
+         "android.hardware.gnss-V2.1-java",
+         "android.hardware.health-V1.0-java-constants",
+         "android.hardware.radio-V1.6-java",
++        "vendor.samsung.hardware.radio-V2.2-java",
+         "android.hardware.radio.data-V5-java",
+         "android.hardware.radio.ims-V4-java",
+         "android.hardware.radio.messaging-V5-java",

@@ -1,0 +1,24 @@
+From e5043805a13ec2279cf4c265317810034295447e Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:51 +0800
+Subject: [PATCH 04/10] GSI Android 17 compatibility:
+ 0004-Fix-NPE-with-1.0-and-1.1-CardStatus.patch
+
+Change-Id: Ied830951339d46715f3ac9fe57ee6c0254299027
+---
+ src/java/com/android/internal/telephony/RadioResponse.java | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/java/com/android/internal/telephony/RadioResponse.java b/src/java/com/android/internal/telephony/RadioResponse.java
+index ada45ec..84e15c6 100644
+--- a/src/java/com/android/internal/telephony/RadioResponse.java
++++ b/src/java/com/android/internal/telephony/RadioResponse.java
+@@ -1871,6 +1871,8 @@ public class RadioResponse extends IRadioResponse.Stub {
+ 
+         if (rr != null) {
+             IccCardStatus iccCardStatus = RILUtils.convertHalCardStatus(cardStatus);
++            IccSlotPortMapping slotPortMapping = new IccSlotPortMapping();
++            iccCardStatus.mSlotPortMapping = slotPortMapping;
+             mRil.riljLog("responseIccCardStatus: from HIDL: " + iccCardStatus);
+             if (responseInfo.error == RadioError.NONE) {
+                 sendMessageResponse(rr.mResult, iccCardStatus);

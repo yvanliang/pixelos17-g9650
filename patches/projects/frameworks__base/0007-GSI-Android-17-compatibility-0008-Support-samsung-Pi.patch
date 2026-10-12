@@ -1,0 +1,24 @@
+From a93cbe6260ea8190dfc8ee66842761fe8f1f9544 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:33 +0800
+Subject: [PATCH 07/60] GSI Android 17 compatibility:
+ 0008-Support-samsung-Pie-and-Q-light-hal.patch
+
+Change-Id: I6d7e3c7b9e86923b7eb1940ebdebc84edbf08224
+---
+ services/core/jni/Android.bp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/services/core/jni/Android.bp b/services/core/jni/Android.bp
+index 2b6629c87..83c7f130a 100644
+--- a/services/core/jni/Android.bp
++++ b/services/core/jni/Android.bp
+@@ -203,6 +203,8 @@ cc_defaults {
+         "attentionmanager_native_aidl-cpp",
+         "server_configurable_flags",
+         "service.incremental",
++        "vendor.samsung.hardware.light@2.0",
++        "vendor.samsung.hardware.light@3.0",
+     ],
+ 
+     static_libs: [

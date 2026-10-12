@@ -1133,4 +1133,5 @@
   <include name="snippets/lineage.xml" />
   <include name="snippets/pixelos.xml" />
 
+  <include name="manifests/g9650.xml" />
 </manifest>

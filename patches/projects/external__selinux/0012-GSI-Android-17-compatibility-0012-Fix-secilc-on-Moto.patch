@@ -1,0 +1,30 @@
+From b613c44b1eb94755dd0a343d09008f04e5c8d9d5 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:42 +0800
+Subject: [PATCH 12/12] GSI Android 17 compatibility:
+ 0012-Fix-secilc-on-Moto-One-Action.patch
+
+Change-Id: I538f47fc70d8d8b79fcbfac9ae690ab51ab52a91
+---
+ libsepol/cil/src/cil_build_ast.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/libsepol/cil/src/cil_build_ast.c b/libsepol/cil/src/cil_build_ast.c
+index b318ea2..b831df7 100644
+--- a/libsepol/cil/src/cil_build_ast.c
++++ b/libsepol/cil/src/cil_build_ast.c
+@@ -253,6 +253,14 @@ int cil_gen_ordered(struct cil_db *db, struct cil_tree_node *parse_current, stru
+ 
+ 	int rc = SEPOL_ERR;
+ 
++        {
++            const char* path = cil_tree_get_cil_path(parse_current);
++            if(strstr(path, "vendor/")) {
++                cil_clear_node(ast_node);
++                return SEPOL_OK;
++            }
++        }
++
+ 	if (db == NULL || parse_current == NULL || ast_node == NULL) {
+ 		goto exit;
+ 	}

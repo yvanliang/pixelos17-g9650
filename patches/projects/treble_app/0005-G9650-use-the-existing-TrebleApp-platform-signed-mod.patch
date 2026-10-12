@@ -1,0 +1,23 @@
+From bd78d66f16584c31863917d4a4069dfe3fb4bda9 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 16:05:31 +0800
+Subject: [PATCH 5/6] G9650: use the existing TrebleApp platform-signed module
+
+---
+ Android.bp | 7 -------
+ 1 file changed, 7 deletions(-)
+ delete mode 100644 Android.bp
+
+diff --git a/Android.bp b/Android.bp
+deleted file mode 100644
+index 8de7ede..0000000
+--- a/Android.bp
++++ /dev/null
+@@ -1,7 +0,0 @@
+-android_app_import {
+-    name: "G9650TrebleApp",
+-    apk: "TrebleApp.apk",
+-    certificate: "platform",
+-    privileged: true,
+-    dex_preopt: { enabled: false },
+-}

@@ -1,0 +1,35 @@
+From 653152cc7b8370c0ec25285e9dc232b64aef8c89 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 17:44:55 +0800
+Subject: [PATCH 2/3] G9650: distinguish VNDK28 protobuf wrappers from PixelOS
+ VNDK29 compatibility
+
+Change-Id: Iab2131eef622a7247161658bb5d99b796a70a1bb
+---
+ Android.bp | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/Android.bp b/Android.bp
+index 152657c..7df0a02 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -131,7 +131,8 @@ prebuilt_etc {
+ 
+ // Defining prebuilt libraries for the compatibility of old vendor modules
+ cc_prebuilt_library_shared {
+-    name: "libprotobuf-cpp-lite-vndk28-vendorcompat",
++    name: "libprotobuf-cpp-lite-vndk28-vendorcompat"
++    installable: false,,
+     stem: "libprotobuf-cpp-lite",
+     vendor: true,
+     // These are already stripped, and restripping them just issues diagnostics.
+@@ -163,7 +164,8 @@ cc_prebuilt_library_shared {
+ }
+ 
+ cc_prebuilt_library_shared {
+-    name: "libprotobuf-cpp-full-vndk28-vendorcompat",
++    name: "libprotobuf-cpp-full-vndk28-vendorcompat"
++    installable: false,,
+     stem: "libprotobuf-cpp-full",
+     vendor: true,
+     // These are already stripped, and restripping them just issues diagnostics.

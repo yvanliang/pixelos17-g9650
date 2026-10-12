@@ -1,0 +1,25 @@
+From 0bc26962d970a0c782875a14bf2af7ff8bd9a927 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:36 +0800
+Subject: [PATCH 3/3] GSI Android 17 compatibility:
+ 0003-Include-vndk-v28-v29-and-v30-sepolicy-support.patch
+
+Change-Id: Ib8ecb416e96d3463389f775ea7697b1bc8b2eec3
+---
+ core/config.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/core/config.mk b/core/config.mk
+index 8e0bb7f..0db45a8 100644
+--- a/core/config.mk
++++ b/core/config.mk
+@@ -915,6 +915,9 @@ BOARD_SEPOLICY_VERS := $(PLATFORM_SEPOLICY_VERSION)
+ 
+ # A list of SEPolicy versions, besides PLATFORM_SEPOLICY_VERSION, that the framework supports.
+ PLATFORM_SEPOLICY_COMPAT_VERSIONS := \
++    28.0 \
++    29.0 \
++    30.0 \
+     31.0 \
+     32.0 \
+     33.0 \

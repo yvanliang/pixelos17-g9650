@@ -1,0 +1,22 @@
+From 6460fb02229a54c11995e4fda79b803e123067cf Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Sat, 10 Oct 2026 11:40:09 +0800
+Subject: [PATCH 29/38] G9650: preinstall original signed Google Photos instead
+ of Gallery2
+
+---
+ custom_g9650.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/custom_g9650.mk b/custom_g9650.mk
+index 695468c..8952e67 100644
+--- a/custom_g9650.mk
++++ b/custom_g9650.mk
+@@ -64,3 +64,7 @@ PRODUCT_COPY_FILES += \
+ 
+ # Keep PixelOS's Material3 Aperture camera; omit the extra recovery-reference app.
+ PRODUCT_PACKAGES := $(filter-out G9650CameraCompat,$(PRODUCT_PACKAGES))
++
++# Pixel's Google Photos replaces the small AOSP Gallery on this product only.
++PRODUCT_PACKAGES += Photos
++PRODUCT_PACKAGES := $(filter-out Gallery2 Glimpse,$(PRODUCT_PACKAGES))

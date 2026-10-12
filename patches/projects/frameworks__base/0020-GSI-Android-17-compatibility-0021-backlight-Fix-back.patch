@@ -1,0 +1,75 @@
+From 87c3ec326dbb97f3fbcaa27212a989d2c6ceb900 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:41:01 +0800
+Subject: [PATCH 20/60] GSI Android 17 compatibility:
+ 0021-backlight-Fix-backlight-control-on-Galaxy-S9.patch
+
+Change-Id: Ifab420eb61ee43a8ad48a2209e1b641a6dc81d66
+---
+ .../android/server/lights/LightsService.java  | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/services/core/java/com/android/server/lights/LightsService.java b/services/core/java/com/android/server/lights/LightsService.java
+index a1365517e..d9f29e20e 100644
+--- a/services/core/java/com/android/server/lights/LightsService.java
++++ b/services/core/java/com/android/server/lights/LightsService.java
+@@ -38,6 +38,7 @@ import android.os.Looper;
+ import android.os.PermissionEnforcer;
+ import android.os.RemoteException;
+ import android.os.ServiceManager;
++import android.os.SystemProperties;
+ import android.os.Trace;
+ import android.provider.Settings;
+ import android.text.TextUtils;
+@@ -673,6 +674,51 @@ public class LightsService extends SystemService {
+                     return;
+                 }
+                 int brightnessInt = BrightnessSynchronizer.brightnessFloatToInt(brightness);
++
++                if(mHwLight.id == 0) {
++                    String fp = SystemProperties.get("ro.vendor.build.fingerprint", "hello");
++                    if(fp.matches(".*astarqlte.*")) {
++                        int newBrightness = brightnessInt;
++                        if(SystemProperties.getBoolean("persist.sys.samsung.full_brightness", false)) {
++                            newBrightness = (int) (brightnessInt * 365.0 / 255.0);
++                        }
++                        setLightLocked(newBrightness, LIGHT_FLASH_HARDWARE, 0, 0, brightnessMode);
++                        return;
++                    }
++
++                    int useSamsungBacklight = SystemProperties.getInt("persist.sys.phh.samsung_backlight", -1);
++                    if(useSamsungBacklight != 0) {
++                        if(useSamsungBacklight > 0 ||
++                                fp.matches(".*beyond.*lte.*") ||
++                                fp.matches(".*(crown|star)[q2]*lte.*") ||
++                                fp.matches(".*(SC-0[23]K|SCV3[89]).*")) {
++                            int ratio = 100;
++                            if(useSamsungBacklight > 1)
++                                ratio = useSamsungBacklight;
++                            int newBrightness = brightnessInt * ratio;
++                            if(SystemProperties.getBoolean("persist.sys.samsung.full_brightness", false)) {
++                                newBrightness = (int) (brightnessInt * 40960.0 / 255.0);
++                            }
++                            setLightLocked(newBrightness, LIGHT_FLASH_HARDWARE, 0, 0, brightnessMode);
++                            return;
++                        }
++                    }
++
++                    boolean qcomExtendBrightness = SystemProperties.getBoolean("persist.extend.brightness", false);
++                    int scale = SystemProperties.getInt("persist.display.max_brightness", 1023);
++                    //This is set by vndk-detect
++                    int qcomScale = SystemProperties.getInt("persist.sys.qcom-brightness", -1);
++                    if(qcomScale != -1) {
++                        qcomExtendBrightness = true;
++                        scale = qcomScale;
++                    }
++
++                    if(qcomExtendBrightness) {
++                        setLightLocked(brightnessInt * scale / 255, LIGHT_FLASH_NONE, 0, 0, brightnessMode);
++                        return;
++                    }
++                }
++
+                 int color = brightnessInt & 0x000000ff;
+                 color = 0xff000000 | (color << 16) | (color << 8) | color;
+                 setLightLocked(color, LIGHT_FLASH_NONE, 0, 0, brightnessMode);

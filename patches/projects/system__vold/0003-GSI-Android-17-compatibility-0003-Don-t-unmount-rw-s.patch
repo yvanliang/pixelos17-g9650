@@ -1,0 +1,23 @@
+From 1745d27cfb0126904baa79a21df263b960582a6f Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:56 +0800
+Subject: [PATCH 3/7] GSI Android 17 compatibility:
+ 0003-Don-t-unmount-rw-system.sh-binds.patch
+
+Change-Id: I2d25b3e3ecac43120a05f64349deb073ebc5feb7
+---
+ VolumeManager.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/VolumeManager.cpp b/VolumeManager.cpp
+index 2b42e25..33efa75 100644
+--- a/VolumeManager.cpp
++++ b/VolumeManager.cpp
+@@ -1074,6 +1074,7 @@ int VolumeManager::unmountAll() {
+     while ((mentry = getmntent(fp)) != NULL) {
+         auto test = std::string(mentry->mnt_dir);
+         if ((StartsWith(test, "/mnt/") &&
++             !StartsWith(test, "/mnt/phh") &&
+ #ifdef __ANDROID_DEBUGGABLE__
+              !StartsWith(test, "/mnt/scratch") &&
+ #endif

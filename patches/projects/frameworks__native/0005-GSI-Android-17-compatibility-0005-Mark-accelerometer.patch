@@ -1,0 +1,30 @@
+From 3926d736bb71ebd9b55ae216a8eacb77a4b28afd Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:42:35 +0800
+Subject: [PATCH 05/17] GSI Android 17 compatibility:
+ 0005-Mark-accelerometer-input-as-sensor-exclusively-if-th.patch
+
+Change-Id: Ib70267181cb752cc9a48338fed0501c531792470
+---
+ services/inputflinger/reader/EventHub.cpp | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/services/inputflinger/reader/EventHub.cpp b/services/inputflinger/reader/EventHub.cpp
+index ca79fc5..30664ea 100644
+--- a/services/inputflinger/reader/EventHub.cpp
++++ b/services/inputflinger/reader/EventHub.cpp
+@@ -2647,7 +2647,13 @@ void EventHub::openDeviceLocked(const std::string& devicePath) {
+ 
+     // Check whether this device is an accelerometer.
+     if (device->propBitmask.test(INPUT_PROP_ACCELEROMETER)) {
+-        device->classes |= InputDeviceClass::SENSOR;
++        bool hasAxis = false;
++        for (int i = 0; i <= ABS_MAX; i++) {
++            if (device->absBitmask.test(i)) hasAxis = true;
++        }
++        if(hasAxis) {
++            device->classes |= InputDeviceClass::SENSOR;
++        }
+     }
+ 
+     // Check whether this device has switches.

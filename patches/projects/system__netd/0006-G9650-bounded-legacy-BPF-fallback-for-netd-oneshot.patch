@@ -1,0 +1,22 @@
+From 8d75b0f2a6d83d44fc099ce05ec5364c24d0565d Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:47:50 +0800
+Subject: [PATCH 06/11] G9650: bounded legacy BPF fallback for netd oneshot
+
+Change-Id: Ia63bfaabf489c0d23879cbd4e7eab0b2c3fc23b6
+---
+ server/netd.rc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/server/netd.rc b/server/netd.rc
+index 38f7cd4..65ab813 100644
+--- a/server/netd.rc
++++ b/server/netd.rc
+@@ -1,6 +1,6 @@
+ # This should be similar to proper 'netd' below, this is merely a quick self test during bootup.
+ # If this invocation fails during a mainline module update it should trigger a module rollback.
+-service netd1shot /system/bin/netd oneshot
++service netd1shot /system/bin/g9650-netd-oneshot.sh
+     disabled # only started once bpf programs are loaded
+     class main
+     capabilities CHOWN DAC_OVERRIDE DAC_READ_SEARCH FOWNER IPC_LOCK KILL NET_ADMIN NET_BIND_SERVICE NET_RAW SETUID SETGID

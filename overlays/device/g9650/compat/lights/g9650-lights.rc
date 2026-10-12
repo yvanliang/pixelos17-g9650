@@ -1,0 +1,13 @@
+# Stable AIDL backlight adapter, using the original G9650 panel driver.
+on post-fs-data
+    start g9650-lights
+
+service g9650-lights /system/bin/g9650-lights-service
+    class hal
+    disabled
+    updatable
+    user system
+    group system
+    seclabel u:r:hal_light_default:s0
+    interface aidl android.hardware.light.ILights/default
+

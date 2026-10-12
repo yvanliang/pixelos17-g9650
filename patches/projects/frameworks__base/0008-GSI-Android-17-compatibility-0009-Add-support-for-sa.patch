@@ -1,0 +1,64 @@
+From 27418f45c4c03310d34376207ada0e8e6af37b83 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:35 +0800
+Subject: [PATCH 08/60] GSI Android 17 compatibility:
+ 0009-Add-support-for-samsung-touch-physical-and-hover-pro.patch
+
+Change-Id: Ice3a55cc60b5f819ff6914d4745a421bd974cf49
+---
+ .../DisplayPowerProximityStateController.java | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/services/core/java/com/android/server/display/DisplayPowerProximityStateController.java b/services/core/java/com/android/server/display/DisplayPowerProximityStateController.java
+index 35455c841..70c651187 100644
+--- a/services/core/java/com/android/server/display/DisplayPowerProximityStateController.java
++++ b/services/core/java/com/android/server/display/DisplayPowerProximityStateController.java
+@@ -92,6 +92,20 @@ public final class DisplayPowerProximityStateController {
+         public void onSensorChanged(SensorEvent event) {
+             if (mProximitySensorEnabled) {
+                 final long time = mClock.uptimeMillis();
++                if("com.samsung.sensor.touch_proximity".equals(mProximitySensor.getStringType())) {
++                    int v = (int)event.values[0];
++                    boolean positive = (v <= 4);
++                    android.util.Log.d("PHH", "Samsung sensor changed " + positive + ":" + v);
++                    handleProximitySensorEvent(time, positive);
++                    return;
++                }
++                if("com.samsung.sensor.hover_proximity".equals(mProximitySensor.getStringType())) {
++                    float v = event.values[0];
++                    boolean positive = (v >= 0.5f && v <= 4.5);
++                    android.util.Log.d("PHH", "Samsung hover sensor changed " + positive + ":" + v);
++                    handleProximitySensorEvent(time, positive);
++                    return;
++                }
+                 final float distance = event.values[0];
+                 boolean positive = distance >= 0.0f && distance < mProximityThreshold;
+                 handleProximitySensorEvent(time, positive);
+@@ -380,6 +394,27 @@ public final class DisplayPowerProximityStateController {
+         }
+         mProximitySensor = SensorUtils.findSensor(mSensorManager,
+                 mDisplayDeviceConfig.getProximitySensor(), Sensor.TYPE_PROXIMITY);
++        if(mProximitySensor == null) {
++            java.util.List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
++            for(Sensor sensor: sensors) {
++                if("com.samsung.sensor.physical_proximity".equals(sensor.getStringType()))
++                    mProximitySensor = sensor;
++            }
++        }
++        if(mProximitySensor == null) {
++            java.util.List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
++            for(Sensor sensor: sensors) {
++                if("com.samsung.sensor.hover_proximity".equals(sensor.getStringType()))
++                    mProximitySensor = sensor;
++            }
++        }
++        if(mProximitySensor == null) {
++            java.util.List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
++            for(Sensor sensor: sensors) {
++                if("com.samsung.sensor.touch_proximity".equals(sensor.getStringType()))
++                    mProximitySensor = sensor;
++            }
++        }
+         if (mProximitySensor != null) {
+             mProximityThreshold = Math.min(mProximitySensor.getMaximumRange(),
+                     TYPICAL_PROXIMITY_THRESHOLD);

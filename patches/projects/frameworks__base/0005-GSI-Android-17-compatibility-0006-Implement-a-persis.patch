@@ -1,0 +1,48 @@
+From 4559a18dba5fa46a0b27857c98c5094423f89b1f Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:28 +0800
+Subject: [PATCH 05/60] GSI Android 17 compatibility:
+ 0006-Implement-a-persistent-property-to-override-the-defa.patch
+
+Change-Id: Ic7869a58ccaad26cfef787907f4d394a3866c447
+---
+ core/java/android/hardware/Camera.java                | 5 +++++
+ core/java/android/hardware/camera2/CameraManager.java | 9 +++++++++
+ 2 files changed, 14 insertions(+)
+
+diff --git a/core/java/android/hardware/Camera.java b/core/java/android/hardware/Camera.java
+index 14d8a2854..bbcafde72 100644
+--- a/core/java/android/hardware/Camera.java
++++ b/core/java/android/hardware/Camera.java
+@@ -518,6 +518,11 @@ public class Camera {
+      * @see #open(int)
+      */
+     public static Camera open() {
++        int altPrimaryCamera = SystemProperties.getInt("persist.sys.alt_primary_camera", -1);
++        if (altPrimaryCamera > 0) {
++            return open(altPrimaryCamera);
++        }
++
+         int numberOfCameras = getNumberOfCameras();
+         CameraInfo cameraInfo = new CameraInfo();
+         for (int i = 0; i < numberOfCameras; i++) {
+diff --git a/core/java/android/hardware/camera2/CameraManager.java b/core/java/android/hardware/camera2/CameraManager.java
+index 623527160..c2b3e1b7d 100644
+--- a/core/java/android/hardware/camera2/CameraManager.java
++++ b/core/java/android/hardware/camera2/CameraManager.java
+@@ -2606,6 +2606,15 @@ public final class CameraManager {
+                             return s1.compareTo(s2);
+                         }
+                     }});
++
++            // HAXX: Allow overriding default primary camera (assumed to be camera 0) via property
++            // Should match with libcameraservice/common/CameraProviderManager.cpp
++            int altPrimaryCamera = SystemProperties.getInt("persist.sys.alt_primary_camera", -1);
++            if (altPrimaryCamera > 0 && altPrimaryCamera < cameraIds.length) {
++                String origPrimary = cameraIds[0];
++                cameraIds[0] = cameraIds[altPrimaryCamera];
++                cameraIds[altPrimaryCamera] = origPrimary;
++            }
+         }
+ 
+         private boolean shouldHideCamera(int currentDeviceId, int devicePolicy,

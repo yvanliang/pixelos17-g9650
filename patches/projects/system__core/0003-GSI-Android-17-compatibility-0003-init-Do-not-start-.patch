@@ -1,0 +1,25 @@
+From 9212164a0b634c10f956467e7db84b6415a67dff Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:43:36 +0800
+Subject: [PATCH 03/23] GSI Android 17 compatibility:
+ 0003-init-Do-not-start-console-service-when-debuggable.patch
+
+Change-Id: I35d99fb39555a1db3a9ded68023986eb39da343c
+---
+ rootdir/init.rc | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/rootdir/init.rc b/rootdir/init.rc
+index 56024b9..5007ac1 100644
+--- a/rootdir/init.rc
++++ b/rootdir/init.rc
+@@ -1347,9 +1347,6 @@ on property:ro.debuggable=1
+     # Give reads to anyone for the accessibility trace folder on debug builds.
+     chmod 0775 /data/misc/a11ytrace
+ 
+-on init && property:ro.debuggable=1
+-    start console
+-
+ # Allow other processes to run `snapshotctl` through `init`. This requires
+ # `set_prop` permission on `snapshotctl_prop`.
+ on property:sys.snapshotctl.map=requested

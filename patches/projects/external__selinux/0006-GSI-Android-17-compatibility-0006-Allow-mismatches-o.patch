@@ -1,0 +1,26 @@
+From 4c97af38aeab8bb9c29dc97906bd529e70dc8180 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:39:38 +0800
+Subject: [PATCH 06/12] GSI Android 17 compatibility:
+ 0006-Allow-mismatches-of-exfat-genfscon.patch
+
+Change-Id: Ie708d445dadb50738d225c55450aa68ed0db89b5
+---
+ libsepol/cil/src/cil_post.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/libsepol/cil/src/cil_post.c b/libsepol/cil/src/cil_post.c
+index b462649..ecc704e 100644
+--- a/libsepol/cil/src/cil_post.c
++++ b/libsepol/cil/src/cil_post.c
+@@ -509,6 +509,10 @@ static int cil_post_genfscon_context_compare(const void *a, const void *b)
+ 		 */
+ 		if(strcmp(a_genfscon->path_str, "/devices/virtual/block/") == 0)
+ 			bypass = 1;
++		if(strcmp(a_genfscon->fs_str, "exfat") == 0 || strcmp(a_genfscon->fs_str, "esdfs") == 0) {
++            if(strcmp(a_genfscon->path_str, "/") == 0)
++                bypass = 1;
++        }
+ 		if(bypass == 1) {
+ 			fprintf(stderr, "Received conflicting %s vs %s but ignore\n", a_genfscon->path_str, b_genfscon->path_str);
+ 			return 0;

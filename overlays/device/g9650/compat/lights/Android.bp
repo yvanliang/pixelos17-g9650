@@ -1,0 +1,15 @@
+cc_binary {
+    name: "g9650-lights-service",
+    init_rc: ["g9650-lights.rc"],
+    vintf_fragment_modules: ["g9650-lights-vintf"],
+    srcs: ["main.cpp"],
+    static_libs: ["android.hardware.light-V1-ndk"],
+    shared_libs: ["libbinder_ndk", "liblog"],
+    stl: "libc++_static",
+    cflags: ["-Wall", "-Werror"],
+}
+
+vintf_fragment {
+    name: "g9650-lights-vintf",
+    src: "g9650-lights.xml",
+}

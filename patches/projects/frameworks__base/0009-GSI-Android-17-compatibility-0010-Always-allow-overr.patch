@@ -1,0 +1,28 @@
+From 02101539e89a8d003252dca7fb4de9f962dd7856 Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:40:37 +0800
+Subject: [PATCH 09/60] GSI Android 17 compatibility:
+ 0010-Always-allow-overriding-the-number-of-work-profiles.patch
+
+Change-Id: I84db0b344504a9060d4eafe1ea626698b065b045
+---
+ .../core/java/com/android/server/pm/UserTypeFactory.java    | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/services/core/java/com/android/server/pm/UserTypeFactory.java b/services/core/java/com/android/server/pm/UserTypeFactory.java
+index dbc2f0deb..738014a49 100644
+--- a/services/core/java/com/android/server/pm/UserTypeFactory.java
++++ b/services/core/java/com/android/server/pm/UserTypeFactory.java
+@@ -615,11 +615,7 @@ public final class UserTypeFactory {
+     /** Returns the number of managed profiles allowed, virtually always 1. */
+     private static int getMaxManagedProfiles() {
+         final int normalValue = 1;
+-        if (!Build.IS_DEBUGGABLE) {
+-            return normalValue;
+-        } else {
+-            return SystemProperties.getInt("persist.sys.max_profiles", normalValue);
+-        }
++        return SystemProperties.getInt("persist.sys.max_profiles", normalValue);
+     }
+ 
+     /**

@@ -1,0 +1,23 @@
+From c7d8192a7acf60237962d943e23c06d910bf3c6b Mon Sep 17 00:00:00 2001
+From: yvanliang <yvan6liang@outlook.com>
+Date: Fri, 9 Oct 2026 15:41:53 +0800
+Subject: [PATCH 39/60] GSI Android 17 compatibility:
+ 0041-Add-Samsung-sysinput.patch
+
+Change-Id: I4685d4c3d3a05c3678a091aec6820297a8653bbe
+---
+ services/core/Android.bp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/services/core/Android.bp b/services/core/Android.bp
+index 469b5ddbd..5e37617a2 100644
+--- a/services/core/Android.bp
++++ b/services/core/Android.bp
+@@ -274,6 +274,7 @@ java_library_static {
+         "vendor.xiaomi.hardware.fingerprintextension-V1.0-java",
+ 
+         //AIDL
++        "vendor.samsung.hardware.sysinput-V1-java",
+         "vendor.samsung.hardware.biometrics.fingerprint-V1-java",
+         "vendor.samsung.hardware.light-V1-java",
+         "aconfig_adbdauth_flags_java_lib",
